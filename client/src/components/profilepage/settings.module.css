@@ -1,0 +1,33 @@
+/* Settings.module.css */
+
+.settingtabs {
+    padding: 10px;
+    max-height: 100%;
+    width: 80%;
+    overflow-y: auto;
+}
+.settabs{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+}
+
+
+.setBox {
+    padding: 10px;
+    margin: 10px;
+    margin-right: 20px;
+    background-color: white;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.setDangerBox {
+    padding: 10px;
+    margin: 10px;
+    margin-right: 20px;
+    background-color: lightcoral;
+    border-radius: 10px;
+    font-size: 16px;
+}

@@ -1,0 +1,563 @@
+/* General Resets */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 2px black;
+  /* Consider if all elements truly need this border */
+}
+
+body {
+  overflow: hidden;
+}
+
+/* Layout */
+#body {
+  box-sizing: border-box;
+  height: 100vh;
+  width: 100vw;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+}
+
+
+
+main {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Dashboard */
+.dashboard {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0px 50px;
+  background-color: #d9d9d9;
+  overflow: auto;
+}
+
+.dashboard h2 {
+  font-size: 30px;
+}
+
+.dashboard p {
+  font-size: 18px;
+}
+
+.img-container {
+  width: clamp(400px, 40vw, 500px);
+}
+
+/* Image Box */
+#imgbox {
+  width: 100%;
+  max-height: inherit;
+  padding: 20px;
+  box-sizing: border-box;
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 40px;
+  box-shadow: 2px 4px 7px rgba(0, 0, 0, 0.5);
+  background-color: white;
+}
+
+#img {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  max-height: 590px;
+  border-radius: inherit;
+}
+
+img {
+  height: 100%;
+  width: 100%;
+}
+
+/* Info Container */
+#info-container {
+  width: 60%;
+  height: 100%;
+}
+
+.info-box {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.date-time,
+.location {
+  background: #fff;
+  padding: 13px;
+  border-radius: 20px;
+  border: 1px solid black;
+  box-shadow: 2px 4px 7px rgba(0, 0, 0, 0.5);
+  flex: 1 1;
+  margin: 0 10px;
+  margin-top: -25px;
+}
+
+.date-time h3 {
+  margin-left: 1rem;
+}
+
+.date {
+  font-size: 70%;
+}
+
+.zone {
+  font-size: 30%;
+}
+
+.location h4 {
+  margin-top: -45px;
+  margin-left: 143px;
+  font-size: 30px;
+}
+
+.location h3 {
+  margin-left: 11px;
+}
+
+.date-time p {
+  font-size: 34px;
+  margin-left: 11px;
+}
+
+.lon-lat {
+  font-size: 19px;
+}
+
+/* Index Styles */
+.index-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.index-box {
+  width: 90%;
+  min-width: 270px;
+  background: #fff;
+  padding: 10px;
+  border-radius: 39px;
+  border: 1px solid black;
+  box-shadow: 2px 4px 7px rgba(0, 0, 0, 0.5);
+  flex: 1;
+  margin: 5px;
+}
+
+.index-box h3 {
+  padding-bottom: 5px;
+  margin-left: 12px;
+  margin-top: 10px;
+}
+
+.index-box table {
+  width: 94%;
+  border-collapse: collapse;
+  margin-left: 10px;
+}
+
+.index-box th,
+.index-box td {
+  border: 2px solid black;
+  padding: 1px;
+}
+
+
+
+.index-box .underline1 {
+  border-bottom: 7px solid red;
+  display: block;
+  margin-top: 3px;
+  padding: 0px 7px;
+
+}
+
+.index-box .underline2 {
+  border-bottom: 7px solid yellow;
+  display: block;
+  margin-top: 3px;
+  padding: 0px 7px;
+}
+
+.index-box .underline3 {
+  border-bottom: 7px solid rgb(174, 225, 91);
+  display: block;
+  margin-top: 3px;
+  padding: 0px 7px;
+}
+
+.index-box .exposure {
+  padding: 0px 5px;
+}
+
+.index-box .high {
+  display: block;
+  margin-top: 3px;
+  padding: 0px 43px;
+}
+
+.index-box .medium {
+  display: block;
+  margin-top: -17px;
+  text-align: end;
+  margin-right: 38px;
+}
+
+.index-box .low {
+  display: block;
+  margin-top: -18px;
+  text-align: end;
+  margin-right: -5rem;
+}
+
+/* Index Values */
+.index-values {
+  display: flex;
+  height: min-content;
+}
+
+.indexvalues-indivisual {
+  display: flex;
+  margin: 5px;
+  width: 50%;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.indexvalue-final {
+  display: flex;
+  margin: 5px;
+  width: 50%;
+}
+
+/* Index Cards */
+.index-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  padding: 7px clamp(7px, 5%, 30px);
+  border-radius: 20px;
+  border: 1px solid black;
+  box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.5);
+}
+
+.index-card .highlight {
+  font-size: clamp(20px, 2.5vw, 35px);
+  color: black;
+  border-bottom: 7px solid red;
+  padding: 0px 5px;
+}
+
+.index-card .highlight1 {
+  font-size: clamp(20px, 2.5vw, 35px);
+  color: black;
+  padding: 0px 5px;
+  font-weight: bold;
+  border-bottom: 7px solid yellow;
+}
+
+.index-card .highlight2 {
+  font-size: clamp(20px, 2.5vw, 35px);
+  color: black;
+  padding: 0px 5px;
+  font-weight: bold;
+  border-bottom: 7px solid rgb(17, 255, 0);
+}
+
+
+/* Index Card Results */
+.index-card-result {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  padding: 12px;
+  border-radius: 21px;
+  border: 1px solid black;
+  box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.index-card-result .highlight {
+  margin: auto;
+  font-size: 35px;
+  color: black;
+  border-bottom: 7px solid red;
+
+}
+
+.index-card-result .highlight2 {
+  margin: auto;
+  font-size: 35px;
+  color: black;
+  border-bottom: 7px solid rgb(0, 255, 34);
+
+}
+
+.index-card-result .highlight1 {
+  margin: auto;
+  font-size: 35px;
+  color: black;
+  border-bottom: 7px solid rgb(255, 242, 0);
+
+}
+
+.index-card-result p {
+  margin-top: -7px;
+  color: black;
+}
+
+/* Chart Styles */
+#myChart {
+  background: #fff;
+  padding: 6px;
+  border-radius: 22px;
+  border: 1px solid black;
+  box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.chart-container {
+  display: block;
+  box-sizing: border-box;
+  height: 100px;
+  width: 100%;
+  margin-top: 5px;
+}
+
+/* Footer */
+.footer {
+  margin-left: -31rem;
+  margin-top: 8px;
+  display: block;
+}
+
+/* Miscellaneous */
+.highlight {
+  font-weight: bold;
+  color: #333;
+}
+
+/* Media Queries */
+@media screen and (min-width: 750px) and (max-width: 1000px) {
+  #info-container {
+    width: 50%;
+    height: 100%;
+  }
+
+  .DateLoc_infobox__KDn45 {
+    flex-direction: column;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .DateLoc_datetime__yHaFw,
+  .DateLoc_location__i7XvY {
+    width: 100% !important;
+  }
+
+  .index-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+
+  .index-box {
+    width: auto;
+    background: #fff;
+    padding: 10px;
+    border-radius: 39px;
+    border: 1px solid black;
+    box-shadow: 2px 4px 7px rgba(0, 0, 0, 0.5);
+    flex: 1 1;
+    margin: 5px;
+  }
+
+  .index-values {
+    flex-direction: column;
+    display: flex;
+    height: min-content;
+  }
+
+  .indexvalues-indivisual,
+  .indexvalue-final {
+    width: auto;
+  }
+}
+
+@media screen and (min-width: 500px) and (max-width: 750px) {
+  .dashboard {
+    padding: 10px;
+  }
+
+  main {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .img-container {
+    max-width: 340px;
+    margin: 5px;
+  }
+
+  #info-container {
+    justify-content: space-between;
+    display: flex;
+    width: 100%;
+    height: 100%;
+  }
+
+  .DateLoc_infobox__KDn45 {
+    flex-direction: row;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .DateLoc_datetime__yHaFw,
+  .DateLoc_location__i7XvY {
+    height: auto !important;
+    width: 100% !important;
+  }
+
+  .index-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+
+  .index-box {
+    width: auto;
+    background: #fff;
+    padding: 10px;
+    border-radius: 39px;
+    border: 1px solid black;
+    box-shadow: 2px 4px 7px rgba(0, 0, 0, 0.5);
+    flex: 1 1;
+    margin: 5px;
+  }
+
+  .index-values {
+    justify-content: space-between;
+    width: 50%;
+    flex-direction: column;
+    display: flex;
+    height: auto;
+  }
+
+  .indexvalues-indivisual,
+  .indexvalue-final {
+    width: auto;
+  }
+
+  .chart-container {
+    display: block;
+    box-sizing: border-box;
+    height: 100px;
+    width: auto;
+    margin: 5px;
+  }
+}
+
+/* ... (Previous CSS) ... */
+
+@media screen and (max-width: 500px) {
+  .dashboard {
+    padding: 10px;
+  }
+
+  main {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .DateLoc_infobox__KDn45 {
+    flex-direction: column;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .DateLoc_datetime__yHaFw,
+  .DateLoc_location__i7XvY {
+    height: auto !important;
+    width: 100% !important;
+    margin: 0px !important;
+  }
+
+  .img-container {
+    width: 90vw;
+    max-width: 340px;
+    margin: 5px;
+  }
+
+  #info-container {
+    align-items: center;
+    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+  }
+
+  .index-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+
+  .index-box {
+    width: auto;
+    background: #fff;
+    padding: 10px;
+    border-radius: 39px;
+    border: 1px solid black;
+    box-shadow: 2px 4px 7px rgba(0, 0, 0, 0.5);
+    flex: 1 1;
+    margin: 5px;
+  }
+
+  .index-values {
+    justify-content: space-between;
+    width: 100%;
+    flex-direction: column;
+    display: flex;
+    height: auto;
+  }
+
+  .indexvalues-indivisual,
+  .indexvalue-final {
+    width: auto;
+  }
+
+  .chart-container {
+    display: block;
+    box-sizing: border-box;
+    height: 100px;
+    width: auto;
+    margin: 5px;
+  }
+}
+
+/* Miscellaneous - These were already grouped, but I'm repeating them for completeness */
+.highlight {
+  font-weight: bold;
+  color: #333;
+}
+
+/*  These classes were not used in your provided CSS. If you intend to use them, include the relevant HTML. */
+/*.DateLoc_infobox__KDn45 { }
+.DateLoc_datetime__yHaFw { }
+.DateLoc_location__i7XvY { }*/

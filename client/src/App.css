@@ -1,0 +1,68 @@
+/* =============================== */
+/* GLOBAL RESETS */
+/* =============================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* =============================== */
+/* HEADER & NAVIGATION */
+/* =============================== */
+header {
+  color: white;
+  padding: 1rem;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+
+/* =============================== */
+/* MAIN LAYOUT */
+/* =============================== */
+main {
+  display: flex;
+  justify-content: space-between;
+}
+
+.dashboard {
+  height: 100%;
+  width: 100%;
+  padding: 0px 50px;
+  background-color: #d9d9d9;
+  overflow: auto;
+}
+
+/* =============================== */
+/* FOOTER */
+/* =============================== */
+footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+/* =============================== */
+/* RESPONSIVE DESIGN */
+/* =============================== */
+@media screen and (max-width: 1000px) {
+  main {
+    flex-direction: column;
+    align-items: center;
+  }
+}

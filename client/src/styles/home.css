@@ -1,0 +1,92 @@
+/* General Resets */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 2px black;
+  /* Consider if all elements truly need this border */
+}
+
+body {
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Layout */
+#body {
+  box-sizing: border-box;
+  height: 100vh;
+  width: 100vw;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+}
+
+
+
+main {
+  display: flex;
+  justify-content: space-between;
+  height: calc(100vh - 90px);
+}
+
+/* Dashboard */
+.dashboard {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0px 50px;
+  background-color: #d9d9d9;
+  overflow: auto;
+}
+
+.dashboard h2 {
+  font-size: 30px;
+}
+
+.dashboard p {
+  font-size: 18px;
+}
+
+img {
+  height: 100%;
+  width: 100%;
+}
+
+
+/* Footer */
+.footer {
+  margin-left: -31rem;
+  margin-top: 8px;
+  display: block;
+}
+
+
+
+
+
+@media screen and (min-width: 500px) and (max-width: 750px) {
+  .dashboard {
+    padding: 10px;
+  }
+
+  main {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+}
+
+/* ... (Previous CSS) ... */
+
+@media screen and (max-width: 500px) {
+  .dashboard {
+    padding: 10px;
+  }
+}
+
+/*  These classes were not used in your provided CSS. If you intend to use them, include the relevant HTML. */
+/*.DateLoc_infobox__KDn45 { }
+.DateLoc_datetime__yHaFw { }
+.DateLoc_location__i7XvY { }*/

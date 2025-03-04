@@ -1,0 +1,270 @@
+/* .page {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+
+
+.formstats {
+    display: flex;
+    height: 100%;
+    width: 250px;
+    background-color: red;
+    border: 1px solid black;
+
+}
+
+.formstatempty {
+    height: 50px;
+    width: 100%;
+    background-color: gray;
+}
+
+
+.formspace {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    flex: 1;
+}
+
+.formtypehead {
+    display: flex;
+    height: 50px;
+}
+
+.formtype {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex: 1;
+    border: 1px solid black;
+    background-color: rgba(166, 165, 165, 0.829);
+}
+
+.formcard {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+.formtype {
+    cursor: pointer;
+    padding: 10px;
+    font-size: 16px;
+    text-align: center;
+    display: inline-block;
+    margin: 5px;
+}
+
+.formtype.active {
+    font-weight: bold;
+    background-color: #007bff;
+    color: white;
+} */
+
+.formcontainer {
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+
+    height: 85vh;
+    width: 100%;
+
+    border: 5px solid black;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.formprogressbox {
+
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+
+    height: 100%;
+    width: 25%;
+
+    padding: 20px;
+
+    background-color: white;
+    box-shadow: -3px 3px 8px -2px rgba(0, 0, 0, 0.5);
+    color: rgb(1, 4, 14);
+
+    border-radius: 15px;
+    border: 2px solid black;
+}
+
+
+
+
+.progreselements {
+    box-sizing: border-box;
+    overflow-x: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+
+    width: 100%;
+    flex: 1 1;
+    padding: 10px 20px;
+
+    background-color: aliceblue;
+
+
+
+    input {
+        display: none;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.feildbox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 75%;
+    border: 2px solid red;
+}
+
+.feildcard {
+    display: flex;
+    flex-direction: column;
+    height: 60%;
+    width: 50%;
+}
+
+.feilddiv {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1 1;
+
+    height: 100%;
+    width: 100%;
+
+    height: 100%;
+    width: 100%;
+    border: 2px solid rgb(248, 76, 76);
+    border-radius: 20px;
+}
+
+.feild {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(10px, 2vw, 30px);
+    height: calc(100% - 17%);
+    width: 100%;
+
+    fieldset{
+        display: flex;
+        flex-direction: column;
+        font-size: clamp(10px,2vw,30px);
+        min-width: max-content;
+
+        input{
+            height: clamp(20px,3vh,50px);
+            width: clamp(30%,3vw,200px);
+            min-width: max-content;
+        }
+    }
+}
+
+.feildbtndiv {
+    position: absolute;
+    bottom: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+
+    height: 17%;
+    width: 100%;
+    padding: clamp(5px, 0.5vw, 20px);
+
+    border-radius: inherit;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-top: 2px solid rgb(248, 76, 76);
+    background-color: bisque;
+
+
+}
+
+.feildbtn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1vw;
+    height: 100%;
+
+    button {
+        height: 100%;
+        border-radius: 5px;
+        width: clamp(50px, 5vw, 100px);
+        min-width: max-content;
+        padding: clamp(5px,2vw,10px);
+        font-size: clamp(10px,1vw,20px);
+    }
+}

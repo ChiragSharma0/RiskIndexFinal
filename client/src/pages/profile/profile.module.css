@@ -1,0 +1,69 @@
+/* Profile.module.css */
+
+.dashboard {
+    height: 100vh;
+    width: 100vw;
+}
+
+.main {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+
+/* PROFILE */
+.profile {
+    width: 30%;
+    margin: 10px;
+    margin-left: 30px;
+}
+
+.profileBox {
+    flex-direction: row-reverse;
+    display: flex;
+    height: 80px;
+    background: linear-gradient(to right, #ff1acd, rgb(239, 150, 122));
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.button {
+    display: flex;
+}
+
+.editButton {
+    height: 30px;
+    width: 60px;
+    background-color: #fff;
+    color: #000;
+    border: 0px solid #000;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.editButton:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+.profiletabs {
+    padding: 10px;
+    max-height: 100%;
+    width: 70%;
+    overflow-y: hidden;
+}
+
+
+/* Responsive */
+@media screen and (max-width: 600px) {
+    .main {
+        width: 100%;
+    }
+
+    .profileBox {
+        width: 100%;
+        background: linear-gradient(to right, #ff1a7d, rgb(240, 127, 127));
+    }
+}

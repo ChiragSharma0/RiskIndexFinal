@@ -1,0 +1,84 @@
+/* DateLoc.module.css */
+
+/* Using clamp() for responsive font size */
+.datetime h3 {
+    font-size: clamp(10px, 2vw, 30px); /* Minimum size: 20px, preferred size: 5vw, maximum size: 40px */
+  }
+  
+  .lonlat {
+    font-size: clamp(8px, 2vw, 15px); /* Minimum size: 14px, preferred size: 3vw, maximum size: 19px */
+  }
+  
+  .infobox {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .datetime,
+  .location {
+    position: relative;
+    width: 50%;
+    background: #fff;
+    padding: 13px 17px;
+    border-radius: 20px;
+    border: 1px solid black;
+    box-shadow: 2px 4px 7px rgba(0, 0, 0, 0.5);
+    flex: 1 1;
+    margin: 5px;
+    min-width: max-content;
+  }
+  
+  
+  
+  .date {
+    font-size: 70%;
+  }
+  
+  .zone {
+    font-size: 30%;
+  }
+  
+  .location h4 {
+    font-size: clamp(10px, 2vw, 25px); /* Minimum size: 20px, preferred size: 3vw, maximum size: 30px */
+  }
+  
+
+input{
+  border: 1px solid black;
+  width: clamp(20px,3vw,55px);
+}
+.button{
+    position: absolute; 
+    top: 10px;
+    right: 10px;
+    border: 1px solid black;
+    border-radius: 2px;
+    width: fit-content;
+    padding: 2px;
+  }
+
+
+
+
+
+
+
+
+/* Hide step arrows in number input completely */
+.dateInput::-webkit-outer-spin-button,
+.dateInput::-webkit-inner-spin-button,
+.timeInput::-webkit-outer-spin-button,
+.timeInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  display: none;
+  margin: 0;
+}
+
+/* Ensure Firefox doesn't leave space */
+.dateInput,
+.timeInput {
+  padding: 0;  /* Removes extra padding */
+  text-align: center; /* Keeps text centered */
+  background: transparent; /* Optional: Match background */
+}
