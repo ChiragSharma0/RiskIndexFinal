@@ -9,12 +9,15 @@ const AuthRoutes = () => {
   useEffect(()=>{
     console.log("authroute accessed:");
   })
+
+  
   return (
+    
     <AUthpage>
         <Routes>
-          <Route path="/auth/login" element={<Login />} />
-          <Route path="/auth/register" element={<Register />} />
-          <Route path="*" element={<Navigate to="/auth/login" replace />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
           
         </Routes>
     </AUthpage>

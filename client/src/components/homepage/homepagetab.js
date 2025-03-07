@@ -10,9 +10,9 @@ import { useLocationContext } from "../../context/locationcontext";
 
 export default function HomePageMobile()
 {
-const{EIfinal}=useEIFormContext;
-const {VIfinal}=useVIFormContext;
-const{HIfinal} =useLocationContext;
+const{EIfinal}=useEIFormContext();
+const {VIfinal}=useVIFormContext();
+const{HIfinal} =useLocationContext();
     return(
         <div className="dashboard tab">
                         <header>

@@ -84,7 +84,7 @@ const updateHIFinal = async () => {
   const utciKey = `UTCI_${date.date}_${time.hrs}`; // Change as needed
 
   const normalizedValue = await fetchUTCI(latitude, longitude, utciKey);
-  
+  console.log("setting hifinal",normalizedValue);
   setHifinal(normalizedValue); // ✅ Directly saving normalized UTCI
   }
 };

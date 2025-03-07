@@ -1,23 +1,17 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
-import { useAuthContext } from "../components/context/Authcontext";
+import React, { useEffect } from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import { useAuthContext } from "../context/Authcontext";
 
-const AuthGuard = ({ children, isPublic = false }) => {
-  const { isloggedin, loading } = useAuthContext();
+const ProtectedRoute = () => {
+  const { isloggedin, isloading } = useAuthContext();
 
-  if (loading) return <div>Loading...</div>; // Prevent flickering
+  useEffect(() => {
+    console.log("ProtectedRoute rendered");
+  }, []);
 
-  // If it's a public route (Auth pages) and the user is logged in, redirect to home
-  if (isPublic && isloggedin) {
-    return <Navigate to="/home" replace />;
-  }
+  if (isloading) return null; // ✅ Wait until loading is finished
 
-  // If it's a protected route (Main pages) and the user is NOT logged in, redirect to auth
-  if (!isPublic && !isloggedin) {
-    return <Navigate to="/auth" replace />;
-  }
-
-  return children;
+  return isloggedin ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
-export default AuthGuard;
+export default ProtectedRoute;

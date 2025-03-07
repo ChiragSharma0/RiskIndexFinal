@@ -7,14 +7,12 @@ import './home.css'
 import LocationModal from '../../components/Formelement/MapComponent';
 import { useLocationContext } from '../../context/locationcontext';
 import Profile from '../profile/profile';
-import { usePageContext } from '../../context/pagecontext';
 
 
 
 function Home() {
     const [screenType, setScreenType] = useState(getScreenType());
     const {ismodalopen} = useLocationContext();
-const { showPage,setShowPage }=usePageContext();    
 
     function getScreenType() {
         const width = window.innerWidth;
@@ -39,7 +37,7 @@ useEffect(()=>{
     return (
         <>
         {/* ✅ Conditionally render based on `showPage` state */}
-        {showPage === "home" ? (
+        
           <>
             {screenType === "desktop" ? (
               <HomePageDesk />
@@ -51,9 +49,7 @@ useEffect(()=>{
   
             {ismodalopen && <LocationModal />}
           </>
-        ) : showPage === "profile" ? (
-          <Profile />
-        ) : null}
+       
         </>
     );
 }

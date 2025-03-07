@@ -4,6 +4,8 @@ import { useLocationContext } from '../context/locationcontext';
 import { useSchedule } from "./schedule";
 
 import axios from "axios";
+import Loader from "../components/common/loader";
+ const Fetchurl = process.env.REACT_APP_FETCH_EI_DATA;
 
 const EIFormContext = createContext();
 
@@ -369,6 +371,8 @@ export const EIFormProvider = ({ children }) => {
 
   const [EIresult, setEIresult] = useState({});
   const [EIfinal, setEIfinal] = useState(0);
+  const [isLoading, setIsLoading] = useState(true); // 🔹 Loading state added
+
   const [sleepOptions, setSleepOptions] = useState({
     recommended: "Recommended",
     mayBeAppropriate: "May be appropriate",
@@ -377,20 +381,29 @@ export const EIFormProvider = ({ children }) => {
 
   // Fetch EI Data on Mount
   useEffect(() => {
-    if (!VIformData.dob) return;
+    if (!VIformData.dob) {
+      setIsLoading(false); // Stop loading if no DOB
+      return;
+    }
 
     const fetchEIData = async () => {
       const userid = localStorage.getItem("userid");
-      if (!userid) return;
+      if (!userid) {
+        console.error("❌ User ID not found");
+        setIsLoading(false);
+        return;
+      }
 
       try {
-        const response = await axios.post("http://localhost:5500/api/find/eidata", { userid });
+        const response = await axios.post(`${Fetchurl}`, { userid });
         console.log("🔹 API response received EI:", response.data.EIdata);
         if (response.status === 200 && response.data.EIdata) {
           setEIFormData(response.data.EIdata);
         }
       } catch (error) {
         console.error("❌ Data fetch failed", error);
+      } finally {
+        setIsLoading(false); // 🔹 Always stop loading, even on error
       }
     };
 
@@ -428,7 +441,6 @@ export const EIFormProvider = ({ children }) => {
 
     console.log("health inside calculate", HealthAccessibility);
 
-    // Determine Risk Based on Task
     const task = currentTask?.toLowerCase();
     let currentrisk;
     let Infrastructure = {};
@@ -444,7 +456,6 @@ export const EIFormProvider = ({ children }) => {
       currentrisk = Transit;
     }
 
-    // Combine All Components
     const components = {
       ...Infrastructure,
       Alcohol,
@@ -458,13 +469,11 @@ export const EIFormProvider = ({ children }) => {
 
     console.log("🛠 Final Components before setting state:", components);
     setEIresult(components);
-
-
   }
 
   useEffect(() => {
     console.log("✅ Updated EIresult:", EIresult);
-    // Calculate Final Exposure Index
+
     const InfrastructureWorkplace = calculateInfrastructureWorkplace(EIformData);
     const InfrastructureFacilityWorkplace = calculateInfrastructureFacilityWorkplace(EIformData);
     const workrisk = calculateinfra(InfrastructureWorkplace, InfrastructureFacilityWorkplace);
@@ -498,27 +507,23 @@ export const EIFormProvider = ({ children }) => {
       currentrisk = Transit;
     }
 
-
-
     const finalIndex = calculateExposureIndex(currentrisk, liferisk, Fluid, AQI, HealthAccessibility);
     setEIfinal(finalIndex);
-    console.log("Final Exposure Index\n\n\n\n\n\:", finalIndex);
+    console.log("Final Exposure Index:", finalIndex);
   }, [EIresult]);
 
   useEffect(() => {
-    console.log("updated VIfinal", EIfinal);
+    console.log("updated EIfinal", EIfinal);
   }, [EIfinal]);
+
   return (
     <EIFormContext.Provider value={{ EIformData, setEIFormData, EIfinal, EIresult, sleepOptions }}>
-      {children}
+      {isLoading ? <Loader /> : children} {/* 🔹 Show Loader while loading */}
     </EIFormContext.Provider>
   );
 };
 
-
 export const useEIFormContext = () => useContext(EIFormContext);
-
-
 
 
 

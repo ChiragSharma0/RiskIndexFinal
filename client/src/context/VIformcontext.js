@@ -1,7 +1,8 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
+import Loader from "../components/common/loader";
 
-const FETCH_URL = process.env.REACT_APP_FetchVIdata; // Ensure this is defined in your .env file
+const FETCH_URL = process.env.REACT_APP_FETCH_VI_DATA; // Ensure this is defined in your .env file
 
 const VIFormContext = createContext();
 
@@ -155,8 +156,9 @@ function calculateVulnerabilityIndexFromComponents(components) {
 // ----- End of Helper Functions -----
 
 
-export const VIFormProvider = ({ children }) => {
+// Create Context
 
+export const VIFormProvider = ({ children }) => {
   const [VIformData, setVIFormData] = useState({
     dob: "",
     age: "",
@@ -178,34 +180,36 @@ export const VIFormProvider = ({ children }) => {
     benchmarkDisability: "",
   });
 
-  // State for individual vulnerability components
   const [viresult, setViresult] = useState({});
-  // Separate state for the final vulnerability index
   const [VIfinal, setVIfinal] = useState(0);
+  const [isLoading, setIsLoading] = useState(true); // 🔹 Added Loading State
 
   // Fetch initial VIdata from backend on mount
   useEffect(() => {
     const fetchData = async () => {
       const userid = localStorage.getItem("userid");
       if (!userid) {
-        console.error("User ID not found in localStorage");
+        console.error("❌ User ID not found in localStorage");
+        setIsLoading(false); // 🔹 Stop loading even if user ID is missing
         return;
       }
       try {
-        const response = await axios.post("http://localhost:5500/api/find/vidata", { userid });
+        const response = await axios.post(`${FETCH_URL}`, { userid });
         if (response.status === 200 && response.data.VIdata) {
           console.log("🔹 Data fetched:", response.data.VIdata);
           setVIFormData(response.data.VIdata);
         }
       } catch (error) {
         console.error("❌ Data fetch failed:", error);
+      } finally {
+        setIsLoading(false); // 🔹 Always stop loading, even on failure
       }
     };
     fetchData();
   }, []);
 
   useEffect(() => {
-    if (!VIformData.dob) return; // Ensure data is fetched before calculations
+    if (!VIformData.dob) return;
 
     const ageCategory = calculateAgeCategoryFromDOB(VIformData.dob);
     const bmiCategory = calculateBMICategoryFromData(VIformData);
@@ -233,20 +237,18 @@ export const VIFormProvider = ({ children }) => {
 
     setViresult(components);
     console.log("Updated viresult:", components);
-
   }, [VIformData]);
 
   useEffect(() => {
-    if(!viresult) return;
-    console.log("updated vifinal data\n\n\n\n\n\n");
+    if (!viresult) return;
+    console.log("Updated VIfinal data");
     const finalIndex = calculateVulnerabilityIndexFromComponents(viresult);
-
     setVIfinal(finalIndex);
   }, [viresult]);
 
   return (
     <VIFormContext.Provider value={{ VIformData, setVIFormData, viresult, VIfinal }}>
-      {children}
+      {isLoading ? <Loader /> : children} {/* 🔹 Show Loader while loading */}
     </VIFormContext.Provider>
   );
 };

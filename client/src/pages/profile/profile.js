@@ -5,29 +5,28 @@ import Header from "../../components/common/Header";
 import Footer from "../../components/common/Footer";
 import ProfileTabs from "../../components/profilepage/profiletabs";
 import { Avatar, UserName, Note } from "../../components/common/avatar";
-import { useUserContext } from "../../context/usercontext";
 import axios from "axios"; // Import axios for API calls
+import { useAuthContext } from "../../context/Authcontext";
+
 
 export default function Profile() {
-  const { userdata, setUserdata } = useUserContext(); // Get context values
-  const [isEditing, setIsEditing] = useState(false); // Track edit mode
-  const [formData, setFormData] = useState({}); // Local state for editing
+  const { userdata = {}, setUserdata } = useAuthContext(); // Ensure userdata is never undefined
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
-    if (!userdata.UserName) return;
+    if (!userdata?.UserName) return;
     console.log("🔹 Profile Rendered:", userdata);
-    setFormData(userdata); // Sync local form data with userdata
+    setFormData(userdata);
   }, [userdata]);
 
-  // Function to handle input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Function to save changes
   const saveChanges = async () => {
-    setUserdata(formData); // Update UI immediately
-    setIsEditing(false); // Exit edit mode
+    setUserdata(formData);
+    setIsEditing(false);
 
     try {
       const response = await axios.post("http://localhost:5500/api/update/userdata", formData);
@@ -38,6 +37,8 @@ export default function Profile() {
       console.error("❌ Failed to update user data", error);
     }
   };
+
+  if (!userdata) return <p>Loading...</p>; // Prevent error
 
   return (
     <div className={`dashboard ${styles.dashboard}`}>
@@ -60,13 +61,13 @@ export default function Profile() {
                 <input
                   type="text"
                   name="profilepic"
-                  value={formData.profilepic}
+                  value={formData.profilepic || ""}
                   onChange={handleChange}
                   className={styles.input}
                   placeholder="Profile Picture URL"
                 />
               ) : (
-                <Avatar link={userdata.profilepic} />
+                <Avatar link={userdata?.profilepic} />
               )}
             </div>
 
@@ -75,12 +76,12 @@ export default function Profile() {
                 <input
                   type="text"
                   name="UserName"
-                  value={formData.UserName}
+                  value={formData.UserName || ""}
                   onChange={handleChange}
                   className={styles.input}
                 />
               ) : (
-                <UserName name={userdata.UserName} />
+                <UserName name={userdata?.UserName} />
               )}
             </div>
 
@@ -88,12 +89,12 @@ export default function Profile() {
               {isEditing ? (
                 <textarea
                   name="NOTE"
-                  value={formData.NOTE}
+                  value={formData.NOTE || ""}
                   onChange={handleChange}
                   className={styles.input}
                 />
               ) : (
-                <Note note={userdata.NOTE} />
+                <Note note={userdata?.NOTE} />
               )}
             </div>
           </div>

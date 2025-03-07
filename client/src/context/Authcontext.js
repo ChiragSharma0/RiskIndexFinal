@@ -1,29 +1,31 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { LanguageContext } from "./TranslatorContext";
-
+const verifyurl = process.env.REACT_APP_VERIFY_USER;
+const getuser = process.env.REACT_APP_FETCH_USER_DATA;
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [isloggedin, setlogin] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const [User, setUser] = useState({});
+    const [isloading, setloading] = useState(true);
 
     useEffect(() => {
-        const TODAY = new Date();
-        console.log("AuthContext mounted at", TODAY);
+        console.log("AuthContext mounted at", new Date());
     
         const userid = localStorage.getItem("userid");
         if (!userid) {
-            setlogin(false);
+            if (isloggedin) setlogin(false); // ✅ Avoid unnecessary state updates
+            setloading(false);
             return;
         }
     
-        verifyUser();
+        if (!isloggedin) {
+            setloading(true);
+            verifyUser();
+        }
     
-        return () => {
-            console.log("AuthContext unmounted");  // ✅ Correct cleanup function
-        };
-    }, []);
+        return () => console.log("AuthContext unmounted");
+    }, []); // ✅ Adding dependencies safely
     
 
 
@@ -32,35 +34,43 @@ export const AuthProvider = ({ children }) => {
 
 
 
-
+ 
     const verifyUser = async () => {
-        console.log("🔹 Starting user verification...");
+        console.log("🔹 Verifying user...");
         const userid = localStorage.getItem("userid");
     
         if (!userid) {
-            console.warn("⚠️ No user ID found. Redirecting to /auth...");
+            console.warn("⚠️ No user ID found. Redirecting to /login...");
             setlogin(false);
-            setLoading(false);
             return;
         }
     
         try {
-            console.log("api initiated")
-            const response = await axios.post("http://localhost:5500/api/auth/verify", { userid });
+            console.log(verifyurl);
+            const response = await axios.post(`${verifyurl}`, { userid });
     
-            console.log("🔹 API response received:", response);
-    
-            // ✅ Fix: Check `response.data.exists` instead of `response.data.user`
             if (response.status === 200 && response.data.exists) {
-                setlogin(true);
+                console.log("✅ User verified, fetching user details...");
+                const userResponse = await axios.post(`${getuser}`, { userid });
+    
+                if (userResponse.status === 200) {
+                    setUser(userResponse.data);
+                    console.log(userResponse.data);
+                    setlogin(true);
+                    
+                } else {
+                    setlogin(false);
+                }
             } else {
+                console.warn("⚠️ Invalid user ID. Logging out...");
                 setlogin(false);
+                localStorage.removeItem("userid");
             }
         } catch (error) {
-            console.error("❌ User verification failed:", error);
+            console.error("❌ Verification failed:", error);
             setlogin(false);
         } finally {
-            setLoading(false);
+            setloading(false);
         }
     };
     
@@ -79,6 +89,7 @@ export const AuthProvider = ({ children }) => {
         const userid = localStorage.getItem("userid");
         if (!userid) {
             console.warn("⚠️ No user ID found. Cannot log out.");
+            setlogin(false);
             return;
         }
 
@@ -88,7 +99,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
 
-        <AuthContext.Provider value={{ isloggedin, loading, setlogin, logout }}>
+        <AuthContext.Provider value={{ isloggedin, isloading, setlogin, logout, User }}>
 
             {children}
 

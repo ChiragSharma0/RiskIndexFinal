@@ -13,10 +13,15 @@ body {
   height: 100vh;
   width: 100vw;
 }
+.body{
+  height: 100vh;
+  width: 100vw;
+}
 
 /* =============================== */
 /* HEADER & NAVIGATION */
 /* =============================== */
+
 header {
   color: white;
   padding: 1rem;

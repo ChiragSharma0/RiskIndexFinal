@@ -4,7 +4,6 @@ import { usePageContext } from "../../context/pagecontext";
 
 function Header() { // ✅ Accept setShowPage as a prop
   const [sidebarOpen, setSidebarOpen] = useState(false); // State for sidebar
-  const { setShowPage } = usePageContext(); // ✅ Get setShowPage from context
 
   return (
     <header className={styles.header}>
@@ -22,8 +21,8 @@ function Header() { // ✅ Accept setShowPage as a prop
       <div className={`${styles.sidebar} ${sidebarOpen ? styles.open : styles.close}`}>
         <button className={styles.closeButton} onClick={() => setSidebarOpen(false)}>✖</button>
         <ul>
-          <li onClick={() => { setShowPage("home"); setSidebarOpen(false); }}>Home</li>
-          <li onClick={() => { setShowPage("profile"); setSidebarOpen(false); }}>Profile</li>
+          <li onClick={() => {  setSidebarOpen(false); }}>Home</li>
+          <li onClick={() => { setSidebarOpen(false); }}>Profile</li>
         </ul>
       </div>
     </header>

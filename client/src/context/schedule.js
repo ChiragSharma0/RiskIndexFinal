@@ -5,9 +5,9 @@ const ScheduleContext = createContext();
 
 // Define task schedule based on hours
 const schedule = {
-    atWork: { start: 9, end: 17 },
-    traveling: { start: [8, 17], end: [9, 18] },
-    atHome: { start: 0, end: 24 }
+    atWork: { start: 9, end: 17 }, // 9 AM - 5 PM
+    traveling: { start: [8, 17], end: [9, 18] }, // 8-9 AM & 5-6 PM
+    atHome: { start: 0, end: 24 } // Always when not working or traveling
 };
 
 // Context Provider
@@ -24,10 +24,14 @@ export const ScheduleProvider = ({ children }) => {
 
     function getCurrentTask() {
         const hour = new Date().getHours();
-        if (hour >= schedule.atWork.start && hour < schedule.atWork.end) return "At Work";
-        if ((hour >= schedule.traveling.start[0] && hour < schedule.traveling.end[0]) ||
-            (hour >= schedule.traveling.start[1] && hour < schedule.traveling.end[1])) return "Traveling";
-        return "At Home";
+        const { start: workStart, end: workEnd } = schedule.atWork;
+        const { start: travelStart, end: travelEnd } = schedule.traveling;
+
+        if (hour >= workStart && hour < workEnd) return "Workplace";
+        if ((hour >= travelStart[0] && hour < travelEnd[0]) ||
+            (hour >= travelStart[1] && hour < travelEnd[1])) return "Traveling";
+
+        return "Residence";
     }
 
     return (
@@ -38,6 +42,4 @@ export const ScheduleProvider = ({ children }) => {
 };
 
 // Hook to use Schedule Context
-export const useSchedule = () => {
-    return useContext(ScheduleContext);
-};
+export const useSchedule = () => useContext(ScheduleContext);

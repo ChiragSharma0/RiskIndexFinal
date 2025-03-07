@@ -1,39 +1,38 @@
-import React ,{memo} from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
-import AppContextProvider from "../context/Contextprovider";
-import { LocationProvider } from "../context/locationcontext";
-
-// Pages
+import React, { useEffect } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "../pages/homepage/home";
 import Profile from "../pages/profile/profile";
 import Test from "../components/profilepage/profiletabs";
-import { PageProvider } from "../context/pagecontext";
+import ProtectedRoute from "./AuthGuard";
+import { LocationProvider } from "../context/locationcontext";
+import { ScheduleProvider } from "../context/schedule";
+import FormContextProvider from "../context/formcontext";
 
 const MainRoutes = () => {
-  const location = useLocation(); // ✅ Get the current location
-
-  console.log("📍 Current Path:", location.pathname); // Debugging route changes
+  useEffect(() => {
+    console.log("MainRoutes mounted");
+  }, []);
 
   return (
+
     <LocationProvider>
-      <AppContextProvider>
-        <PageProvider>
-        <Routes >
-         {/*  <Route path="/" element={<Navigate to="/home" replace />} />
+      <ScheduleProvider>
+        <FormContextProvider>
+          <Routes>
+            <Route element={<ProtectedRoute />}>
+              <Route path="/home" element={<Home />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/test" element={<Test />} />
+            </Route>
 
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/test" element={<Test />} /> */}
-          <Route path="/home" element={<Home />} />
+            {/* Wildcard Route */}
+            <Route path="*" element={<Navigate to="/home" replace />} />
+          </Routes>
 
-          <Route path="*" element={<Navigate to="/home" replace />} />
-        </Routes>
-        </PageProvider>
-      </AppContextProvider>
+        </FormContextProvider>
+      </ScheduleProvider>
     </LocationProvider>
   );
 };
 
-// ✅ Wrap MainRoutes inside BrowserRouter in App.js
-
-
-export default memo(MainRoutes);
+export default MainRoutes;
