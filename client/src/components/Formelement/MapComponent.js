@@ -41,7 +41,7 @@ const LocationModal = () => {
 
     console.log("🗺️ Creating new map...");
     mapInstance = L.map("map", {
-      center: [28.6139, 77.2090], // Delhi Center
+      center: [28.6139, 77.2090],
       zoom: 12,
       minZoom: 10,
       maxZoom: 17,
@@ -60,7 +60,7 @@ const LocationModal = () => {
 
       console.log(`📍 Clicked at: ${lat}, ${lon}`);
 
-      // Ensure user selects within Delhi
+      // Check if inside Delhi
       if (
         lat < DELHI_BOUNDS.southWest.lat ||
         lat > DELHI_BOUNDS.northEast.lat ||
@@ -73,11 +73,18 @@ const LocationModal = () => {
       }
 
       const locality = await getLocalityName(lat, lon);
+
       setSelectedLocation({
         latitude: parseFloat(lat).toFixed(6),
         longitude: parseFloat(lon).toFixed(6),
         locality,
       });
+
+      // Add marker
+      if (mapInstance._marker) {
+        mapInstance.removeLayer(mapInstance._marker);
+      }
+      mapInstance._marker = L.marker([lat, lon], { icon: customMarker }).addTo(mapInstance);
 
       console.log(`✅ Selected Location: ${locality}`);
     });
@@ -91,7 +98,7 @@ const LocationModal = () => {
     };
   }, []);
 
-  // Function to get locality name using reverse geocoding
+  // Reverse geocoding to get locality name
   const getLocalityName = async (lat, lon) => {
     try {
       console.log(`🔄 Fetching locality name for ${lat}, ${lon}`);
@@ -106,14 +113,12 @@ const LocationModal = () => {
     }
   };
 
-  // Save selected location and close modal
-
   const handleSaveLocation = () => {
     if (!selectedLocation) {
       console.error("⛔ No location selected!");
       return;
     }
-  
+
     console.log("💾 Saving selected location:", selectedLocation);
     setCurrentLocation({
       latitude: parseFloat(selectedLocation.latitude).toFixed(6),
@@ -121,7 +126,7 @@ const LocationModal = () => {
       error: null,
     });
   };
-  
+
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
@@ -130,16 +135,25 @@ const LocationModal = () => {
         {/* Map Container */}
         <div id="map" className={styles.mapContainer}></div>
 
-        {/* Show selected location */}
+        {/* Selected Location */}
         <div className={styles.selectedLocation}>
           <h4>📍 {selectedLocation.locality}</h4>
         </div>
 
         <div className={styles.modalActions}>
-          <button className={styles.saveButton} onClick={handleSaveLocation}>
+          <button
+            className={styles.saveButton}
+            onClick={() => {
+              handleSaveLocation();
+              setmodalopen(false);
+            }}
+          >
             Save
           </button>
-          <button className={styles.cancelButton} onClick={() => setmodalopen(false)}>
+          <button
+            className={styles.cancelButton}
+            onClick={() => setmodalopen(false)}
+          >
             Cancel
           </button>
         </div>
