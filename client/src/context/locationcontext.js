@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
-
+const url = process.env.REACT_APP_FETCH_LOCATION;
 const LocationContext = createContext();
 
 export const LocationProvider = ({ children }) => {
@@ -51,7 +51,7 @@ const normalizeUTCI = (T) => {
 
 const fetchUTCI = async (latitude, longitude, utciKey) => {
   try {
-    const response = await axios.post("http://localhost:5500/api/find/getutci", {
+    const response = await axios.post(`${url}`, {
       latitude,
       longitude,
       utciKey,

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, } from 'react-router-dom';
 import axios from 'axios';
 import './input.css';
-
+const url = process.env.REACT_APP_USER_LOGIN;
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,7 +22,7 @@ const LoginForm = () => {
 
     try {
       // Send login request to the API
-      const response = await axios.post('http://localhost:5500/api/auth/login', {
+      const response = await axios.post(`${url}`, {
         email,
         password,
       }, { withCredentials: true }); // ✅ Ensures cookies are sent & received
@@ -98,7 +98,7 @@ const LoginForm = () => {
         <p className="p">
           Don't have an account?{' '}
           <span className="span">
-            <Link to="/auth/register">Sign Up</Link>
+            <Link to="/register">Sign Up</Link>
           </span>
         </p>
       </form>

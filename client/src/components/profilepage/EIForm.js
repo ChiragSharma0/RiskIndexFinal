@@ -9,7 +9,7 @@ import axios from "axios";
 const EIForm = () => {
   // State to hold form data
 
-  const UPDATE_URL = "http://localhost:5500/api/update/EI"
+  const UPDATE_URL = process.env.REACT_APP_UPDATE_EI ;
   const { EIformData, setEIFormData, sleepOptions } = useEIFormContext(); // Get context values
 
 
