@@ -165,7 +165,7 @@ export const VIFormProvider = ({ children }) => {
     weight: "",
     weightunit: "kg",
     height: "",
-    heightunit: "m",
+    heightUnit: "m",
     heightininch: "",
     income: "",
     adults: "",

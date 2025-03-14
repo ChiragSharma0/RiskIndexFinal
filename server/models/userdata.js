@@ -1,26 +1,24 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-// Define the schema
-const UserSchema = new mongoose.Schema({
-  vidata: {
-    type: Number,
-    required: true,
-    unique: true, // Assuming it's a unique identifier
+const geoUTCISchema = new mongoose.Schema({
+  location: {
+    type: {
+      type: String,
+      enum: ["Point"],
+      required: true,
+    },
+    coordinates: {
+      type: [Number], // [longitude, latitude]
+      required: true,
+    },
   },
-  eidata: {
-    type: String,
-    required: false,
-  },
-  age: {
-    type: String,
-    required: true,
-  },
-  height: {
-    type: String,
+  UTCI: {
+    type: Map,
+    of: Number,
     required: true,
   }
 });
 
-// Export the model
-const UserData = mongoose.model('UserData', UserSchema);
-module.exports = UserData;
+geoUTCISchema.index({ location: "2dsphere" });
+
+module.exports = mongoose.model("GeoUTCIData", geoUTCISchema, "HAZARDINDEX");

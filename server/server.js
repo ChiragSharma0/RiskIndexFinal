@@ -13,11 +13,11 @@ connectDB();
 const FRONTEND_URL = process.env.FRONTEND_URL || 'https://yourdomain.com';
 
 // Middleware
-app.use(cors({
+app.use(cors({ 
     origin: FRONTEND_URL,  // ✅ Allow only your frontend domain
     credentials: true      // ✅ Allow cookies to be sent
-}));
-
+})); 
+ 
 app.use(express.json()); // Parse JSON requests
 app.use(cookieParser()); // Enable cookie parsing
 

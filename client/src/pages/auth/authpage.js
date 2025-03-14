@@ -1,46 +1,37 @@
 import React, { useContext, memo, useEffect } from "react";
-import { LanguageContext } from "../../context/TranslatorContext";
+import { LanguageContext } from "../../context/TranslatorContext.jsx";
 import "./input.css";
+import LanguageSelector from "../../components/common/translator.jsx";
 
 const AuthPage = ({ children }) => {
-    const { translations, setLanguage } = useContext(LanguageContext);
-    const savedLanguage = localStorage.getItem("appLanguage") || "en";
+  const { translations, setLanguage, language } = useContext(LanguageContext);
+  const savedLanguage = localStorage.getItem("appLanguage") || "en";
 
-    // 🔹 Load Google Translate on component mount
-    useEffect(() => {
-        const script = document.createElement("script");
-        script.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-        script.async = true;
-        document.body.appendChild(script);
+  useEffect(() => {
+    console.log("✅ AuthPage mounted");
+    console.log("🌐 Saved Language from localStorage:", savedLanguage);
 
-        window.googleTranslateElementInit = () => {
-            new window.google.translate.TranslateElement(
-                { pageLanguage: "en", autoDisplay: false },
-                "google_translate_element"
-            );
-        };
-    }, []);
+    return () => {
+      console.log("❌ AuthPage unmounted");
+    };
+  }, []);
 
-    return (
-        <div className="Authbody">
-            <header>
-                <label>{translations.choose} {translations.language}:</label>
-                <select
-                    value={savedLanguage}
-                    onChange={(e) => setLanguage(e.target.value)}
-                    className="language-selector"
-                >
-                    <option value="en">🇬🇧 {translations.english}</option>
-                    <option value="hi">🇮🇳 {translations.hindi}</option>
-                </select>
-            </header>
+  useEffect(() => {
+    console.log("🌍 Current language in context:", language);
+  }, [language]);
 
-            {/* 🔹 Hidden Google Translate Widget */}
-            <div id="google_translate_element" style={{ display: "none" }}></div>
+  return (
+    <div className="Authbody">
+      <header>
+        <label>
+          {translations.choose} {translations.language}:
+          <LanguageSelector />
+        </label>
+      </header>
 
-            <main>{children}</main>
-        </div>
-    );
+      <main>{children}</main>
+    </div>
+  );
 };
 
 export default memo(AuthPage);

@@ -196,12 +196,14 @@ function calculateFluidCategory(VIformData, EIformData) {
 
   // Convert weight and height
   const weight = parseFloat(VIformData.weight);
+  console.log("HEIGHT VALUES",VIformData.height,VIformData.heightininch,VIformData.heightUnit);
+
   let heightInMeters;
-  if (VIformData.heightunit === "m") {
+  if (VIformData.heightUnit === "m") {
     heightInMeters = parseFloat(VIformData.height);
-  } else if (VIformData.heightunit === "cm") {
+  } else if (VIformData.heightUnit === "cm") {
     heightInMeters = parseFloat(VIformData.height) / 100;
-  } else if (VIformData.heightunit === "ft") {
+  } else if (VIformData.heightUnit === "ft") {
     const feet = parseFloat(VIformData.height) || 0;
     const inches = parseFloat(VIformData.heightininch) || 0;
     heightInMeters = feet * 0.3048 + inches * 0.0254;
@@ -363,7 +365,7 @@ export const EIFormProvider = ({ children }) => {
     smokedTobacco: "",
     caffeine: "",
     sleep: "",
-    fluidIntake: null,
+    fluidIntake: 0o0,
     activityStatus: "",
     air_quality: "",
     hospital_access: "",
@@ -420,16 +422,16 @@ export const EIFormProvider = ({ children }) => {
 
   function CalculateResult() {
     if (!EIformData) return;
-
+  
     const InfrastructureWorkplace = calculateInfrastructureWorkplace(EIformData);
     const InfrastructureFacilityWorkplace = calculateInfrastructureFacilityWorkplace(EIformData);
     const workrisk = calculateinfra(InfrastructureWorkplace, InfrastructureFacilityWorkplace);
-
+  
     const InfrastructureResidence = calculateInfrastructureResidence(EIformData);
     const InfrastructureFacilityResidence = calculateInfrastructureFacilityResidence(EIformData);
     const homerisk = calculateinfra(InfrastructureResidence, InfrastructureFacilityResidence);
     const Transit = calculateTransit(EIformData);
-
+  
     const Alcohol = calculateAlcohol(VIformData, EIformData);
     const Tobacco = calculateTobacco(VIformData, EIformData);
     const Caffeine = calculateCaffeine(EIformData);
@@ -438,24 +440,40 @@ export const EIFormProvider = ({ children }) => {
     const Fluid = calculateFluidCategory(VIformData, EIformData);
     const AQI = calculateAQI(date.date);
     const HealthAccessibility = calculateHealthAccessibility(EIformData);
-
-    console.log("health inside calculate", HealthAccessibility);
-
+  
     const task = currentTask?.toLowerCase();
     let currentrisk;
     let Infrastructure = {};
-
-    if (task === "at work") {
-      Infrastructure = { InfrastructureWorkplace, InfrastructureFacilityWorkplace };
+  
+    if (task === "workplace") {
+      Infrastructure = {
+        InfrastructureWorkplace,
+        InfrastructureFacilityWorkplace
+      };
       currentrisk = workrisk;
-    } else if (task === "at home") {
-      Infrastructure = { InfrastructureResidence, InfrastructureFacilityResidence };
+    } else if (task === "residence") {
+      Infrastructure = {
+        InfrastructureResidence,
+        InfrastructureFacilityResidence
+      };
       currentrisk = homerisk;
     } else if (task === "traveling") {
-      Infrastructure = { Transit };
+      Infrastructure = {
+        Transit
+      };
       currentrisk = Transit;
     }
-
+  
+    // ✅ Check if Infrastructure has at least one meaningful (non-null/undefined/empty) value
+    const hasInfrastructureValue = Object.values(Infrastructure).some(
+      (val) => val !== null && val !== undefined && val !== "" && !(Array.isArray(val) && val.length === 0)
+    );
+  
+    if (!hasInfrastructureValue) {
+      console.warn("⚠️ Infrastructure has no valid values. EI result not set.");
+      return;
+    }
+  
     const components = {
       ...Infrastructure,
       Alcohol,
@@ -466,10 +484,11 @@ export const EIFormProvider = ({ children }) => {
       AQI,
       HealthAccessibility,
     };
-
+  
     console.log("🛠 Final Components before setting state:", components);
     setEIresult(components);
   }
+  
 
   useEffect(() => {
     console.log("✅ Updated EIresult:", EIresult);
@@ -492,21 +511,22 @@ export const EIFormProvider = ({ children }) => {
     const AQI = calculateAQI(date.date);
     const HealthAccessibility = calculateHealthAccessibility(EIformData);
 
-    const task = currentTask?.toLowerCase();
     let currentrisk;
+
+    const task = currentTask?.toLowerCase();
     let Infrastructure = {};
 
-    if (task === "at work") {
+    if (task === "workplace") {
       Infrastructure = { InfrastructureWorkplace, InfrastructureFacilityWorkplace };
       currentrisk = workrisk;
-    } else if (task === "at home") {
+    } else if (task === "residence") {
       Infrastructure = { InfrastructureResidence, InfrastructureFacilityResidence };
       currentrisk = homerisk;
     } else if (task === "traveling") {
       Infrastructure = { Transit };
       currentrisk = Transit;
     }
-
+console.log("infrastructure", Infrastructure);
     const finalIndex = calculateExposureIndex(currentrisk, liferisk, Fluid, AQI, HealthAccessibility);
     setEIfinal(finalIndex);
     console.log("Final Exposure Index:", finalIndex);

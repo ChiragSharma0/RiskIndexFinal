@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
 
-
+const url = process.env.REACT_APP_FETCH_USER_DATA;
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
@@ -17,7 +17,7 @@ export const UserProvider = ({ children }) => {
     const userid = localStorage.getItem("userid"); // Retrieve userid from localStorage
     
     try {
-      const response = await axios.post("http://localhost:5500/api/find/userdata", { userid });
+      const response = await axios.post(`${url}`, { userid });
   
       console.log("🔹 API response received user:", response.data.user);
   

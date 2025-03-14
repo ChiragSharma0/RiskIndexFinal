@@ -32,6 +32,8 @@ function ExpoTable() {
         { title: "Infrastructure Residence", level: interpretLevel(EIresult.InfrastructureResidence) },
         { title: "Infrastructure Facility Residence", level: interpretLevel(EIresult.InfrastructureFacilityResidence) },
         { title: "Transit", level: interpretLevel(EIresult.Transit) },
+
+        { title: "LifeStyle", level: "just" },
         { title: "Alcohol", level: interpretLevel(EIresult.Alcohol) },
         { title: "Tobacco", level: interpretLevel(EIresult.Tobacco) },
         { title: "Caffeine", level: interpretLevel(EIresult.Caffeine) },
@@ -66,7 +68,12 @@ function ExpoTable() {
             <tbody>
               {EIdata.map((row, index) => (
                 <tr key={index}>
-                  <td style={{ textAlign: row.title.includes("Health") ? "right" : "left" }}>
+                  <td style={
+                    {
+                      textAlign: ["Alcohol","Tobacco","Caffeine","Sleep" ].some(keyword =>row.title.includes(keyword))? "right": "left"
+                    }
+                  }>
+
                     {row.title}
                   </td>
                   <td style={getCellStyle(row.level, "low")}></td>

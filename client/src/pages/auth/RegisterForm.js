@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './input.css';
 import axios from 'axios';
-
+const url = process.env.REACT_APP_USER_REGISTER;
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
     username: '',
@@ -51,7 +51,7 @@ const RegisterForm = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5500/api/auth/register', formData);
+      const response = await axios.post(`${url}`, formData);
       setGeneralMessage(response.data.message);
     } catch (error) {
       setGeneralMessage(error.response?.data?.message || 'Registration failed. Please try again.');

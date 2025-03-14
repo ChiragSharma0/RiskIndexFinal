@@ -1,56 +1,86 @@
-import React, { useEffect} from 'react';
-
+import React, { useEffect, useRef } from 'react';
+import { useVIFormContext } from '../../context/VIformcontext';
+import { useLocationContext } from '../../context/locationcontext';
+import { useEIFormContext } from '../../context/Eicontext';
 
 const ChartComponent = () => {
-    
+  const { EIfinal } = useEIFormContext();
+  const { utciArray = [] } = useLocationContext(); // default to [] to avoid errors
+  const { VIfinal } = useVIFormContext();
+  const chartRef = useRef(null); // Store Chart instance
 
-    useEffect(() => {
-        // Dynamically load the Chart.js script
-        const script = document.createElement('script');
-        script.src = 'https://unpkg.com/chart.js';
-        script.async = true;
-        document.body.appendChild(script);
+  // Load Chart.js
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/chart.js';
+    script.async = true;
+    document.body.appendChild(script);
 
-        script.onload = () => {
-            // Chart.js Data
-            const hourlyData = [0.34, 0.5, 0.4, 0.3, 0.2, 0.3, 0.45, 0.5, 0.55, 0.4, 0.35, 0.3, 0.25, 0.3, 0.4, 0.5, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95];
-            const ctx = document.getElementById('myChart').getContext('2d');
+    script.onload = () => {
+      initializeChart();
+    };
 
-            // Initialize Chart.js
-            new window.Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: Array.from({ length: 24 }, (_, i) => i + 1),
-                    datasets: [{
-                        label: 'Hourly Risk Index',
-                        data: hourlyData,
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 2,
-                        fill: true,
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                        }
-                    }
-                }
-            });
-        };
+  // Update chart when data changes
+  useEffect(() => {
+    if (window.Chart && chartRef.current) {
+      updateChart();
+    }
+  }, [EIfinal, VIfinal, utciArray]);
 
-        // Cleanup script on component unmount
-        return () => {
-            document.body.removeChild(script);
-        };
-    }, []);
+  // Initialize chart
+  const initializeChart = () => {
+    const ctx = document.getElementById('myChart')?.getContext('2d');
+    if (!ctx) return;
 
-    return (
-        <canvas id="myChart"></canvas>
+    chartRef.current = new window.Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: Array.from({ length: 24 }, (_, i) => i + 1),
+        datasets: [{
+          label: 'Hourly Risk Index',
+          data: Array(24).fill(0),
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 2,
+          fill: true,
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
 
-    );
+    updateChart();
+  };
+
+  // Update chart data
+  const updateChart = () => {
+    const EI = parseFloat(EIfinal) || 0;
+    const VI = parseFloat(VIfinal) || 0;
+
+    const multipliedData = utciArray.map(item => {
+      const utci = typeof item === 'number' ? item : item?.value ?? 0;
+      return utci * EI * VI;
+    });
+
+    if (chartRef.current) {
+      chartRef.current.data.datasets[0].data = multipliedData;
+      chartRef.current.update();
+    }
+  };
+
+  return (
+    <div style={{ height: '100px' }}>
+      <canvas id="myChart"></canvas>
+    </div>
+  );
 };
 
 export default ChartComponent;

@@ -100,6 +100,134 @@ button:hover {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.schedule-form-container {
+    padding: 1rem;
+    border: 1px solid #ccc;
+    width: 300px;
+    margin: 20px auto;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .schedule-form-container h3 {
+    text-align: center;
+  }
+  
+  .schedule-form-container label {
+    display: block;
+    margin: 10px 0 5px;
+  }
+  
+  .schedule-form-container input {
+    width: 100%;
+    padding: 6px;
+    margin-bottom: 10px;
+  }
+  
+  .schedule-form-container button {
+    width: 100%;
+    padding: 8px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .schedule-form-container button:hover {
+    background-color: #0056b3;
+  }
+  
+  .schedule-dropdown {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+  }
+  
+  .schedule-dropdown select {
+    padding: 6px 12px;
+    font-size: 1rem;
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .formpage {

@@ -7,7 +7,7 @@ import ProfileTabs from "../../components/profilepage/profiletabs";
 import { Avatar, UserName, Note } from "../../components/common/avatar";
 import axios from "axios"; // Import axios for API calls
 import { useAuthContext } from "../../context/Authcontext";
-
+const url = process.env.REACT_APP_UPDATE_USER;
 
 export default function Profile() {
   const { userdata = {}, setUserdata } = useAuthContext(); // Ensure userdata is never undefined
@@ -29,7 +29,7 @@ export default function Profile() {
     setIsEditing(false);
 
     try {
-      const response = await axios.post("http://localhost:5500/api/update/userdata", formData);
+      const response = await axios.post(`${url}`, formData);
       if (response.status === 200) {
         console.log("✅ User data updated successfully");
       }

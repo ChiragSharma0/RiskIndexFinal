@@ -5,6 +5,7 @@ import Settings from "./settings";
 import VIFORM from "./VIFORM";
 import EIForm from "./EIForm";
 import styles from './profiletab.module.css'
+import CustomScheduleForm from "./ScheduleForm";
 
 
 function ProfileTabs() {
@@ -17,6 +18,8 @@ function ProfileTabs() {
         { label: 'VI', component: <VIFORM /> },
 
         { label: 'EI', component: <EIForm /> },
+
+        { label: 'Schedule', component: <CustomScheduleForm /> },
 
     ];
 

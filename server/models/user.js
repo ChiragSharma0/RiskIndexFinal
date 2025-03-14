@@ -71,6 +71,20 @@ const HISchema = new mongoose.Schema({
   },
 });
 
+const ScheduleSchema = new mongoose.Schema({
+  work: {
+    start: { type: Number, required: true, default: 9 }, // 9 AM
+    end: { type: Number, required: true, default: 17 },  // 5 PM
+  },
+  residence: {
+    start: { type: Number, required: true, default: 17 }, // 5 PM
+    end: { type: Number, required: true, default: 9 },    // 9 AM (next day)
+  },
+  useCustom: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 // Define the main User Schema
 const UserSchema = new mongoose.Schema({
@@ -114,6 +128,10 @@ const UserSchema = new mongoose.Schema({
   EIdata: {
     type: EISchema, // Use the nested schema here
     default: {}, // Ensures an empty object is stored by default
+  },
+   schedule: {
+    type: ScheduleSchema,
+    default: () => ({})
   },
 });
 
