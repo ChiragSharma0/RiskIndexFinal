@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useEIFormContext } from "../../context/Eicontext"; // Import context
 import axios from "axios";
+const UPDATE_URL = process.env.REACT_APP_UPDATE_EI;
 
 
 
@@ -9,7 +10,6 @@ import axios from "axios";
 const EIForm = () => {
   // State to hold form data
 
-  const UPDATE_URL = "http://localhost:5500/api/update/EI"
   const { EIformData, setEIFormData, sleepOptions } = useEIFormContext(); // Get context values
 
 

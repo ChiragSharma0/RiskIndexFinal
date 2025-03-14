@@ -25,12 +25,12 @@ body {
 
 main {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 /* Dashboard */
 .dashboard {
-  height: 100%;
+  height: 100vh;
   width: 100%;
   margin: 0;
   padding: 0px 50px;
@@ -52,6 +52,7 @@ main {
 
 /* Image Box */
 #imgbox {
+  height: calc(100vh - 120px);
   width: 100%;
   max-height: inherit;
   padding: 20px;
@@ -159,6 +160,8 @@ img {
   width: 94%;
   border-collapse: collapse;
   margin-left: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .index-box th,
@@ -170,7 +173,7 @@ img {
 
 
 .index-box .underline1 {
-  border-bottom: 7px solid red;
+  border-left: 50px solid red;
   display: block;
   margin-top: 3px;
   padding: 0px 7px;
@@ -178,14 +181,14 @@ img {
 }
 
 .index-box .underline2 {
-  border-bottom: 7px solid yellow;
+  border-left: 50px solid yellow;
   display: block;
   margin-top: 3px;
   padding: 0px 7px;
 }
 
 .index-box .underline3 {
-  border-bottom: 7px solid rgb(174, 225, 91);
+  border-left: 50px solid rgb(174, 225, 91);
   display: block;
   margin-top: 3px;
   padding: 0px 7px;
@@ -247,14 +250,14 @@ img {
 }
 
 .index-card .highlight {
-  font-size: clamp(20px, 2.5vw, 35px);
+  font-size: clamp(20px, 2vw, 35px);
   color: black;
   border-bottom: 7px solid red;
   padding: 0px 5px;
 }
 
 .index-card .highlight1 {
-  font-size: clamp(20px, 2.5vw, 35px);
+  font-size: clamp(20px, 2vw, 35px);
   color: black;
   padding: 0px 5px;
   font-weight: bold;
@@ -262,11 +265,11 @@ img {
 }
 
 .index-card .highlight2 {
-  font-size: clamp(20px, 2.5vw, 35px);
+  font-size: clamp(20px, 2vw, 35px);
   color: black;
   padding: 0px 5px;
   font-weight: bold;
-  border-bottom: 7px solid rgb(17, 255, 0);
+  border-bottom: 7px solid rgb(174, 225, 91);
 }
 
 
@@ -286,7 +289,7 @@ img {
 
 .index-card-result .highlight {
   margin: auto;
-  font-size: 35px;
+  font-size: clamp(20px, 2vw, 35px);
   color: black;
   border-bottom: 7px solid red;
 
@@ -294,7 +297,7 @@ img {
 
 .index-card-result .highlight2 {
   margin: auto;
-  font-size: 35px;
+  font-size: clamp(20px, 2vw, 35px);
   color: black;
   border-bottom: 7px solid rgb(0, 255, 34);
 
@@ -302,7 +305,7 @@ img {
 
 .index-card-result .highlight1 {
   margin: auto;
-  font-size: 35px;
+  font-size: clamp(20px, 2vw, 35px);
   color: black;
   border-bottom: 7px solid rgb(255, 242, 0);
 
@@ -321,6 +324,7 @@ img {
   border: 1px solid black;
   box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.5);
   text-align: center;
+  margin: 5px;
 }
 
 .chart-container {
@@ -346,12 +350,15 @@ img {
 
 /* Media Queries */
 @media screen and (min-width: 750px) and (max-width: 1000px) {
+  main{
+     flex-direction: column;
+  }
   #info-container {
     width: 50%;
     height: 100%;
   }
 
-  .DateLoc_infobox__KDn45 {
+  .DateLoc_infobox {
     flex-direction: column;
     display: flex;
     justify-content: space-between;
@@ -390,6 +397,7 @@ img {
   .indexvalues-indivisual,
   .indexvalue-final {
     width: auto;
+    flex-direction: column;
   }
 }
 
@@ -498,8 +506,7 @@ img {
   }
 
   .img-container {
-    width: 90vw;
-    max-width: 340px;
+    width: 90%;
     margin: 5px;
   }
 

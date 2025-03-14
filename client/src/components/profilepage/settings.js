@@ -1,24 +1,33 @@
 import React from "react";
 import styles from "./settings.module.css"; // Import modular CSS
 import ToggleSwitch from "../common/toggle"
+import LanguageSelector from "../common/translator.jsx";
+import ScheduleDropdown from "../common/schedulestatus.jsx";
 function Settings() {
     return (
         <div className={styles.settingtabs}>
             <div className={styles.settabs}>
                 <div className={styles.setBox}>
-                    <h2> Notifications</h2>
-                    - Allow users to enable/disable notifications for different events.
+                    <h2> Language</h2>
+                    - Select the Language of Your Choice.
 
                 </div>
-                <ToggleSwitch />
+                <label>
+
+                    <LanguageSelector />
+                </label>
             </div>
             <div className={styles.settabs}>
                 <div className={styles.setBox}>
-                    <h2>Appearance</h2>
-                    - Let users customize color themes.
+                    <h2>Schedule</h2>
+                    - Customize Your Daily General Schedule.
                 </div>
-            </div>
+                <label>
 
+                    <ScheduleDropdown />
+                </label>
+            </div>
+{/* 
             <div className={styles.settabs}>
                 <div className={styles.setBox}>
                     <h2>Privacy</h2>
@@ -39,7 +48,7 @@ function Settings() {
                     - Permanent account actions like deactivate account, wipe data, etc.
                 </div>
             </div>
-
+ */}
         </div>
     );
 }

@@ -27,6 +27,7 @@ console.log("USEEFFECT TRIGGERED FROM HOMEPAGEDESK");
                     <div id='imgbox'>
                         <Image />
                     </div>
+                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}> <span> H.I. - Heat Index;</span><span> V.I. Vulnerability Index;</span><span> R.I. Risk Index</span></div>
                 </div>
                 <div id='info-container'>
                     <DateLoc />

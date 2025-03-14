@@ -4,27 +4,32 @@ import { useLocationContext } from "../../context/locationcontext";
 import { useVIFormContext } from "../../context/VIformcontext";
 
 function RIfinalVal() {
-  // Get values from contexts
   const { EIfinal } = useEIFormContext();
   const { HIfinal } = useLocationContext();
   const { VIfinal } = useVIFormContext();
 
-  // State to store the final result
   const [RIfinal, setRIfinal] = useState("0.00");
 
-  // Calculate the product whenever any value updates
   useEffect(() => {
-    const EI = typeof EIfinal === "number" ? EIfinal : 0;
-    const HI = typeof HIfinal === "number" ? HIfinal : 0;
-    const VI = typeof VIfinal === "number" ? VIfinal : 0;
+    // 🛠 Ensure values are valid floats, default to 0 if not
+    const EI = parseFloat(EIfinal) || 0;
+    const HI = parseFloat(HIfinal) || 0;
+    const VI = parseFloat(VIfinal) || 0;
 
+    console.log("🔍 Debugging Inputs:");
+    console.log("📌 EI (EIfinal):", EI);
+    console.log("📌 HI (HIfinal):", HI);
+    console.log("📌 VI (VIfinal):", VI);
+
+    // Calculate Risk Index
     const result = EI * HI * VI;
     setRIfinal(result.toFixed(2));
 
-    console.log("🔹 RIfinal Calculated:", result);
+    console.log("✅ Final Computation:");
+    console.log(`🟢 ${EI} * ${HI} * ${VI} = ${result.toFixed(2)}`);
+
   }, [EIfinal, HIfinal, VIfinal]);
 
-  // Determine the highlight class
   const interpretLevel = (value) => {
     if (value <= 0.33) return "highlight2";
     if (value <= 0.66) return "highlight1";

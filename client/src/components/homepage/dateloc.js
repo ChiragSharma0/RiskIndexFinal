@@ -21,21 +21,23 @@ function DateLoc() {
   };
 
   const handletimeSave = () => {
-    const newDate = String(tempDate).padStart(2, "0");  // Ensure two-digit format
-    const newTime = String(tempTime).padStart(2, "0");  // Ensure two-digit format
-
+    const newDate = String(tempDate).padStart(2, "0");
+    const newTime = String(tempTime).padStart(2, "0");
+  
     if (Number(newDate) >= 10 && Number(newDate) <= 16) {
-      console.log(newDate);
-      console.log(newTime);
-      setDate((prev) => ({ ...prev, date: Number(newDate) }));
+      setDate((prev) => ({ ...prev, date: Number(newDate) })); // Keep date as number
     }
-
+  
     if (Number(newTime) >= 0 && Number(newTime) <= 23) {
-      setTime((prev) => ({ ...prev, hrs: Number(newTime) }));
+      setTime((prev) => ({
+        ...prev,
+        hrs: newTime, // ✅ Save as two-digit string
+      }));
     }
-
+  
     settimeEditing(false);
   };
+  
 
 
 useEffect(()=>{

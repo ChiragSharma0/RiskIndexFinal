@@ -124,6 +124,103 @@ const updateLocation = async (req, res) => {
         res.status(500).json({ error: "Server error" });
     }
 };
+const updateSchedule = async (req, res) => {
+  try {
+    const { userid, schedule } = req.body;
+    console.log("🔹 Update schedule request received:", { userid, schedule });
+
+    if (!userid || !schedule) {
+      return res.status(400).json({ message: "Userid and schedule required" });
+    }
+
+    // Helper to convert "HH:MM" => hour as number
+    const parseHour = (timeStr) => {
+      const parts = timeStr?.split(":");
+      const hour = parts && parts.length > 0 ? parseInt(parts[0], 10) : 0;
+      return isNaN(hour) ? 0 : hour;
+    };
+
+    // Convert frontend time format to numbers for backend storage
+    const work = {
+      start: parseHour(schedule.workTime.start),
+      end: parseHour(schedule.workTime.end),
+    };
+
+    const residence = {
+      start: parseHour(schedule.homeTime.start),
+      end: parseHour(schedule.homeTime.end),
+    };
+
+    // Update only work and residence — no change to useCustom
+    const updatedUser = await User.findOneAndUpdate(
+      { UserID: userid },
+      {
+        $set: {
+          "schedule.work": work,
+          "schedule.residence": residence,
+        },
+      },
+      {
+        new: true,
+        select: "UserID schedule",
+      }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    console.log("✅ Schedule updated:", updatedUser.schedule);
+    return res.status(200).json({
+      message: "Schedule updated successfully",
+      updatedSchedule: updatedUser.schedule,
+    });
+  } catch (error) {
+    console.error("🔥 Error updating schedule:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 
 
-module.exports = { updateUserData , updateEIdata , updateVIdata , updateLocation};
+const updateScheduleStatus = async (req, res) => {
+    try {
+      const { userid, useCustom } = req.body;
+  
+      console.log("🔹 Schedule status update requested");
+      console.log("   📦 Payload:", { userid, useCustom });
+  
+      if (typeof useCustom !== "boolean" || !userid) {
+        console.warn("⚠️ Invalid request: Missing or incorrect userid/useCustom");
+        return res.status(400).json({ message: "Userid and useCustom boolean are required" });
+      }
+  
+      const updatedUser = await User.findOneAndUpdate(
+        { UserID: userid },
+        { $set: { "schedule.useCustom": useCustom } },
+        { new: true, select: "UserID schedule.useCustom" }
+      );
+  
+      if (!updatedUser) {
+        console.warn("❌ No user found with the provided UserID:", userid);
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      console.log(`✅ Schedule status successfully updated for user: ${userid}`);
+      console.log("   🔄 New useCustom value:", updatedUser.schedule.useCustom);
+  
+      res.status(200).json({
+        message: "Schedule status updated",
+        useCustom: updatedUser.schedule.useCustom
+      });
+  
+    } catch (error) {
+      console.error("🔥 Error updating schedule status:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  };
+  
+
+
+
+
+module.exports = { updateUserData , updateEIdata , updateVIdata , updateLocation , updateSchedule , updateScheduleStatus};

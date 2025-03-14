@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useVIFormContext } from "../../context/VIformcontext"; // Import context
 import axios from "axios";
 import "./form.css";
+const UPDATE_URL = process.env.REACT_APP_UPDATE_VI; // API to update database
 
 const VIFORM = () => {
 
@@ -30,7 +31,6 @@ const VIFORM = () => {
       
         return { years, months, days };
       }
-  const UPDATE_URL = "http://localhost:5500/api/update/VI"; // API to update database
 
   const { VIformData, setVIFormData } = useVIFormContext(); // Get context values
 

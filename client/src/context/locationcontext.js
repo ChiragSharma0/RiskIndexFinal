@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
-
+const url = process.env.REACT_APP_FETCH_LOCATION;
 const LocationContext = createContext();
 
 export const LocationProvider = ({ children }) => {
@@ -18,86 +18,90 @@ export const LocationProvider = ({ children }) => {
 
   const [time, setTime] = useState({
     hrs: 12,
-    min: new Date().getMinutes(),
-    sec: new Date().getSeconds(),
+    min: 0o0,
+    sec: 0o0,
   });
-const [ ismodalopen,setmodalopen] = useState(false);
-  
-const[HIfinal,setHifinal] = useState(0.00);
-  
-  
-const normalizeUTCI = (T) => {
-  // Define UTCI categories based on the given table
-  const categories = [
-    { min: 9, max: 26, min_cat: 0.00, max_cat: 0.25 },
-    { min: 26, max: 32, min_cat: 0.25, max_cat: 0.50 },
-    { min: 32, max: 38, min_cat: 0.50, max_cat: 0.75 },
-    { min: 38, max: 46, min_cat: 0.75, max_cat: 1.00 },
-    { min: 46, max: Infinity, min_cat: 1.00, max_cat: 1.00 },
-  ];
 
-  // Find the category where T falls
-  const category = categories.find(cat => T >= cat.min && T < cat.max);
-  
-  if (!category) return 0.00; // If T is undefined or out of range
-
-  const { min, max, min_cat, max_cat } = category;
-
-  // Apply the normalization formula
-  const K = min_cat + (((T - min) / (max - min)) * (max_cat - min_cat));
-
-  return K;
-};
-
-const fetchUTCI = async (latitude, longitude, utciKey) => {
-  try {
-    const response = await axios.post("http://localhost:5500/api/find/getutci", {
-      latitude,
-      longitude,
-      utciKey,
+  const setFormattedTime = ({ hrs, min, sec }) => {
+    setTime({
+      hrs: formatTwoDigits(hrs),
+      min: formatTwoDigits(min),
+      sec: formatTwoDigits(sec),
     });
+  };
 
-    if (response.data && response.data.utciValue !== undefined) {
-      const T = response.data.utciValue;
-      console.log("✅ Fetched UTCI:", T);
+  const [ismodalopen, setmodalopen] = useState(false);
 
-      // Normalize UTCI value
-      const normalizedUTCI = normalizeUTCI(T);
-      console.log("✅ Normalized UTCI:", normalizedUTCI);
+  const [HIfinal, setHifinal] = useState(0.00);
+  const [utciArray, setUtciArray] = useState([]);
 
-      return normalizedUTCI; // ✅ Directly returning the normalized value
-    } else {
-      console.warn("⚠️ No UTCI data found for the given location.");
-      return 0.00;
+
+  const normalizeUTCI = (T) => {
+    // Define UTCI categories based on the given table
+    const categories = [
+      { min: 9, max: 26, min_cat: 0.00, max_cat: 0.25 },
+      { min: 26, max: 32, min_cat: 0.25, max_cat: 0.50 },
+      { min: 32, max: 38, min_cat: 0.50, max_cat: 0.75 },
+      { min: 38, max: 46, min_cat: 0.75, max_cat: 1.00 },
+      { min: 46, max: Infinity, min_cat: 1.00, max_cat: 1.00 },
+    ];
+
+    // Find the category where T falls
+    const category = categories.find(cat => T >= cat.min && T < cat.max);
+
+    if (!category) return 0.00; // If T is undefined or out of range
+
+    const { min, max, min_cat, max_cat } = category;
+
+    // Apply the normalization formula
+    const K = min_cat + (((T - min) / (max - min)) * (max_cat - min_cat));
+
+    return K;
+  };
+
+
+
+
+  useEffect(() => {
+
+    try {
+      console.log("triggered ")
+      updateHIFinal();
+    } catch (error) {
+      console.log(error);
+      setHifinal(0.00);
     }
-  } catch (error) {
-    console.error("❌ Error fetching UTCI:", error.response?.data?.error || error.message);
-    return 0.00;
-  }
-};
+  }, [date.date, currentLocation, time.hrs]);
 
+  const updateHIFinal = async () => {
+    if (currentLocation) {
+      const latitude = currentLocation.latitude;
+      const longitude = currentLocation.longitude;
 
-const updateHIFinal = async () => {
-  if(currentLocation){
-  const latitude = currentLocation.latitude;
-  const longitude = currentLocation.longitude;
-  const utciKey = `UTCI_${date.date}_${time.hrs}`; // Change as needed
+      // ✅ Fix the naming
+      const currentDate = date.date; // or format as needed e.g. "2025-03-13"
+      const currentHour = time.hrs;
 
-  const normalizedValue = await fetchUTCI(latitude, longitude, utciKey);
-  console.log("setting hifinal",normalizedValue);
-  setHifinal(normalizedValue); // ✅ Directly saving normalized UTCI
-  }
-};
+      try {
+        console.log("posting location")
+        const response = await axios.post(`${url}`, {
+          latitude,
+          longitude,
+          date: currentDate,
+          hour: currentHour,
+        });
+        const { currentUTCI, utciNext24Hours } = response.data;
+        const normalizedArray = utciNext24Hours.map((utci) => normalizeUTCI(utci.value));
+        console.log("✅ setting hifinal:", normalizedArray[0]);
+        setHifinal(normalizedArray[0]);
+        setUtciArray(normalizedArray);
 
-useEffect(()=>{
- 
-try{
-  updateHIFinal();
-}catch(error){
-console.log(error);
-setHifinal(0.00);
-}
-},[date.date,currentLocation,time.hrs]);
+      } catch (error) {
+        console.error("❌ Failed to fetch UTCI:", error.response?.data || error.message);
+      }
+    }
+  };
+
 
 
   // Get the user's current location
@@ -137,25 +141,15 @@ setHifinal(0.00);
   }, []);
 
 
-const formatTwoDigits = (num) => String(num).padStart(2, "0");
-
-  // Auto-update time every second and ensure two-digit format
-useEffect(() => {
-  const interval = setInterval(() => {
-    setTime((prev) => ({
-      ...prev,
-      min: formatTwoDigits(new Date().getMinutes()),
-      sec: formatTwoDigits(new Date().getSeconds()),
-    }));
-  }, 1000);
-  return () => clearInterval(interval);
-}, []);
+  const formatTwoDigits = (num) => String(num).padStart(2, "0");
 
 
 
 
 
- 
+
+
+
 
   return (
     <LocationContext.Provider
@@ -163,20 +157,20 @@ useEffect(() => {
         date,
         setDate,  // ✅ Directly passing the state updater
         time,
-        setTime,  // ✅ Directly passing the state updater
+        setTime, // ✅ replaces raw setTime
         currentLocation,
         setCurrentLocation,
         ismodalopen,
         setmodalopen,
         HIfinal,
-        setHifinal
+        setHifinal,
+        utciArray
       }}
     >
       {children}
     </LocationContext.Provider>
   );
-  
+
 };
 
 export const useLocationContext = () => useContext(LocationContext);
-  
