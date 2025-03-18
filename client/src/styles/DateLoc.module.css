@@ -20,7 +20,7 @@
     position: relative;
     width: 50%;
     background: #fff;
-    padding: 13px 17px;
+    padding: 5px 17px;
     border-radius: 20px;
     border: 1px solid black;
     box-shadow: 2px 4px 7px rgba(0, 0, 0, 0.5);
@@ -50,12 +50,14 @@ input{
 }
 .button{
     position: absolute; 
-    top: 10px;
+    top: 5px;
     right: 10px;
     border: 1px solid black;
     border-radius: 2px;
     width: fit-content;
     padding: 2px;
+    background-color: whitesmoke;
+    color: black;
   }
 
 

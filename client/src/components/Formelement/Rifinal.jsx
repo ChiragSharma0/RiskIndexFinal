@@ -31,18 +31,21 @@ function RIfinalVal() {
   }, [EIfinal, HIfinal, VIfinal]);
 
   const interpretLevel = (value) => {
-    if (value <= 0.33) return "highlight2";
-    if (value <= 0.66) return "highlight1";
-    if (value <= 1.0) return "highlight";
+    if (value <= 0.33) return "green";
+    if (value <= 0.66) return "yellow";
+    if (value <= 1.0) return "red";
     return "";
   };
 
   return (
-    <>
-      <span className={interpretLevel(Number(RIfinal))}>
-        {RIfinal}
-      </span>
-    </>
+    <div style={{ display: "flex", justifyContent: "center", alignContent: "center" }}>
+      <div style={{ display: "flex" ,flex:"1",justifyContent:"center"}}>
+        <div className="highlight1" style={{border:"none", margin:"0px"}}>
+          {RIfinal}
+        </div>
+        <div  style={{ height: "100%", width: "40%" ,backgroundColor:interpretLevel(Number(RIfinal))}}></div>
+      </div>
+    </div>
   );
 }
 

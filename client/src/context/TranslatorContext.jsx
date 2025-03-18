@@ -1,61 +1,45 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useEffect, useState } from "react";
+
 import en from "../locales/en.json";
 import hi from "../locales/hi.json";
 
 export const LanguageContext = createContext();
 
-export function LanguageProvider({ children }) {
-  const storedLanguage = localStorage.getItem("appLanguage") || "en";
-  const [language, setLanguage] = useState(storedLanguage);
-  const translations = language === "hi" ? hi : en;
+export const LanguageProvider = ({ children }) => {
+  const [language, setLanguage] = useState("en");
+  const [translations, setTranslations] = useState(en); // default to English
 
   useEffect(() => {
-    localStorage.setItem("appLanguage", language);
-    applyGoogleTranslate(language);
-  }, [language]);
+    const savedLang = localStorage.getItem("language") || "en";
+    setLanguage(savedLang);
+    loadTranslations(savedLang);
+  }, []);
 
-  const applyGoogleTranslate = (lang) => {
-    const googleLang = lang === "en" ? "/en/en" : `/en/${lang}`;
-    document.cookie = `googtrans=${googleLang}; path=/; domain=${window.location.hostname}`;
-
-    if (window.google) {
-      new window.google.translate.TranslateElement(
-        { pageLanguage: "en", autoDisplay: false },
-        "google_translate_element"
-      );
+  const loadTranslations = (lang) => {
+    switch (lang) {
+      case "hi":
+        setTranslations(hi);
+        break;
+      case "en":
+      default:
+        setTranslations(en);
+        break;
     }
   };
 
-  // 🔹 Inject Google Translate script once on initial load
-  useEffect(() => {
-    console.log("📦 Injecting Google Translate script...");
+  const changeLanguage = (lang) => {
+    setLanguage(lang);
+    localStorage.setItem("language", lang);
+    loadTranslations(lang);
+  };
 
-    const script = document.createElement("script");
-    script.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
-    script.async = true;
-    document.body.appendChild(script);
-
-    window.googleTranslateElementInit = () => {
-      console.log("✅ Google Translate initialized");
-      new window.google.translate.TranslateElement(
-        { pageLanguage: "en", autoDisplay: false },
-        "google_translate_element"
-      );
-    };
-
-    return () => {
-      console.log("🧹 Cleaning up Google Translate script");
-      // Optional: remove the script if you want
-    };
-  }, []);
+  const t = (key) => {
+    return translations[key] || key;
+  };
 
   return (
-    <LanguageContext.Provider value={{ language, translations, setLanguage }}>
-      <>
-        {/* 🔹 Hidden Google Translate Widget */}
-        <div id="google_translate_element" style={{ display: "none" }}></div>
-        {children}
-      </>
+    <LanguageContext.Provider value={{ language, changeLanguage, t }}>
+      {children}
     </LanguageContext.Provider>
   );
-}
+};

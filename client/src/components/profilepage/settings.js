@@ -1,54 +1,55 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import styles from "./settings.module.css"; // Import modular CSS
-import ToggleSwitch from "../common/toggle"
+import ToggleSwitch from "../common/toggle";
 import LanguageSelector from "../common/translator.jsx";
 import ScheduleDropdown from "../common/schedulestatus.jsx";
+
 function Settings() {
+    const { t } = useTranslation();
+
     return (
         <div className={styles.settingtabs}>
             <div className={styles.settabs}>
                 <div className={styles.setBox}>
-                    <h2> Language</h2>
-                    - Select the Language of Your Choice.
-
+                    <h2>{t("settings.languageTitle")}</h2>
+                    - {t("settings.languageDescription")}
                 </div>
                 <label>
-
                     <LanguageSelector />
                 </label>
             </div>
             <div className={styles.settabs}>
                 <div className={styles.setBox}>
-                    <h2>Schedule</h2>
-                    - Customize Your Daily General Schedule.
+                    <h2>{t("settings.scheduleTitle")}</h2>
+                    - {t("settings.scheduleDescription")}
                 </div>
                 <label>
-
                     <ScheduleDropdown />
                 </label>
             </div>
-{/* 
+            {/* 
             <div className={styles.settabs}>
                 <div className={styles.setBox}>
-                    <h2>Privacy</h2>
-                    - Settings for data privacy preferences and permissions.
+                    <h2>{t("settings.privacyTitle")}</h2>
+                    - {t("settings.privacyDescription")}
                 </div>
             </div>
 
             <div className={styles.settabs}>
                 <div className={styles.setBox}>
-                    <h2>Activity Status</h2>
-                    - Show/hide active/online status to other users.
+                    <h2>{t("settings.statusTitle")}</h2>
+                    - {t("settings.statusDescription")}
                 </div>
             </div>
 
             <div className={styles.settabs}>
                 <div className={styles.setDangerBox}>
-                    <h2>Danger zone</h2>
-                    - Permanent account actions like deactivate account, wipe data, etc.
+                    <h2>{t("settings.dangerTitle")}</h2>
+                    - {t("settings.dangerDescription")}
                 </div>
             </div>
- */}
+            */}
         </div>
     );
 }

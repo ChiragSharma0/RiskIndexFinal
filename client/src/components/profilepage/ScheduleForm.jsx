@@ -72,7 +72,7 @@ console.log(workTime,homeTime);
       <div>
         <label>Work Start Time:</label>
         <input
-          type="time"
+          type="time" style={{width:"auto"}}
           value={workTime.start}
           onChange={(e) => setWorkTime({ ...workTime, start: e.target.value })}
           required
@@ -81,7 +81,7 @@ console.log(workTime,homeTime);
       <div>
         <label>Work End Time:</label>
         <input
-          type="time"
+          type="time" style={{width:"auto"}}
           value={workTime.end}
           onChange={(e) => setWorkTime({ ...workTime, end: e.target.value })}
           required
@@ -90,7 +90,7 @@ console.log(workTime,homeTime);
       <div>
         <label>Home Start Time:</label>
         <input
-          type="time"
+          type="time" style={{width:"auto"}}
           value={homeTime.start}
           onChange={(e) => setHomeTime({ ...homeTime, start: e.target.value })}
           required
@@ -99,7 +99,7 @@ console.log(workTime,homeTime);
       <div>
         <label>Home End Time:</label>
         <input
-          type="time"
+          type="time" style={{width:"auto"}}
           value={homeTime.end}
           onChange={(e) => setHomeTime({ ...homeTime, end: e.target.value })}
           required

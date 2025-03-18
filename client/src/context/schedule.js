@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { useLocationContext } from "./locationcontext";
 import axios from "axios"; // Make sure this is imported at the top
+import React from "react";
+import { useTranslation } from "react-i18next";
 const url = process.env.REACT_APP_FETCH_SCHEDULE;
 const ScheduleContext = createContext();
 
@@ -10,12 +12,13 @@ const timeToHrs = (timeStr) => {
 };
 
 export const ScheduleProvider = ({ children }) => {
-
+  const { t } = useTranslation();
   const { time } = useLocationContext(); // Get current time from LocationContext
   const [scheduleType, setScheduleType] = useState("default");
   const [schedule, setSchedule] = useState({
     workTime: { start: "09:00", end: "17:00" },
-    homeTime: { start: "17:00", end: "07:00" } // overnight
+    homeTime: { start: "17:00", end: "07:00" }, // overnight
+    
   });
 
   const [currentTask, setCurrentTask] = useState(getCurrentTask());
@@ -24,7 +27,7 @@ export const ScheduleProvider = ({ children }) => {
     const task = getCurrentTask();
     setCurrentTask(task);
     console.log(task);
-  }, [time,schedule]); // runs every time `time` changes
+  }, [time, schedule]); // runs every time `time` changes
   // 🔄 Fetch schedule from backend on mount
 
   useEffect(() => {

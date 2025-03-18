@@ -142,8 +142,8 @@ img {
   width: 90%;
   min-width: 270px;
   background: #fff;
-  padding: 10px;
-  border-radius: 39px;
+  padding: 5px 10px;
+  border-radius: 25px;
   border: 1px solid black;
   box-shadow: 2px 4px 7px rgba(0, 0, 0, 0.5);
   flex: 1;
@@ -153,7 +153,6 @@ img {
 .index-box h3 {
   padding-bottom: 5px;
   margin-left: 12px;
-  margin-top: 10px;
 }
 
 .index-box table {
@@ -167,31 +166,38 @@ img {
 .index-box th,
 .index-box td {
   border: 2px solid black;
-  padding: 1px;
 }
 
 
 
 .index-box .underline1 {
-  border-left: 50px solid red;
   display: block;
-  margin-top: 3px;
-  padding: 0px 7px;
+  flex: 0.6;
+  height: 10px;
+  width: auto;
+  margin:  auto 0px;
+
+  background-color: red;
 
 }
 
 .index-box .underline2 {
-  border-left: 50px solid yellow;
   display: block;
-  margin-top: 3px;
-  padding: 0px 7px;
+  flex: 0.8;
+  height: 10px;
+  width: auto;
+  margin:  auto 0px;
+  background-color: yellow;
 }
 
 .index-box .underline3 {
-  border-left: 50px solid rgb(174, 225, 91);
   display: block;
-  margin-top: 3px;
-  padding: 0px 7px;
+  flex: 0.6;
+  height: 10px;
+  width: auto;
+  margin:  auto 0px;
+
+  background-color: rgb(174, 225, 91);
 }
 
 .index-box .exposure {
@@ -305,9 +311,10 @@ img {
 
 .index-card-result .highlight1 {
   margin: auto;
-  font-size: clamp(20px, 2vw, 35px);
+  font-size: clamp(24px, 2.1vw, 35px);
   color: black;
   border-bottom: 7px solid rgb(255, 242, 0);
+  font-weight: 1000;
 
 }
 
@@ -324,15 +331,14 @@ img {
   border: 1px solid black;
   box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.5);
   text-align: center;
-  margin: 5px;
 }
 
 .chart-container {
   display: block;
   box-sizing: border-box;
-  height: 100px;
+  height: 115px;
   width: 100%;
-  margin-top: 5px;
+  margin: 5px;
 }
 
 /* Footer */
@@ -397,7 +403,6 @@ img {
   .indexvalues-indivisual,
   .indexvalue-final {
     width: auto;
-    flex-direction: column;
   }
 }
 

@@ -1,54 +1,48 @@
-import React, { useState ,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../../styles/DateLoc.module.css';
 import { useLocationContext } from '../../context/locationcontext';
 import { useSchedule } from '../../context/schedule';
+import { useTranslation } from 'react-i18next';
 
 function DateLoc() {
-  const { date, setDate, time, setTime ,currentLocation,setmodalopen} = useLocationContext();
-  
-  const [istimeEditing, settimeEditing] = useState(false);
+  const { t } = useTranslation();
+  const { date, setDate, time, setTime, currentLocation, setmodalopen } = useLocationContext();
   const { currentTask } = useSchedule();
-  // Temporary values while editing
+
+  const [istimeEditing, settimeEditing] = useState(false);
   const [tempDate, setTempDate] = useState(date.date);
   const [tempTime, setTempTime] = useState(time.hrs);
 
-  const handleDateChange = (e) => {
-    setTempDate(e.target.value);
-  };
-
-  const handleTimeChange = (e) => {
-    setTempTime(e.target.value);
-  };
+  const handleDateChange = (e) => setTempDate(e.target.value);
+  const handleTimeChange = (e) => setTempTime(e.target.value);
 
   const handletimeSave = () => {
-    const newDate = String(tempDate).padStart(2, "0");
-    const newTime = String(tempTime).padStart(2, "0");
-  
+    const newDate = String(tempDate).padStart(2, '0');
+    const newTime = String(tempTime).padStart(2, '0');
+
     if (Number(newDate) >= 10 && Number(newDate) <= 16) {
-      setDate((prev) => ({ ...prev, date: Number(newDate) })); // Keep date as number
+      setDate((prev) => ({ ...prev, date: Number(newDate) }));
     }
-  
+
     if (Number(newTime) >= 0 && Number(newTime) <= 23) {
       setTime((prev) => ({
         ...prev,
-        hrs: newTime, // ✅ Save as two-digit string
+        hrs: newTime,
       }));
     }
-  
+
     settimeEditing(false);
   };
-  
 
-
-useEffect(()=>{
-  console.log("date rendered",currentTask);
-},[currentTask]);
+  useEffect(() => {
+    console.log('date rendered', currentTask);
+  }, [currentTask]);
 
   return (
     <div className={styles.infobox}>
       <div className={styles.datetime}>
         <button
-        style={{position:"absolute"}}
+          style={{ position: 'absolute' }}
           onClick={() => {
             if (istimeEditing) {
               handletimeSave();
@@ -58,15 +52,14 @@ useEffect(()=>{
           }}
           className={styles.button}
         >
-          {istimeEditing ? "Save" : "Edit"}
+          {istimeEditing ? t('confirm') : t('edit')}
         </button>
-        <p>Date & Time</p>
+        <p>{t('datetime_label')}</p>
         <div>
           <h3>
             {!istimeEditing ? (
-              <>{String(date.date).padStart(2, "0")}</>
+              <>{String(date.date).padStart(2, '0')}</>
             ) : (
-
               <input
                 type="number"
                 min="10"
@@ -80,7 +73,7 @@ useEffect(()=>{
             /{date.month}/{date.year} |
 
             {!istimeEditing ? (
-              <>{String(time.hrs).padStart(2, "0")}</>
+              <>{String(time.hrs).padStart(2, '0')}</>
             ) : (
               <input
                 type="number"
@@ -92,25 +85,23 @@ useEffect(()=>{
                 style={{ fontSize: 'clamp(10px, 2vw, 30px)' }}
               />
             )}
-            :{String(time.min).padStart(2, "0")}:{String(time.sec).padStart(2, "0")} UTC
+            :{String(time.min).padStart(2, '0')}:{String(time.sec).padStart(2, '0')} UTC
           </h3>
         </div>
       </div>
 
       <div className={styles.location}>
-        <p>Location & Place</p>
+        <p>{t('location_label')}</p>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          
           <h3 className={styles.lonlat}>
-            Lat: {currentLocation.latitude ? Number(currentLocation.latitude).toFixed(3) : "Unavailable"}
+            {t('latitude')}: {currentLocation.latitude ? Number(currentLocation.latitude).toFixed(3) : t('unavailable')}
             <br />
-            Lon: {currentLocation.longitude ? Number(currentLocation.longitude).toFixed(3) : "Unavailable"}
+            {t('longitude')}: {currentLocation.longitude ? Number(currentLocation.longitude).toFixed(3) : t('unavailable')}
           </h3>
-          <h4 id="localityName">{currentTask||0}</h4>
-          <button className={styles.button}   style={{position:"absolute"}} onClick={()=>{setmodalopen(true)}}>Edit</button>
-
-        
-
+          <h4 id="localityName">{currentTask || 0}</h4>
+          <button className={styles.button} style={{ position: 'absolute' }} onClick={() => setmodalopen(true)}>
+            {t('edit')}
+          </button>
         </div>
       </div>
     </div>

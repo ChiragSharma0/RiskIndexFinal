@@ -1,44 +1,49 @@
 import React, { useState, useEffect } from "react";
-import styles from "./profile.module.css"; // Import the modular CSS
+import styles from "./profile.module.css";
 
 import Header from "../../components/common/Header";
 import Footer from "../../components/common/Footer";
 import ProfileTabs from "../../components/profilepage/profiletabs";
 import { Avatar, UserName, Note } from "../../components/common/avatar";
-import axios from "axios"; // Import axios for API calls
+import axios from "axios";
 import { useAuthContext } from "../../context/Authcontext";
+import { useTranslation } from "react-i18next";
+
 const url = process.env.REACT_APP_UPDATE_USER;
 
 export default function Profile() {
-  const { userdata = {}, setUserdata } = useAuthContext(); // Ensure userdata is never undefined
+  const { t } = useTranslation();
+  const { User = {}, setUser } = useAuthContext();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
 
   useEffect(() => {
-    if (!userdata?.UserName) return;
-    console.log("🔹 Profile Rendered:", userdata);
-    setFormData(userdata);
-  }, [userdata]);
+    if (!User?.UserName) return;
+    setFormData(User);
+  }, [User]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const saveChanges = async () => {
-    setUserdata(formData);
+    const userid =localStorage.getItem("userid");
+    setUser(formData);
     setIsEditing(false);
+console.log("initiated user change ");
 
     try {
-      const response = await axios.post(`${url}`, formData);
+      console.log("sending user req");
+      const response = await axios.post(`${url}`, {userid,
+        userdata: formData
+      });
       if (response.status === 200) {
         console.log("✅ User data updated successfully");
       }
     } catch (error) {
-      console.error("❌ Failed to update user data", error);
+      console.error("❌ Failed to update User data", error);
     }
   };
-
-  if (!userdata) return <p>Loading...</p>; // Prevent error
 
   return (
     <div className={`dashboard ${styles.dashboard}`}>
@@ -47,55 +52,24 @@ export default function Profile() {
         <div className={styles.profile}>
           <div className={styles.profileBox}>
             <div className={styles.button}>
-              {isEditing ? (
-                <button className={styles.saveButton} onClick={saveChanges}>💾 Save</button>
-              ) : (
-                <button className={styles.editButton} onClick={() => setIsEditing(true)}>✎ Edit</button>
-              )}
+              <button
+                className={styles.editButton}
+                onClick={() => setIsEditing(true)}
+              >
+                ✎
+              </button>
             </div>
           </div>
 
-          <div className={styles.userBox}>
+          <div className={styles.UserBox}>
             <div className={styles.avatar}>
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="profilepic"
-                  value={formData.profilepic || ""}
-                  onChange={handleChange}
-                  className={styles.input}
-                  placeholder="Profile Picture URL"
-                />
-              ) : (
-                <Avatar link={userdata?.profilepic} />
-              )}
+              <Avatar link={User?.profilepic} />
             </div>
-
             <div className={styles.name}>
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="UserName"
-                  value={formData.UserName || ""}
-                  onChange={handleChange}
-                  className={styles.input}
-                />
-              ) : (
-                <UserName name={userdata?.UserName} />
-              )}
+              <UserName name={User?.UserName} />
             </div>
-
-            <div className={styles.userNote}>
-              {isEditing ? (
-                <textarea
-                  name="NOTE"
-                  value={formData.NOTE || ""}
-                  onChange={handleChange}
-                  className={styles.input}
-                />
-              ) : (
-                <Note note={userdata?.NOTE} />
-              )}
+            <div className={styles.UserNote}>
+              <Note note={User?.NOTE} />
             </div>
           </div>
         </div>
@@ -105,6 +79,55 @@ export default function Profile() {
         </div>
       </main>
       <Footer />
+
+      {isEditing && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <h2>{t("edit_profile")}</h2>
+
+            <label>
+              {t("profile_picture_placeholder")}
+              <input
+                type="text"
+                name="profilepic"
+                value={formData.profilepic || ""}
+                onChange={handleChange}
+                className={styles.input}
+              />
+            </label>
+
+            <label>
+              {t("username")}
+              <input
+                type="text"
+                name="UserName"
+                value={formData.UserName || ""}
+                onChange={handleChange}
+                className={styles.input}
+              />
+            </label>
+
+            <label>
+              {t("note")}
+              <textarea
+                name="NOTE"
+                value={formData.NOTE || ""}
+                onChange={handleChange}
+                className={styles.textarea}
+              />
+            </label>
+
+            <div className={styles.buttonGroup}>
+              <button onClick={saveChanges} className={styles.saveButton}>
+                💾 {t("save_profile")}
+              </button>
+              <button onClick={() => setIsEditing(false)} className={styles.cancelButton}>
+                ❌ {t("cancel")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
