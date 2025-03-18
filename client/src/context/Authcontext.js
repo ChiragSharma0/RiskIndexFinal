@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
                 const userResponse = await axios.post(`${getuser}`, { userid });
     
                 if (userResponse.status === 200) {
-                    setUser(userResponse.data);
+                    setUser(userResponse.data.user);
                     console.log(userResponse.data);
                     setlogin(true);
                     
@@ -99,7 +99,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
 
-        <AuthContext.Provider value={{ isloggedin, isloading, setlogin, logout, User }}>
+        <AuthContext.Provider value={{ isloggedin, isloading, setlogin, logout, User ,setUser }}>
 
             {children}
 

@@ -2,54 +2,67 @@ import React, { useEffect, useRef } from 'react';
 import { useVIFormContext } from '../../context/VIformcontext';
 import { useLocationContext } from '../../context/locationcontext';
 import { useEIFormContext } from '../../context/Eicontext';
+import { useTranslation } from 'react-i18next';
+import { Chart } from 'chart.js/auto';
 
 const ChartComponent = () => {
   const { EIfinal } = useEIFormContext();
-  const { utciArray = [] } = useLocationContext(); // default to [] to avoid errors
+  const { utciArray = [] } = useLocationContext();
   const { VIfinal } = useVIFormContext();
-  const chartRef = useRef(null); // Store Chart instance
+  const chartRef = useRef(null);
+  const chartInstance = useRef(null);
+  const { t } = useTranslation();
 
-  // Load Chart.js
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://unpkg.com/chart.js';
-    script.async = true;
-    document.body.appendChild(script);
+    console.log("📦 Initializing Chart.js from NPM");
+  
+    if (!chartRef.current) {
+      console.warn("❌ canvas ref is not ready");
+      return;
+    }
 
-    script.onload = () => {
-      initializeChart();
-    };
+    initializeChart();
 
     return () => {
-      document.body.removeChild(script);
+      if (chartInstance.current) {
+        chartInstance.current.destroy();
+        chartInstance.current = null;
+        console.log("🧹 Chart instance destroyed");
+      }
     };
   }, []);
 
-  // Update chart when data changes
   useEffect(() => {
-    if (window.Chart && chartRef.current) {
+    if (chartInstance.current) {
       updateChart();
     }
+    console.log(utciArray,"fromchart");
   }, [EIfinal, VIfinal, utciArray]);
 
-  // Initialize chart
   const initializeChart = () => {
-    const ctx = document.getElementById('myChart')?.getContext('2d');
-    if (!ctx) return;
+    const canvas = chartRef.current;
+    const ctx = canvas.getContext('2d');
 
-    chartRef.current = new window.Chart(ctx, {
+    const dummyData = Array.from({ length: 24 }, () => Math.floor(Math.random() * 10) + 1);
+
+    chartInstance.current = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: Array.from({ length: 24 }, (_, i) => i + 1),
-        datasets: [{
-          label: 'Hourly Risk Index',
-          data: Array(24).fill(0),
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 2,
-          fill: true,
-        }]
+        labels: Array.from({ length: 24 }, (_, i) => `${i}:00`),
+        datasets: [
+          {
+            label: t("hourly_risk_index") || "Hourly Risk Index",
+            data: dummyData,
+            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.3
+          }
+        ]
       },
       options: {
+        responsive: true,
         maintainAspectRatio: false,
         scales: {
           y: { beginAtZero: true }
@@ -57,28 +70,35 @@ const ChartComponent = () => {
       }
     });
 
-    updateChart();
+    console.log("✅ Chart initialized with dummy data");
   };
 
-  // Update chart data
   const updateChart = () => {
-    const EI = parseFloat(EIfinal) || 0;
-    const VI = parseFloat(VIfinal) || 0;
+    const EI = parseFloat(EIfinal) || 1;
+    const VI = parseFloat(VIfinal) || 1;
 
-    const multipliedData = utciArray.map(item => {
-      const utci = typeof item === 'number' ? item : item?.value ?? 0;
-      return utci * EI * VI;
-    });
+    const calculatedData =
+      utciArray.length === 24
+        ? utciArray.map(item => {
+            const utci = typeof item === 'number' ? item : item?.value ?? 0;
+            return utci * EI * VI;
+          })
+        : Array.from({ length: 24 }, () => 5); // fallback dummy values
 
-    if (chartRef.current) {
-      chartRef.current.data.datasets[0].data = multipliedData;
-      chartRef.current.update();
+    if (chartInstance.current) {
+      chartInstance.current.data.datasets[0].data = calculatedData;
+      chartInstance.current.update();
+
+      console.log("✅ Chart updated");
+      console.table(calculatedData);
+    } else {
+      console.warn("⚠️ Chart instance not available");
     }
   };
 
   return (
-    <div style={{ height: '100px' }}>
-      <canvas id="myChart"></canvas>
+    <div style={{ height: '100%', width: '100%' }}>
+      <canvas id='myChart' ref={chartRef}></canvas>
     </div>
   );
 };

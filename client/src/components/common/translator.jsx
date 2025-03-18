@@ -1,36 +1,36 @@
-import React, { useContext, useState } from "react";
-import { LanguageContext } from "../../context/TranslatorContext";
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const LanguageSelector = () => {
-  const { language, setLanguage } = useContext(LanguageContext);
-  const [selectedLang, setSelectedLang] = useState(language);
+  const { i18n, t } = useTranslation();
+  const [selectedLang, setSelectedLang] = useState(i18n.language);
   const [showModal, setShowModal] = useState(false);
 
   const handleChange = (e) => {
     const newLang = e.target.value;
-    if (newLang !== language) {
+    if (newLang !== i18n.language) {
       setSelectedLang(newLang);
       setShowModal(true);
     }
   };
 
   const confirmChange = () => {
-    setLanguage(selectedLang);
+    i18n.changeLanguage(selectedLang);
     setShowModal(false);
     setTimeout(() => {
-      window.location.reload();
+      window.location.reload(); // Optional if full refresh is needed
     }, 100);
   };
 
   const cancelChange = () => {
-    setSelectedLang(language);
+    setSelectedLang(i18n.language);
     setShowModal(false);
   };
 
   return (
     <>
       <select
-        value={language}
+        value={i18n.language}
         onChange={handleChange}
         className="p-2 border rounded"
       >
@@ -38,7 +38,6 @@ const LanguageSelector = () => {
         <option value="hi">हिंदी</option>
       </select>
 
-      {/* Modal */}
       {showModal && (
         <div
           style={{
@@ -66,7 +65,7 @@ const LanguageSelector = () => {
             }}
           >
             <p style={{ marginBottom: "16px", fontSize: "16px" }}>
-              Changing language will refresh the page. Continue?
+              {t("confirm_language_change")}
             </p>
             <div style={{ display: "flex", justifyContent: "center", gap: "16px" }}>
               <button
@@ -79,7 +78,7 @@ const LanguageSelector = () => {
                   cursor: "pointer",
                 }}
               >
-                Cancel
+                {t("cancel")}
               </button>
               <button
                 onClick={confirmChange}
@@ -92,7 +91,7 @@ const LanguageSelector = () => {
                   cursor: "pointer",
                 }}
               >
-                Yes, Change
+                {t("confirm")}
               </button>
             </div>
           </div>

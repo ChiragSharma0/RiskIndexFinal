@@ -1,79 +1,80 @@
 import React, { useEffect, useState } from "react";
 import { useEIFormContext } from "../../context/Eicontext";
+import { useTranslation } from "react-i18next";
 
 function ExpoTable() {
-  // ✅ Get EI result from context
+  const { t } = useTranslation();
   const { EIresult } = useEIFormContext();
   const [EIdata, setEIdata] = useState([]);
   const [displaydata, setDisplaydata] = useState(false);
 
-  // ✅ Helper: Convert a numeric value to a qualitative level.
   const interpretLevel = (value) => {
     if (value <= 0.33) return "low";
     else if (value <= 0.66) return "medium";
-    else if (value <= 1.00) return "high";
+    else if (value <= 1.0) return "high";
     return "";
   };
 
-  // ✅ Returns a background color for a cell.
   const getCellStyle = (rowLevel, cellType) => {
-    if (rowLevel === "low" && cellType === "low") return { background: "rgb(174, 225, 91)" };
-    if (rowLevel === "medium" && cellType === "medium") return { background: "yellow" };
-    if (rowLevel === "high" && cellType === "high") return { background: "red" };
+    if (rowLevel === "low" && cellType === "low")
+      return { background: "rgb(174, 225, 91)" };
+    if (rowLevel === "medium" && cellType === "medium")
+      return { background: "yellow" };
+    if (rowLevel === "high" && cellType === "high")
+      return { background: "red" };
     return {};
   };
 
-  // ✅ Effect: Update EIdata when EIresult changes
   useEffect(() => {
     if (EIresult) {
       const data = [
-        { title: "Infrastructure Workplace", level: interpretLevel(EIresult.InfrastructureWorkplace) },
-        { title: "Infrastructure Facility Workplace", level: interpretLevel(EIresult.InfrastructureFacilityWorkplace) },
-        { title: "Infrastructure Residence", level: interpretLevel(EIresult.InfrastructureResidence) },
-        { title: "Infrastructure Facility Residence", level: interpretLevel(EIresult.InfrastructureFacilityResidence) },
-        { title: "Transit", level: interpretLevel(EIresult.Transit) },
+        { title: t("infrastructure_workplace"), level: interpretLevel(EIresult.InfrastructureWorkplace) },
+        { title: t("infrastructure_facility_workplace"), level: interpretLevel(EIresult.InfrastructureFacilityWorkplace) },
+        { title: t("infrastructure_residence"), level: interpretLevel(EIresult.InfrastructureResidence) },
+        { title: t("infrastructure_facility_residence"), level: interpretLevel(EIresult.InfrastructureFacilityResidence) },
+        { title: t("transit"), level: interpretLevel(EIresult.Transit) },
 
-        { title: "LifeStyle", level: "just" },
-        { title: "Alcohol", level: interpretLevel(EIresult.Alcohol) },
-        { title: "Tobacco", level: interpretLevel(EIresult.Tobacco) },
-        { title: "Caffeine", level: interpretLevel(EIresult.Caffeine) },
-        { title: "Sleep", level: interpretLevel(EIresult.Sleep) },
-        { title: "Fluid", level: interpretLevel(EIresult.Fluid) },
-        { title: "Air Quality Index (AQI)", level: interpretLevel(EIresult.AQI) },
-        { title: "Health Accessibility", level: interpretLevel(EIresult.HealthAccessibility) },
-      ].filter((row) => row.level !== ""); // Remove empty values
-
+        { title: t("lifestyle"), level: "none" },
+        { title: t("alcohol"), level: interpretLevel(EIresult.Alcohol) },
+        { title: t("tobacco"), level: interpretLevel(EIresult.Tobacco) },
+        { title: t("caffeine"), level: interpretLevel(EIresult.Caffeine) },
+        { title: t("sleep"), level: interpretLevel(EIresult.Sleep) },
+        { title: t("fluid"), level: interpretLevel(EIresult.Fluid) },
+        { title: t("aqi"), level: interpretLevel(EIresult.AQI) },
+        { title: t("health_accessibility"), level: interpretLevel(EIresult.HealthAccessibility) },
+      ].filter((row) => row.level !== "");
       setEIdata(data);
       setDisplaydata(data.length > 0);
     } else {
       setDisplaydata(false);
     }
-  }, [EIresult]);
+  }, [EIresult, t]);
 
   return (
     <div className="index-box">
-      <h3>Exposure Index (E.I.)</h3>
+      <h3>{t("exposure_index")} (E.I.)</h3>
 
       {displaydata ? (
         <>
           <table>
             <thead>
               <tr>
-                <th>Exposure</th>
-                <th className="exposure">L</th>
-                <th className="exposure">M</th>
-                <th className="exposure">H</th>
+                <th>{t("exposure")}</th>
+                <th className="exposure">{t("low")[0]}</th>
+                <th className="exposure">{t("medium")[0]}</th>
+                <th className="exposure">{t("high")[0]}</th>
               </tr>
             </thead>
             <tbody>
               {EIdata.map((row, index) => (
                 <tr key={index}>
-                  <td style={
-                    {
-                      textAlign: ["Alcohol","Tobacco","Caffeine","Sleep" ].some(keyword =>row.title.includes(keyword))? "right": "left"
-                    }
-                  }>
-
+                  <td
+                    style={{
+                      textAlign: [t("alcohol"), t("tobacco"), t("caffeine"), t("sleep")].includes(row.title)
+                        ? "right"
+                        : "left",
+                    }}
+                  >
                     {row.title}
                   </td>
                   <td style={getCellStyle(row.level, "low")}></td>
@@ -87,15 +88,28 @@ function ExpoTable() {
       ) : (
         <div style={{ color: "red", textAlign: "center", padding: "10px" }}>
           <hr />
-          <p>⚠ ERROR LOADING DATA</p>
-          <button onClick={() => window.location.href = "/profile"}>FILL FORM DATA</button>
+          <p>{t("error_loading_data")}</p>
+          <button onClick={() => (window.location.href = "/profile")}>
+            {t("fill_form_data")}
+          </button>
         </div>
       )}
 
-      <div style={{ display: "flex", padding: "0px 15px", justifyContent: "space-between" }}>
-        <div className="underline1">High</div>
-        <div className="underline2">Medium</div>
-        <div className="underline3">Low</div>
+      <div style={{ display: "flex", padding: "0px 15px", justifyContent: "space-between",gap:"10px" }}>
+        <div style={{display:"flex",flex:"1",alignContent:"center",justifyContent:"right",flexWrap:"wrap"}}>
+          <div className="underline1"></div>
+          <div className="">{t("high")}</div>
+        </div>
+        <div style={{display:"flex",flex:"1"}}>
+
+          <div className="underline2"></div>
+          <div className="">{t("medium")}</div>
+        </div>
+        <div style={{display:"flex",flex:"1"}}>
+
+          <div className="underline3"></div>
+          <div className="">{t("low")}</div>
+        </div>
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ function UserName({ name }) {
 }
 
 function Note({ note }) {
-    return <span className={styles.userNote}>{note}</span>;
+    return <div className={styles.userNote}>{note}</div>;
 }
 
 export { Avatar, UserName, Note };

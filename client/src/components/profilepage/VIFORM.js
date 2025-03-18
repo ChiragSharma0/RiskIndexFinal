@@ -1,63 +1,58 @@
 import React, { useState, useEffect } from "react";
-import { useVIFormContext } from "../../context/VIformcontext"; // Import context
+import { useVIFormContext } from "../../context/VIformcontext";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import "./form.css";
-const UPDATE_URL = process.env.REACT_APP_UPDATE_VI; // API to update database
+
+const UPDATE_URL = process.env.REACT_APP_UPDATE_VI;
 
 const VIFORM = () => {
+  const { t } = useTranslation();
 
+  function calculateAgeInDetail(dob) {
+    const dobDate = new Date(dob);
+    if (isNaN(dobDate.getTime())) return null;
 
- function calculateAgeInDetail(dob) {
-        const dobDate = new Date(dob);
-        if (isNaN(dobDate.getTime())) return null; // Handle invalid date
-      
-        const today = new Date(); // Always use current date
-        let years = today.getFullYear() - dobDate.getFullYear();
-        let months = today.getMonth() - dobDate.getMonth();
-        let days = today.getDate() - dobDate.getDate();
-      
-        // Adjust for negative days
-        if (days < 0) {
-          months--;
-          const lastMonth = new Date(today.getFullYear(), today.getMonth(), 0); // Last day of the previous month
-          days += lastMonth.getDate();
-        }
-      
-        // Adjust for negative months
-        if (months < 0) {
-          years--;
-          months += 12;
-        }
-      
-        return { years, months, days };
-      }
+    const today = new Date();
+    let years = today.getFullYear() - dobDate.getFullYear();
+    let months = today.getMonth() - dobDate.getMonth();
+    let days = today.getDate() - dobDate.getDate();
 
-  const { VIformData, setVIFormData } = useVIFormContext(); // Get context values
+    if (days < 0) {
+      months--;
+      const lastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+      days += lastMonth.getDate();
+    }
 
-  // Local state for form data
+    if (months < 0) {
+      years--;
+      months += 12;
+    }
+
+    return { years, months, days };
+  }
+
+  const { VIformData, setVIFormData } = useVIFormContext();
   const [formData, setFormData] = useState({ ...VIformData });
 
   useEffect(() => {
-    // Sync local state with context data when component mounts
     setFormData({ ...VIformData });
-  }, [VIformData]); // Update only if VIformData changes
+  }, [VIformData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     let updatedData = { ...formData, [name]: value };
 
-
     if (name === "dob") {
-      let age = calculateAgeInDetail(value)
-     updatedData.age = age.years;
-     console.log(updatedData.age);
+      let age = calculateAgeInDetail(value);
+      updatedData.age = age.years;
+      console.log(updatedData.age);
     }
-    // Reset pregnancy status if gender changes
+
     if (name === "gender" && value !== "female") {
       updatedData.pregnant = "";
     }
 
-    // Reset height in inches if unit is changed to meters or cm
     if (name === "heightUnit" && value !== "ft") {
       updatedData.heightininch = "";
     }
@@ -66,31 +61,26 @@ const VIFORM = () => {
       updatedData.enrolled = "";
     }
 
-    setFormData(updatedData); // Update local form data
+    setFormData(updatedData);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
       updateDatabase();
-      setVIFormData(formData); // Push all form data to context at once
-
-      alert("Form data saved successfully!");
+      setVIFormData(formData);
+      alert(t("viform.formSaved"));
       console.log("Updated VIformData:", formData);
     } catch (error) {
-console.log(error);
+      console.log(error);
     }
-
-
   };
 
   const handleCancel = () => {
-    setFormData({ ...VIformData }); // Reset local state to last saved VIformData
-    alert("Form data reverted to previous state.");
+    setFormData({ ...VIformData });
+    alert(t("viform.formReverted"));
   };
 
-
-  // Update Database
   const updateDatabase = async () => {
     const userid = localStorage.getItem("userid");
 
@@ -102,228 +92,189 @@ console.log(error);
     }
   };
 
-
-
   return (
     <div className="form-container">
-      <h2>Vulnerability Parameter Survey</h2>
       <form onSubmit={handleSubmit}>
-
-
-
-
         <fieldset>
-          <legend>Age</legend>
-          <label>Date of Birth:
+          <legend>{t("viform.ageLegend")}</legend>
+          <label>{t("viform.dob")}
             <input type="date" name="dob" value={formData.dob} onChange={handleChange} />
           </label>
         </fieldset>
 
-
-
-
-
         <fieldset>
-          <legend>Body-Mass Index</legend>
-          <label>Weight:
+          <legend>{t("viform.bmiLegend")}</legend>
+          <label>{t("viform.weight")}
             <input type="number" name="weight" value={formData.weight} onChange={handleChange} />
           </label>
           <select name="weightUnit" value={formData.weightUnit} onChange={handleChange}>
-            <option value="kg">kg</option>
-            <option value="lb">lb</option>
+            <option value="kg">{t("viform.kg")}</option>
+            <option value="lb">{t("viform.lb")}</option>
           </select>
 
-          <label>Height:
-            <input type="number" name="height" value={formData.height} onChange={handleChange} />
-          </label>
-          {formData.heightUnit === "ft" && (
-            <input type="number" name="heightininch" value={formData.heightininch} onChange={handleChange} />
-          )}
+           {/* Height Field */}
+      <label>
+        {formData.heightUnit === "ft"
+          ? t("viform.heightFeet")
+          : t("viform.height")}
+        <input
+          type="number"
+          name="height"
+          value={formData.height}
+          onChange={handleChange}
+        />
+      </label>
+
+      {/* Height in Inches - Only if heightUnit is ft */}
+      {formData.heightUnit === "ft" && (
+        <label>
+          {t("viform.heightInInches")}
+          <input
+            type="number"
+            name="heightininch"
+            value={formData.heightininch}
+            onChange={handleChange}
+          />
+        </label>
+      )}
+      
           <select name="heightUnit" value={formData.heightUnit} onChange={handleChange}>
-            <option value="m">meters</option>
-            <option value="cm">centimeters</option>
-            <option value="ft">feet & inches</option>
+            <option value="m">{t("viform.meters")}</option>
+            <option value="cm">{t("viform.centimeters")}</option>
+            <option value="ft">{t("viform.feetInches")}</option>
           </select>
         </fieldset>
 
-
-
-
-
         <fieldset>
-          <legend>Economic Status</legend>
-          <label>Annual Household Income:
+          <legend>{t("viform.economicLegend")}</legend>
+          <label>{t("viform.income")}
             <select name="income" value={formData.income} onChange={handleChange}>
-              <option value="">Select</option>
-              <option value="low">Above ₹18,00,001</option>
-              <option value="medium">₹12,00,001 - ₹18,00,000</option>
-              <option value="high">Below ₹12,00,000</option>
+              <option value="">{t("viform.select")}</option>
+              <option value="low">{t("viform.incomeHigh")}</option>
+              <option value="medium">{t("viform.incomeMid")}</option>
+              <option value="high">{t("viform.incomeLow")}</option>
             </select>
           </label>
         </fieldset>
 
-
-
-
         <fieldset>
-          <legend>Social Isolation</legend>
-          <label>During the time of emergency, how many adults are there to assist
-            you:
+          <legend>{t("viform.isolationLegend")}</legend>
+          <label>{t("viform.adultsHelp")}
             <select name="adults" value={formData.adults} onChange={handleChange}>
-              <option value="">Select</option>
-              <option value="low">More than 1 adult</option>
-              <option value="medium">1 adult</option>
-              <option value="high">No adults</option>
+              <option value="">{t("viform.select")}</option>
+              <option value="low">{t("viform.adultsMore")}</option>
+              <option value="medium">{t("viform.adultsOne")}</option>
+              <option value="high">{t("viform.adultsNone")}</option>
             </select>
           </label>
         </fieldset>
 
-
-
         <fieldset>
-          <legend>Education</legend>
+          <legend>{t("viform.educationLegend")}</legend>
           <div id="educationLevelField">
-            <label htmlFor="educationLevel">Choose your highest education level:</label>
-
+            <label htmlFor="educationLevel">{t("viform.highestEducation")}</label>
             <select name="educationLevel" value={formData.educationLevel} onChange={handleChange}>
-              <option value="" disabled>Select your education level</option>
-              <option value="Above_post_graduate">Above Post Graduate</option>
-              <option value="post_graduate">Post Graduate</option>
-              <option value="graduate">Graduate</option>
-              <option value="ssc">12th/SSC</option>
-              <option value="below_10th">10th or below</option>
+              <option value="" disabled>{t("viform.selectEducation")}</option>
+              <option value="Above_post_graduate">{t("viform.abovePG")}</option>
+              <option value="post_graduate">{t("viform.pg")}</option>
+              <option value="graduate">{t("viform.graduate")}</option>
+              <option value="ssc">{t("viform.ssc")}</option>
+              <option value="below_10th">{t("viform.below10")}</option>
             </select>
-
-
-
           </div>
 
           {(formData.educationLevel === "below_10th") && (formData.age < 25) &&
-            <label htmlFor="enrolled">Are you currently enrolled in school?
+            <label htmlFor="enrolled">{t("viform.currentlyEnrolled")}
               <select id="enrolled" name="enrolled" onChange={handleChange}>
-                <option value="" disabled >Select your answer</option>
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
+                <option value="" disabled>{t("viform.selectAnswer")}</option>
+                <option value="yes">{t("viform.yes")}</option>
+                <option value="no">{t("viform.no")}</option>
               </select>
             </label>
           }
         </fieldset>
 
-
         <fieldset>
-          <legend>Gender</legend>
-          <label>Specify your Gender:
+          <legend>{t("viform.genderLegend")}</legend>
+          <label>{t("viform.gender")}
             <select name="gender" value={formData.gender} onChange={handleChange}>
-              <option value="">Select</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="Other">Others</option>
+              <option value="">{t("viform.select")}</option>
+              <option value="male">{t("viform.male")}</option>
+              <option value="female">{t("viform.female")}</option>
+              <option value="Other">{t("viform.other")}</option>
             </select>
           </label>
           {formData.gender === "female" && (
-            <label>Are You pregnant? :
+            <label>{t("viform.pregnant")}
               <select name="pregnant" value={formData.pregnant} onChange={handleChange}>
-                <option value="">Select</option>
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
+                <option value="">{t("viform.select")}</option>
+                <option value="Yes">{t("viform.yes")}</option>
+                <option value="No">{t("viform.no")}</option>
               </select>
             </label>
           )}
         </fieldset>
 
-
-
-
         <fieldset>
-          <legend>Health Issues</legend>
-          <label htmlFor="chronic_issues">Do you face any Chronic Disease?
+          <legend>{t("viform.healthLegend")}</legend>
+          <label htmlFor="chronic_issues">{t("viform.chronicIssues")}
             <select id="chronic_issues" name="chronicIssues" value={formData.chronicIssues} required onChange={handleChange}>
-              <option value="" disabled >Select chronic disease status</option>
-              <option value="yes">YES</option>
-              <option value="no">No</option>
+              <option value="" disabled>{t("viform.selectChronicStatus")}</option>
+              <option value="yes">{t("viform.yes")}</option>
+              <option value="no">{t("viform.no")}</option>
             </select>
           </label>
 
           {(formData.chronicIssues === "no") &&
-            <label>Have you face any acute disease that lead to hospitalization in the following time
-              brackets?
+            <label>{t("viform.acuteHospitalization")}
               <select id="hospitalization" name="hospitalization" value={formData.hospitalization} onChange={handleChange}>
-                <option value="" disabled >Select chronic disease status</option>
-                <option value="low">No Hospitalization in more than 2 years</option>
-                <option value="medium">Hospitalization within 1-2 years</option>
-                <option value="high">Hospitalisation in the last 1 year</option>
+                <option value="" disabled>{t("viform.selectChronicStatus")}</option>
+                <option value="low">{t("viform.hospMore2Years")}</option>
+                <option value="medium">{t("viform.hosp1to2Years")}</option>
+                <option value="high">{t("viform.hosp1Year")}</option>
               </select>
             </label>
           }
-
         </fieldset>
 
-
-
-
         <fieldset>
-          <legend>Medication</legend>
-          <label>Do You Consume Medication affecting Thermoregulation:
+          <legend>{t("viform.medicationLegend")}</legend>
+          <label>{t("viform.medication")}
             <select name="medication" value={formData.medication} onChange={handleChange}>
-              <option value="">Select</option>
-              <option value="no_medication">No</option>
-              <option value="yes_medication">Yes</option>
-              <option value="not_sure">Don't Know</option>
+              <option value="">{t("viform.select")}</option>
+              <option value="no_medication">{t("viform.no")}</option>
+              <option value="yes_medication">{t("viform.yes")}</option>
+              <option value="not_sure">{t("viform.notSure")}</option>
             </select>
           </label>
         </fieldset>
 
-
-
-
         <fieldset>
-          <legend>Disability</legend>
-          <label>Are you disabled?
+          <legend>{t("viform.disabilityLegend")}</legend>
+          <label>{t("viform.disability")}
             <select name="disability" value={formData.disability} onChange={handleChange}>
-              <option value="">Select</option>
-              <option value="no">No</option>
-              <option value="yes">Yes</option>
+              <option value="">{t("viform.select")}</option>
+              <option value="no">{t("viform.no")}</option>
+              <option value="yes">{t("viform.yes")}</option>
             </select>
           </label>
 
           {formData.disability === "yes" && (
-            <label>Your disability as per the Right of Persons with Disabilities Act, 2016?
+            <label>{t("viform.benchmarkDisability")}
               <select name="benchmarkDisability" value={formData.benchmarkDisability} onChange={handleChange}>
-                <option value="">Select</option>
-                <option value="Above">Above Standard</option>
-                <option value="Below">Below Standard</option>
+                <option value="">{t("viform.select")}</option>
+                <option value="Above">{t("viform.aboveStandard")}</option>
+                <option value="Below">{t("viform.belowStandard")}</option>
               </select>
             </label>
           )}
         </fieldset>
 
-        <button type="submit">Submit</button>
-        <button type="button" onClick={handleCancel}>Cancel</button>
+        <button type="submit">{t("viform.submit")}</button>
+        <button type="button" onClick={handleCancel}>{t("viform.cancel")}</button>
       </form>
     </div>
   );
 };
 
 export default VIFORM;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
