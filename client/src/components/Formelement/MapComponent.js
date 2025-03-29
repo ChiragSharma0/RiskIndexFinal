@@ -1,11 +1,7 @@
+// File: ../Formelement/MapComponent.js
 import React, { useEffect, useState } from "react";
 import L from "leaflet";
-import styles from "../../styles/MapModal.module.css";
-import { useLocationContext } from "../../context/locationcontext";
-
 import "leaflet/dist/leaflet.css";
-
-// Fix for missing default marker icon
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
@@ -21,27 +17,22 @@ const DELHI_BOUNDS = {
   northEast: L.latLng(28.88, 77.30),
 };
 
-let mapInstance = null; // Store map instance globally
+let mapInstance = null;
+let marker = null;
 
-const LocationModal = () => {
-  const { setCurrentLocation, setmodalopen } = useLocationContext();
-  const [selectedLocation, setSelectedLocation] = useState({
-    latitude: 28.6139,
-    longitude: 77.2090,
-    locality: "Connaught Place, Delhi",
+export default function LocationModal({ initial = {}, onSave, onClose }) {
+  const [selected, setSelected] = useState({
+    lat: initial?.lat || 28.6139,
+    lng: initial?.lng || 77.2090,
   });
 
   useEffect(() => {
-    console.log("🔄 Mounting or re-opening modal...");
-
     if (mapInstance) {
-      console.log("🗑️ Removing existing map...");
       mapInstance.remove();
     }
 
-    console.log("🗺️ Creating new map...");
     mapInstance = L.map("map", {
-      center: [28.6139, 77.2090],
+      center: [selected.lat, selected.lng],
       zoom: 12,
       minZoom: 10,
       maxZoom: 17,
@@ -53,113 +44,91 @@ const LocationModal = () => {
       attribution: "&copy; OpenStreetMap contributors",
     }).addTo(mapInstance);
 
-    // Handle user clicks
-    mapInstance.on("click", async (e) => {
-      const lat = e.latlng.lat.toFixed(5);
-      const lon = e.latlng.lng.toFixed(5);
+    // Add marker initially
+    marker = L.marker([selected.lat, selected.lng], { icon: customMarker }).addTo(mapInstance);
 
-      console.log(`📍 Clicked at: ${lat}, ${lon}`);
+    mapInstance.on("click", (e) => {
+      const lat = e.latlng.lat;
+      const lng = e.latlng.lng;
 
-      // Check if inside Delhi
       if (
         lat < DELHI_BOUNDS.southWest.lat ||
         lat > DELHI_BOUNDS.northEast.lat ||
-        lon < DELHI_BOUNDS.southWest.lng ||
-        lon > DELHI_BOUNDS.northEast.lng
+        lng < DELHI_BOUNDS.southWest.lng ||
+        lng > DELHI_BOUNDS.northEast.lng
       ) {
-        console.log("❌ Out of Delhi boundaries! Selection rejected.");
-        alert("Please select a location within Delhi.");
         return;
       }
 
-      const locality = await getLocalityName(lat, lon);
+      setSelected({ lat, lng });
 
-      setSelectedLocation({
-        latitude: parseFloat(lat).toFixed(6),
-        longitude: parseFloat(lon).toFixed(6),
-        locality,
-      });
-
-      // Add marker
-      if (mapInstance._marker) {
-        mapInstance.removeLayer(mapInstance._marker);
+      if (marker) {
+        marker.setLatLng([lat, lng]);
+      } else {
+        marker = L.marker([lat, lng], { icon: customMarker }).addTo(mapInstance);
       }
-      mapInstance._marker = L.marker([lat, lon], { icon: customMarker }).addTo(mapInstance);
-
-      console.log(`✅ Selected Location: ${locality}`);
     });
-
-    return () => {
-      console.log("🔄 Cleaning up map...");
-      if (mapInstance) {
-        mapInstance.remove();
-        mapInstance = null;
-      }
-    };
   }, []);
 
-  // Reverse geocoding to get locality name
-  const getLocalityName = async (lat, lon) => {
-    try {
-      console.log(`🔄 Fetching locality name for ${lat}, ${lon}`);
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
-      );
-      const data = await response.json();
-      return data.display_name || "Unknown Location";
-    } catch (error) {
-      console.error("❌ Error fetching locality:", error);
-      return "Unknown Location";
-    }
-  };
-
-  const handleSaveLocation = () => {
-    if (!selectedLocation) {
-      console.error("⛔ No location selected!");
-      return;
-    }
-
-    console.log("💾 Saving selected location:", selectedLocation);
-    setCurrentLocation({
-      latitude: parseFloat(selectedLocation.latitude).toFixed(6),
-      longitude: parseFloat(selectedLocation.longitude).toFixed(6),
-      error: null,
-    });
-  };
-
   return (
-    <div className={styles.modalOverlay}>
-      <div className={styles.modalContent}>
-        <h2>Select Location (Delhi Only)</h2>
+    <div style={overlayStyle}>
+      <div style={modalStyle}>
+        <div id="map" style={{ height: "300px", borderRadius: "8px" }}></div>
 
-        {/* Map Container */}
-        <div id="map" className={styles.mapContainer}></div>
+        <p style={{ marginTop: "10px" }}>
+          Selected Location: Lat {selected.lat.toFixed(5)}, Lng {selected.lng.toFixed(5)}
+        </p>
 
-        {/* Selected Location */}
-        <div className={styles.selectedLocation}>
-          <h4>📍 {selectedLocation.locality}</h4>
-        </div>
-
-        <div className={styles.modalActions}>
+        <div style={{ marginTop: "1rem", display: "flex", justifyContent: "flex-end", gap: "1rem" }}>
+          <button onClick={onClose} style={cancelBtnStyle}>Cancel</button>
           <button
-            className={styles.saveButton}
-            onClick={() => {
-              handleSaveLocation();
-              setmodalopen(false);
-            }}
+            onClick={() => onSave(selected)}
+            style={saveBtnStyle}
           >
-            Save
-          </button>
-          <button
-            className={styles.cancelButton}
-            onClick={() => setmodalopen(false)}
-          >
-            Cancel
+            Save Location
           </button>
         </div>
       </div>
     </div>
   );
+}
+
+// Simple inline styles
+const overlayStyle = {
+  position: "fixed",
+  top: 0, left: 0, right: 0, bottom: 0,
+  backgroundColor: "rgba(0,0,0,0.5)",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  zIndex: 9999
 };
 
-export default LocationModal;
+const modalStyle = {
+  backgroundColor: "#fff",
+  padding: "1rem",
+  borderRadius: "12px",
+  width: "90%",
+  maxWidth: "600px",
+  boxShadow: "0 2px 12px rgba(0,0,0,0.2)"
+};
+
+const cancelBtnStyle = {
+  padding: "0.6rem 1.2rem",
+  backgroundColor: "#888",
+  border: "none",
+  borderRadius: "6px",
+  color: "#fff",
+  fontWeight: "bold",
+  cursor: "pointer"
+};
+
+const saveBtnStyle = {
+  padding: "0.6rem 1.2rem",
+  backgroundColor: "#1976d2",
+  border: "none",
+  borderRadius: "6px",
+  color: "#fff",
+  fontWeight: "bold",
+  cursor: "pointer"
+};

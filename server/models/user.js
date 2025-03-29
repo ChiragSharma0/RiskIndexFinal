@@ -2,15 +2,15 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
 
-// Define the nested schema for VIdata
+// **Vulnerability Index Data Schema**
 const VISchema = new mongoose.Schema({
   dob: { type: String, default: "" },
-  age:{type:String,default:""},
+  age: { type: String, default: "" },
   weight: { type: String, default: "" },
   weightUnit: { type: String, default: "kg" },
   height: { type: String, default: "" },
   heightUnit: { type: String, default: "m" },
-  heightInches: {type:String,default:""},
+  heightInches: { type: String, default: "" },
   income: { type: String, default: "" },
   adults: { type: String, default: "" },
   educationLevel: { type: String, default: "" },
@@ -23,6 +23,7 @@ const VISchema = new mongoose.Schema({
   disability: { type: String, default: "" },
   benchmarkDisability: { type: String, default: "" },
 });
+
 const EISchema = new mongoose.Schema({
   workplace: { type: String, default: "" },
   heavy_machinery: { type: String, default: "" },
@@ -46,109 +47,73 @@ const EISchema = new mongoose.Schema({
   fluidIntake: { type: String, default: "" },
   activityStatus: { type: String, default: "" },
   air_quality: { type: String, default: "" },
-  hospital_access: { type: String, default: "" }
-})
-
-const HISchema = new mongoose.Schema({
-  
-  residence: {
-    type: {
-      latitude: Number,
-      longitude: Number,
-    },
-    required: false,
-  },
-  workplace: {
-    type: {
-      latitude: Number,
-      longitude: Number,
-    },
-    required: false,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+  hospital_access: { type: String, default: "" },
 });
 
+
+
+// **Schedule Schema (Updated)**
 const ScheduleSchema = new mongoose.Schema({
+  home: {
+    hrs: [{ type: Number }], // Set of home hours
+    location: {
+      lat: { type: Number, required: true },
+      lng: { type: Number, required: true }
+    }, // [longitude, latitude]
+  },
   work: {
-    start: { type: Number, required: true, default: 9 }, // 9 AM
-    end: { type: Number, required: true, default: 17 },  // 5 PM
+    hrs: [{ type: Number }], // Set of work hours
+    location: {
+      lat: { type: Number, required: true },
+      lng: { type: Number, required: true }
+    }, // [longitude, latitude]
   },
-  residence: {
-    start: { type: Number, required: true, default: 17 }, // 5 PM
-    end: { type: Number, required: true, default: 9 },    // 9 AM (next day)
-  },
-  useCustom: {
-    type: Boolean,
-    default: false,
-  },
+  useCustom: { type: Boolean, default: false }, // Keep useCustom flag
 });
 
-// Define the main User Schema
+// **Main User Schema**
 const UserSchema = new mongoose.Schema({
   UserID: {
     type: String,
     required: true,
     unique: true,
-    default: () => uuidv4(), // Ensuring UUID is generated dynamically
+    default: () => uuidv4(),
   },
-  UserName: {
-    type: String,
-    trim: true,
-    default: "",
-  },
+  UserName: { type: String, trim: true, default: "" },
   email: {
     type: String,
     required: true,
     unique: true,
     trim: true,
-    lowercase: true, // Prevents case-sensitive duplicates
+    lowercase: true,
   },
-  password: {
-    type: String,
-    required: true,
-  },
-  NOTE: {
-    type: String,
-    trim: true,
-    default: "",
-  },
+  password: { type: String, required: true },
+  NOTE: { type: String, trim: true, default: "" },
   profilepic: {
     type: String,
     trim: true,
     default:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSu6bBHwMFwvad_dCadhshd30nFTgtSqYtcgA&s",
   },
-  VIdata: {
-    type: VISchema, // Use the nested schema here
-    default: {}, // Ensures an empty object is stored by default
-  },
-  EIdata: {
-    type: EISchema, // Use the nested schema here
-    default: {}, // Ensures an empty object is stored by default
-  },
-   schedule: {
-    type: ScheduleSchema,
-    default: () => ({})
-  },
+  VIdata: { type: VISchema, default: {} },
+  EIdata: { type: EISchema, default: {} },
+  schedule: { type: ScheduleSchema, default: () => ({}) },
 });
 
-// Hash password before saving
+// **Hash Password Before Saving**
 UserSchema.pre("save", async function (next) {
-  if (this.isModified("password")) { // Ensures hashing only on password change
+  if (this.isModified("password")) {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
   }
   next();
 });
 
-// Method to compare passwords
+// **Compare Password Method**
 UserSchema.methods.comparePassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
-// Export the model
+// **Export Model**
 const UserData = mongoose.model("User", UserSchema);
 module.exports = UserData;

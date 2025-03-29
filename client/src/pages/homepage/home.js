@@ -5,14 +5,14 @@ import HomeSmallMobile from '../../components/homepage/homepagemobile';
 import HomePageDesk from '../../components/homepage/homepagedesk';
 import './home.css'
 import LocationModal from '../../components/Formelement/MapComponent';
-import { useLocationContext } from '../../context/locationcontext';
+import { useTimeContext } from '../../context/timecontext';
 import Profile from '../profile/profile';
 
 
 
 function Home() {
     const [screenType, setScreenType] = useState(getScreenType());
-    const {ismodalopen} = useLocationContext();
+    const {ismodalopen} = useTimeContext();
 
     function getScreenType() {
         const width = window.innerWidth;

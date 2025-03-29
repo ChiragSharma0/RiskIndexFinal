@@ -1,114 +1,268 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
+import LocationModal from "../Formelement/MapComponent"; // assumed map modal
 import { useSchedule } from "../../context/schedule";
-import "./form.css";
+import axios from 'axios';
+const timeSlots = Array.from({ length: 24 }, (_, i) => i);
 
-const url = process.env.REACT_APP_UPDATE_Schedule;
-
-const ScheduleForm = () => {
-  const { schedule, setSchedule } = useSchedule();
-
-  const [workTime, setWorkTime] = useState(schedule.workTime);
-  const [homeTime, setHomeTime] = useState(schedule.homeTime);
-  const [error, setError] = useState("");
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log("📤 Submit schedule triggered");
-
-    const userid = localStorage.getItem("userid");
-console.log(workTime,homeTime);
-    if (!userid) {
-      return setError("User ID not found.");
-    }
-
-    if (workTime.start === workTime.end || homeTime.start === homeTime.end) {
-      return setError("Start and end times must be different.");
-    }
-
-    try {
-      const res = await axios.post(url, {
-        userid,
-        schedule: { workTime, homeTime },
-      });
-
-      if (res.data && res.data.updatedSchedule) {
-        const updated = res.data.updatedSchedule;
-        console.log("✅ Updated schedule received:", updated);
-
-        const toTimeStr = (h) => `${h.toString().padStart(2, "0")}:00`;
-
-        const newSchedule = {
-          workTime: {
-            start: toTimeStr(updated.work.start),
-            end: toTimeStr(updated.work.end),
-          },
-          homeTime: {
-            start: toTimeStr(updated.residence.start),
-            end: toTimeStr(updated.residence.end),
-          },
-        };
-
-        setSchedule(newSchedule);
-        setWorkTime(newSchedule.workTime);
-        setHomeTime(newSchedule.homeTime);
-        setError("");
-        alert("✅ Schedule updated successfully!");
-      } else {
-        console.warn("⚠️ No updated schedule received from server.");
-        setError("Failed to update schedule. Try again.");
-      }
-    } catch (err) {
-      console.error("🔥 Error updating schedule:", err);
-      setError("Failed to update schedule.");
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <h3>Set Custom Schedule</h3>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      <div>
-        <label>Work Start Time:</label>
-        <input
-          type="time" style={{width:"auto"}}
-          value={workTime.start}
-          onChange={(e) => setWorkTime({ ...workTime, start: e.target.value })}
-          required
-        />
-      </div>
-      <div>
-        <label>Work End Time:</label>
-        <input
-          type="time" style={{width:"auto"}}
-          value={workTime.end}
-          onChange={(e) => setWorkTime({ ...workTime, end: e.target.value })}
-          required
-        />
-      </div>
-      <div>
-        <label>Home Start Time:</label>
-        <input
-          type="time" style={{width:"auto"}}
-          value={homeTime.start}
-          onChange={(e) => setHomeTime({ ...homeTime, start: e.target.value })}
-          required
-        />
-      </div>
-      <div>
-        <label>Home End Time:</label>
-        <input
-          type="time" style={{width:"auto"}}
-          value={homeTime.end}
-          onChange={(e) => setHomeTime({ ...homeTime, end: e.target.value })}
-          required
-        />
-      </div>
-
-      <button type="submit">Save Schedule</button>
-    </form>
-  );
+const formatTimeSlot = (index) => {
+  const hour = Math.floor(index);
+  const minute = "00" ;
+  return `${hour}:${minute}`;
 };
 
-export default ScheduleForm;
+const categoryColors = {
+  home: "#4caf50", // green
+  work: "#2196f3", // blue
+  travel: "#ffeb3b", // yellow
+};
+
+export default function ScheduleForm() {
+  const { schedule, setSchedule, scheduleType, setScheduleType } = useSchedule();
+  const [activeCategory, setActiveCategory] = useState("home");
+  const [homeHrs, setHomeHrs] = useState(new Set(schedule.home.hrs));
+  const [workHrs, setWorkHrs] = useState(new Set(schedule.work.hrs));
+  const [homeLoc, setHomeLoc] = useState(schedule.home.location || {});
+  const [workLoc, setWorkLoc] = useState(schedule.work.location || {});
+  const [modalTarget, setModalTarget] = useState(null);
+
+  useEffect(() => {
+    setHomeHrs(new Set(schedule.home.hrs));
+    setWorkHrs(new Set(schedule.work.hrs));
+    setHomeLoc(schedule.home.location || {});
+    setWorkLoc(schedule.work.location || {});
+  }, [schedule]);
+
+  const handleHourClick = async (hour) => {
+    const newHomeHrs = new Set(homeHrs);
+    const newWorkHrs = new Set(workHrs);
+
+    if (activeCategory === "home") {
+      newHomeHrs.add(hour);
+      newWorkHrs.delete(hour);
+    } else if (activeCategory === "work") {
+      newWorkHrs.add(hour);
+      newHomeHrs.delete(hour);
+    } else {
+      newHomeHrs.delete(hour);
+      newWorkHrs.delete(hour);
+    }
+
+    setHomeHrs(newHomeHrs);
+    setWorkHrs(newWorkHrs);
+  };
+
+  const getCategory = (hour) => {
+    if (homeHrs.has(hour)) return "home";
+    if (workHrs.has(hour)) return "work";
+    return "travel";
+  };
+
+  const handleSave = async () => {
+    console.log("Saving schedule..."); // Debug log
+      const userid = localStorage.getItem("userid");
+if (userid){
+    const updatedSchedule = {
+      home: { hrs: Array.from(homeHrs), location: homeLoc },
+      work: { hrs: Array.from(workHrs), location: workLoc },
+      useCustom: scheduleType === "custom",
+    };
+  
+    console.log("UserID:", userid); // Debug log
+    console.log("Updated Schedule:", updatedSchedule); // Debug log
+  
+    try {
+      const response = await axios.post("http://localhost:5500/api/update/schedule", { userid, schedule:updatedSchedule });
+      console.log("Server Response:", response.data); // Debug log
+  
+      if (response.status === 200) { 
+        setSchedule(updatedSchedule);
+        console.log("Schedule updated successfully!");
+      } else {
+        console.error("Failed to update schedule:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error updating schedule:", error);
+    }
+  }
+  };
+  
+
+  return (
+    <div style={styles.container}>
+      <h2 style={styles.title}>Set Your Daily Schedule</h2>
+
+      <div style={styles.categoryButtons}>
+        {Object.keys(categoryColors).map((category) => (
+          <button
+            key={category}
+            onClick={() => setActiveCategory(category)}
+            style={{
+              ...styles.catButton,
+              backgroundColor: categoryColors[category],
+              border: activeCategory === category ? "1px solid #333" : "none",
+              boxShadow: activeCategory === category ? "rgba(22, 22, 22, 0.62) 6px 3px 8px" : "none",
+            }}
+          >
+            {category.charAt(0).toUpperCase() + category.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      <div style={styles.hourGrid}>
+        {timeSlots.map((hour) => (
+          <div
+            key={hour}
+            onClick={() => handleHourClick(hour)}
+            style={{
+              ...styles.hourBox,
+              backgroundColor: categoryColors[getCategory(hour)],
+            }}
+          >
+            {formatTimeSlot(hour)}
+          </div>
+        ))}
+      </div>
+
+      <div style={styles.locationRow}>
+        <div style={styles.card}>
+          <h4>Home Location:</h4>
+          <p>Lat: {homeLoc?.lat?.toFixed(4)}</p>
+          <p>Lng: {homeLoc?.lng?.toFixed(4)}</p>
+          <button style={styles.editButton} onClick={() => setModalTarget("home")}>
+            Edit
+          </button>
+        </div>
+
+        <div style={styles.card}>
+          <h4>Work Location:</h4>
+          <p>Lat: {workLoc?.lat?.toFixed(4)}</p>
+          <p>Lng: {workLoc?.lng?.toFixed(4)}</p>
+          <button style={styles.editButton} onClick={() => setModalTarget("work")}>
+            Edit
+          </button>
+        </div>
+      </div>
+
+      <button style={styles.saveButton} onClick={handleSave}>Save Schedule</button>
+
+      {modalTarget && (
+        <LocationModal
+          initial={modalTarget === "home" ? homeLoc : workLoc}
+          onClose={() => setModalTarget(null)}
+          onSave={(loc) => {
+            modalTarget === "home" ? setHomeLoc(loc) : setWorkLoc(loc);
+            setModalTarget(null);
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+
+const styles = {
+  container: {
+    width: "100%",
+    padding: "1rem",
+    borderRadius: "12px",
+    fontFamily: "Arial, sans-serif",
+    backgroundColor: "#eee",
+    margin: "auto",
+    boxSizing: "border-box"
+  },
+  title: {
+    marginBottom: "1rem",
+    fontSize: "1.5rem",
+    textAlign: "center"
+  },
+  categoryButtons: {
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    gap: "1rem",
+    marginBottom: "1.5rem"
+  },
+  catButton: {
+    flex: "1 1 100px",
+    minWidth: "100px",
+    padding: "0.6rem 1rem",
+    border: "none",
+    borderRadius: "6px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    fontSize: "1rem",
+    textAlign: "center"
+  },
+  hourGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(80px, 1fr))",
+    gap: "0.5rem",
+    marginBottom: "1.5rem",
+    width: "100%"
+  },
+  hourBox: {
+    padding: "0.6rem 0",
+    textAlign: "center",
+    borderRadius: "6px",
+    cursor: "pointer",
+    border: "1px solid #ccc",
+    fontWeight: "bold",
+    fontSize: "0.9rem"
+  },
+  locationRow: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "1rem",
+    marginBottom: "1.5rem"
+  },
+  card: {
+    flex: "1 1 250px",
+    backgroundColor: "#fff",
+    borderRadius: "8px",
+    padding: "1rem",
+    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+    border: "1px solid #ccc",
+    fontSize: "0.9rem"
+  },
+  editButton: {
+    marginTop: "0.5rem",
+    padding: "0.5rem 1rem",
+    backgroundColor: "#1976d2",
+    color: "#fff",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+    fontSize: "0.85rem"
+  },
+  saveButton: {
+    width: "100%",
+    padding: "0.8rem",
+    backgroundColor: "#2e7d32",
+    color: "#fff",
+    fontWeight: "bold",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer",
+    fontSize: "1rem",
+    marginTop: "1rem"
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

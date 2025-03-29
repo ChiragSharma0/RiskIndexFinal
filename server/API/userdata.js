@@ -110,13 +110,20 @@ const findSchedule = async (req, res) => {
     }
 
     console.log("✅ [FIND SCHEDULE] Schedule found:", user.schedule);
-    res.status(200).json({ schedule: user.schedule });
+    res.status(200).json({
+      schedule: {
+        work: user.schedule.work,
+        home: user.schedule.home,
+        useCustom: user.schedule.useCustom, // Ensure `useCustom` is always included
+      },
+    });
 
   } catch (error) {
     console.error("🔥 [FIND SCHEDULE] Error fetching schedule:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 
 

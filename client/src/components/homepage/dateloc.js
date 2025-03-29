@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../../styles/DateLoc.module.css';
-import { useLocationContext } from '../../context/locationcontext';
-import { useSchedule } from '../../context/schedule';
+import { useTimeContext } from '../../context/timecontext';
 import { useTranslation } from 'react-i18next';
+import { useLocationContext } from '../../context/locationcontext';
 
 function DateLoc() {
   const { t } = useTranslation();
-  const { date, setDate, time, setTime, currentLocation, setmodalopen } = useLocationContext();
-  const { currentTask } = useSchedule();
+  const { date, setDate, time, setTime } = useTimeContext();
+  const { useLocation, locationSource } = useLocationContext();
 
   const [istimeEditing, settimeEditing] = useState(false);
   const [tempDate, setTempDate] = useState(date.date);
   const [tempTime, setTempTime] = useState(time.hrs);
+  const [modalOpen, setModalOpen] = useState(false); // ✅ Added modal state
 
   const handleDateChange = (e) => setTempDate(e.target.value);
   const handleTimeChange = (e) => setTempTime(e.target.value);
@@ -34,9 +35,10 @@ function DateLoc() {
     settimeEditing(false);
   };
 
+  // ✅ Runs only when `locationSource` or `useLocation` changes
   useEffect(() => {
-    console.log('date rendered', currentTask);
-  }, [currentTask]);
+    console.log('DateLoc re-rendered:', { locationSource, useLocation });
+  }, [locationSource, useLocation]);
 
   return (
     <div className={styles.infobox}>
@@ -44,11 +46,7 @@ function DateLoc() {
         <button
           style={{ position: 'absolute' }}
           onClick={() => {
-            if (istimeEditing) {
-              handletimeSave();
-            } else {
-              settimeEditing(true);
-            }
+            istimeEditing ? handletimeSave() : settimeEditing(true);
           }}
           className={styles.button}
         >
@@ -94,12 +92,12 @@ function DateLoc() {
         <p>{t('location_label')}</p>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h3 className={styles.lonlat}>
-            {t('latitude')}: {currentLocation.latitude ? Number(currentLocation.latitude).toFixed(3) : t('unavailable')}
+            {t('latitude')}: {useLocation?.lat ? Number(useLocation.lat).toFixed(3) : t('unavailable')}
             <br />
-            {t('longitude')}: {currentLocation.longitude ? Number(currentLocation.longitude).toFixed(3) : t('unavailable')}
+            {t('longitude')}: {useLocation?.lng ? Number(useLocation.lng).toFixed(3) : t('unavailable')}
           </h3>
-          <h4 id="localityName">{currentTask || 0}</h4>
-          <button className={styles.button} style={{ position: 'absolute' }} onClick={() => setmodalopen(true)}>
+          <h4 id="localityName">{locationSource || t('unknown')}</h4>
+          <button className={styles.button} style={{ position: 'absolute' }} onClick={() => setModalOpen(true)}>
             {t('edit')}
           </button>
         </div>

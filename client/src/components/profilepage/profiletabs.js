@@ -6,6 +6,7 @@ import VIFORM from "./VIFORM";
 import EIForm from "./EIForm";
 import styles from './profiletab.module.css'
 import CustomScheduleForm from "./ScheduleForm";
+import Userprofile from "./USERprofile";
 
 
 function ProfileTabs() {
@@ -14,6 +15,8 @@ function ProfileTabs() {
     const [currentTab, setCurrentTab] = useState(0);
 
     const tabs = [
+        { label: "Profile", component: <Userprofile /> },
+
         { label: "Settings", component: <Settings /> },
         { label: 'VI', component: <VIFORM /> },
 
@@ -38,6 +41,8 @@ function ProfileTabs() {
                         <div className={styles.name}>{tab.label}</div>
                     </label>
                 ))}
+
+                
             </div>
 
             {/* Tab Content */}

@@ -133,37 +133,20 @@ const updateSchedule = async (req, res) => {
       return res.status(400).json({ message: "Userid and schedule required" });
     }
 
-    // Helper to convert "HH:MM" => hour as number
-    const parseHour = (timeStr) => {
-      const parts = timeStr?.split(":");
-      const hour = parts && parts.length > 0 ? parseInt(parts[0], 10) : 0;
-      return isNaN(hour) ? 0 : hour;
+    // Ensure home and work exist
+    const homeHrs = new Set(schedule.home?.hrs || []);
+    const workHrs = new Set(schedule.work?.hrs || []);
+
+    const updatedSchedule = {
+      home: { hrs: [...homeHrs], location: schedule.home?.location || {} },
+      work: { hrs: [...workHrs], location: schedule.work?.location || {} }
     };
 
-    // Convert frontend time format to numbers for backend storage
-    const work = {
-      start: parseHour(schedule.workTime.start),
-      end: parseHour(schedule.workTime.end),
-    };
-
-    const residence = {
-      start: parseHour(schedule.homeTime.start),
-      end: parseHour(schedule.homeTime.end),
-    };
-
-    // Update only work and residence — no change to useCustom
+    // 🔹 Update MongoDB (excluding travel)
     const updatedUser = await User.findOneAndUpdate(
       { UserID: userid },
-      {
-        $set: {
-          "schedule.work": work,
-          "schedule.residence": residence,
-        },
-      },
-      {
-        new: true,
-        select: "UserID schedule",
-      }
+      { $set: { schedule: updatedSchedule } },
+      { new: true, select: "UserID schedule" }
     );
 
     if (!updatedUser) {
@@ -180,6 +163,7 @@ const updateSchedule = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 
 const updateScheduleStatus = async (req, res) => {

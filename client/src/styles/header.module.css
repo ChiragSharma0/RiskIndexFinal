@@ -98,4 +98,8 @@ header p {
     font-size: 20px;
     cursor: pointer;
   }
-  
+  @media screen and (max-width: 500px) {
+    .para1{
+display: none;
+    }
+  }
