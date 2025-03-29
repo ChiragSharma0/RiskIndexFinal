@@ -1,176 +1,135 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
-import axios from "axios";
-const url = process.env.REACT_APP_FETCH_LOCATION;
-const LocationContext = createContext();
+import React, { createContext, useState, useEffect, useContext } from "react";
+import { useSchedule } from "./schedule";
+import { useTimeContext } from "./timecontext";
+
+export const LocationContext = createContext();
 
 export const LocationProvider = ({ children }) => {
+  const { schedule } = useSchedule();
+  const { time } = useTimeContext();
+
+  const home = schedule?.home;
+  const work = schedule?.work;
+
   const [currentLocation, setCurrentLocation] = useState({
+    lat: null,
+    lng: null,
+    error: "Fetching location...",
+  });
+
+  const [useLocation, setUseLocation] = useState({
     latitude: null,
     longitude: null,
     error: "Fetching location...",
   });
 
-  const [date, setDate] = useState({
-    date: 10,
-    month: new Date().getMonth() + 1,
-    year: new Date().getFullYear(),
-  });
+  const [hasPermission, setHasPermission] = useState(null);
+  const [locationSource, setLocationSource] = useState("Transit");
 
-  const [time, setTime] = useState({
-    hrs: 12,
-    min: 0o0,
-    sec: 0o0,
-  });
-
-  const setFormattedTime = ({ hrs, min, sec }) => {
-    setTime({
-      hrs: formatTwoDigits(hrs),
-      min: formatTwoDigits(min),
-      sec: formatTwoDigits(sec),
-    });
-  };
-
-  const [ismodalopen, setmodalopen] = useState(false);
-
-  const [HIfinal, setHifinal] = useState(0.00);
-  const [utciArray, setUtciArray] = useState([]);
-
-
-  const normalizeUTCI = (T) => {
-    // Define UTCI categories based on the given table
-    const categories = [
-      { min: 9, max: 26, min_cat: 0.00, max_cat: 0.25 },
-      { min: 26, max: 32, min_cat: 0.25, max_cat: 0.50 },
-      { min: 32, max: 38, min_cat: 0.50, max_cat: 0.75 },
-      { min: 38, max: 46, min_cat: 0.75, max_cat: 1.00 },
-      { min: 46, max: Infinity, min_cat: 1.00, max_cat: 1.00 },
-    ];
-
-    // Find the category where T falls
-    const category = categories.find(cat => T >= cat.min && T < cat.max);
-
-    if (!category) return 0.00; // If T is undefined or out of range
-
-    const { min, max, min_cat, max_cat } = category;
-
-    // Apply the normalization formula
-    const K = min_cat + (((T - min) / (max - min)) * (max_cat - min_cat));
-
-    return K;
-  };
-
-
-
-
+  // ✅ Fetch user's current location & check permission
   useEffect(() => {
+    console.log("🔄 [useEffect] Fetching user's current location...");
 
-    try {
-      console.log("triggered ")
-      updateHIFinal();
-    } catch (error) {
-      console.log(error);
-      setHifinal(0.00);
-    }
-  }, [date.date, currentLocation, time.hrs]);
-
-  const updateHIFinal = async () => {
-    if (currentLocation) {
-      const latitude = currentLocation.latitude;
-      const longitude = currentLocation.longitude;
-
-      // ✅ Fix the naming
-      const currentDate = date.date; // or format as needed e.g. "2025-03-13"
-      const currentHour = time.hrs;
-
-      try {
-        console.log("posting location")
-        const response = await axios.post(`${url}`, {
-          latitude,
-          longitude,
-          date: currentDate,
-          hour: currentHour,
-        });
-        const { currentUTCI, utciNext24Hours } = response.data;
-        const normalizedArray = utciNext24Hours.map((utci) => normalizeUTCI(utci.value));
-        console.log("✅ setting hifinal:", normalizedArray[0]);
-        setHifinal(normalizedArray[0]);
-        setUtciArray(normalizedArray);
-
-      } catch (error) {
-        console.error("❌ Failed to fetch UTCI:", error.response?.data || error.message);
-      }
-    }
-  };
-
-
-
-  // Get the user's current location
-  useEffect(() => {
     if ("geolocation" in navigator) {
+      navigator.permissions
+        ?.query({ name: "geolocation" })
+        .then((permissionStatus) => {
+          console.log("📜 Geolocation permission status:", permissionStatus.state);
+          if (permissionStatus.state === "granted") {
+            setHasPermission(true);
+          } else if (permissionStatus.state === "denied") {
+            setHasPermission(false);
+          }
+        })
+        .catch((error) => {
+          console.error("⚠️ Error checking geolocation permission:", error);
+          setHasPermission(false);
+        });
+
       navigator.geolocation.getCurrentPosition(
         (position) => {
+          console.log("✅ Location retrieved:", position.coords);
+          setHasPermission(true);
           setCurrentLocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
             error: null,
+          });
+          console.log("📍 Updated currentLocation state:", {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
           });
         },
         (error) => {
           let errorMessage = "Unable to retrieve location.";
+          setHasPermission(false);
+
           switch (error.code) {
             case error.PERMISSION_DENIED:
-              errorMessage = "User denied location access.";
+              errorMessage = "❌ User denied location access.";
               break;
             case error.POSITION_UNAVAILABLE:
-              errorMessage = "Location information unavailable.";
+              errorMessage = "❌ Location information unavailable.";
               break;
             case error.TIMEOUT:
-              errorMessage = "Location request timed out.";
+              errorMessage = "❌ Location request timed out.";
               break;
             default:
-              errorMessage = "Unknown location error.";
+              errorMessage = "❌ Unknown location error.";
           }
-          setCurrentLocation({ latitude: null, longitude: null, error: errorMessage });
-          console.error("❌ Location Error:", errorMessage);
+          console.error(errorMessage);
+          setCurrentLocation({ lat: null, lng: null, error: errorMessage });
+          console.log("📍 Updated currentLocation state:", { lat: null, lng: null, error: errorMessage });
         }
       );
     } else {
-      setCurrentLocation({ latitude: null, longitude: null, error: "Geolocation not supported." });
-      console.error("❌ Geolocation is not supported by this browser.");
+      console.error("❌ Geolocation not supported by the browser.");
+      setHasPermission(false);
+      setCurrentLocation({ lat: null, lng: null, error: "Geolocation not supported." });
     }
   }, []);
 
+  // ✅ Set `useLocation` & `locationSource` based on time and schedule
+  useEffect(() => {
+    console.log("⏳ [useEffect] Checking location update...");
 
-  const formatTwoDigits = (num) => String(num).padStart(2, "0");
+    if (time?.hrs !== undefined && Array.isArray(home?.hrs) && Array.isArray(work?.hrs)) {
+      console.log(`⏰ Current time: ${time.hrs}`);
+      const currentHour = Number(time?.hrs);
+console.log("🛠 Converted time.hrs to Number:", currentHour);
 
+      console.log("🏠 Home schedule:", home);
+      console.log("🏢 Work schedule:", work);
+      console.log("🔍 Checking home hours match:", home.hrs.includes(currentHour));
+      console.log("🔍 Checking work hours match:", work.hrs.includes(currentHour));
 
+      if (home.hrs.includes(currentHour)) {
+        console.log("✅ Setting location to HOME:", home.location);
+        setUseLocation(home.location || currentLocation);
+        setLocationSource("Residence");
+      } else if (work.hrs.includes(currentHour)) {
+        console.log("✅ Setting location to WORK:", work.location);
+        setUseLocation(work.location || currentLocation);
+        setLocationSource("Workplace");
+      } else {
+        console.log("✅ Setting location to CURRENT LOCATION:", currentLocation);
+        setUseLocation(currentLocation);
+        setLocationSource("Transit");
+      }
 
-
-
-
-
-
+      console.log("📍 Updated useLocation state:", useLocation);
+      console.log("🔄 Updated locationSource state:", locationSource);
+    } else {
+      console.warn("⚠️ `home.hrs` or `work.hrs` is undefined or not an array!");
+    }
+  }, [time?.hrs, schedule, currentLocation]);
 
   return (
-    <LocationContext.Provider
-      value={{
-        date,
-        setDate,  // ✅ Directly passing the state updater
-        time,
-        setTime, // ✅ replaces raw setTime
-        currentLocation,
-        setCurrentLocation,
-        ismodalopen,
-        setmodalopen,
-        HIfinal,
-        setHifinal,
-        utciArray
-      }}
-    >
+    <LocationContext.Provider value={{ currentLocation, useLocation, hasPermission, locationSource }}>
       {children}
     </LocationContext.Provider>
   );
-
 };
 
+// 📌 Hook for consuming the LocationContext
 export const useLocationContext = () => useContext(LocationContext);

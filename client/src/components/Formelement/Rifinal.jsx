@@ -1,35 +1,40 @@
 import React, { useEffect, useState } from "react";
 import { useEIFormContext } from "../../context/Eicontext";
-import { useLocationContext } from "../../context/locationcontext";
 import { useVIFormContext } from "../../context/VIformcontext";
+import { useHIContext } from "../../context/hicontext";
 
 function RIfinalVal() {
   const { EIfinal } = useEIFormContext();
-  const { HIfinal } = useLocationContext();
+  const { HIfinal } = useHIContext();
   const { VIfinal } = useVIFormContext();
 
-  const [RIfinal, setRIfinal] = useState("0.00");
-
+  const [RIfinal, setRIfinal] = useState("0o0");
   useEffect(() => {
-    // 🛠 Ensure values are valid floats, default to 0 if not
     const EI = parseFloat(EIfinal) || 0;
     const HI = parseFloat(HIfinal) || 0;
     const VI = parseFloat(VIfinal) || 0;
-
+  
     console.log("🔍 Debugging Inputs:");
     console.log("📌 EI (EIfinal):", EI);
     console.log("📌 HI (HIfinal):", HI);
     console.log("📌 VI (VIfinal):", VI);
-
-    // Calculate Risk Index
+  
     const result = EI * HI * VI;
-    setRIfinal(result.toFixed(2));
-
-    console.log("✅ Final Computation:");
-    console.log(`🟢 ${EI} * ${HI} * ${VI} = ${result.toFixed(2)}`);
-
+    console.log("🟢 Computed RIfinal:", result.toFixed(2));
+  
+    // ✅ Prevent unnecessary state updates
+    setRIfinal((prev) => {
+      if (prev !== result.toFixed(2)) {
+        console.log("✅ Updating RIfinal state");
+        return result.toFixed(2);
+      } else {
+        console.log("⚠️ No change in RIfinal, skipping update");
+        return prev;
+      }
+    });
   }, [EIfinal, HIfinal, VIfinal]);
-
+  
+  
   const interpretLevel = (value) => {
     if (value <= 0.33) return "green";
     if (value <= 0.66) return "yellow";

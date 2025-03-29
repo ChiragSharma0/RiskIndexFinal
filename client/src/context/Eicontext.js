@@ -1,10 +1,9 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { useVIFormContext } from "./VIformcontext"; // Get VI data
-import { useLocationContext } from '../context/locationcontext';
-import { useSchedule } from "./schedule";
-
+import { useTimeContext } from './timecontext';
 import axios from "axios";
 import Loader from "../components/common/loader";
+import { useLocationContext } from "./locationcontext";
  const Fetchurl = process.env.REACT_APP_FETCH_EI_DATA;
 
 const EIFormContext = createContext();
@@ -341,9 +340,9 @@ function calculateLifestyle(alcohol, tobacco, caffeine, sleep) {
 
 
 export const EIFormProvider = ({ children }) => {
-  const { date } = useLocationContext();
+  const { date } = useTimeContext();
   const { VIformData } = useVIFormContext();
-  const { currentTask } = useSchedule();
+  const { locationSource } = useLocationContext();
 
   const [EIformData, setEIFormData] = useState({
     workplace: "",
@@ -418,7 +417,7 @@ export const EIFormProvider = ({ children }) => {
   useEffect(() => {
     if (!EIformData.alcohol || !VIformData.age) return;
     CalculateResult();
-  }, [EIformData, VIformData, currentTask]);
+  }, [EIformData, VIformData, locationSource]);
 
   function CalculateResult() {
     if (!EIformData) return;
@@ -441,7 +440,7 @@ export const EIFormProvider = ({ children }) => {
     const AQI = calculateAQI(date.date);
     const HealthAccessibility = calculateHealthAccessibility(EIformData);
   
-    const task = currentTask?.toLowerCase();
+    const task = locationSource?.toLowerCase();
     let currentrisk;
     let Infrastructure = {};
   
@@ -513,7 +512,7 @@ export const EIFormProvider = ({ children }) => {
 
     let currentrisk;
 
-    const task = currentTask?.toLowerCase();
+    const task = locationSource?.toLowerCase();
     let Infrastructure = {};
 
     if (task === "workplace") {
@@ -522,7 +521,7 @@ export const EIFormProvider = ({ children }) => {
     } else if (task === "residence") {
       Infrastructure = { InfrastructureResidence, InfrastructureFacilityResidence };
       currentrisk = homerisk;
-    } else if (task === "traveling") {
+    } else if (task === "transit") {
       Infrastructure = { Transit };
       currentrisk = Transit;
     }

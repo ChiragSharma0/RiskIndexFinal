@@ -253,5 +253,20 @@
     "belowStandard": "No, below benchmark",
     "submit": "Save",
     "cancel": "Cancel"
-  }
+  },
+
+
+  "settings": {
+  "languageTitle": "Language",
+  "languageDescription": "Choose your preferred language.",
+  "scheduleTitle": "Schedule",
+  "scheduleDescription": "Customize your usual daily time periods.",
+  "privacyTitle": "Privacy",
+  "privacyDescription": "Settings for data privacy preferences and permissions.",
+  "statusTitle": "Activity Status",
+  "statusDescription": "Show or hide your active/online status to other users.",
+  "dangerTitle": "Danger Zone",
+  "dangerDescription": "Permanent account actions like deactivating account, deleting data, etc."
+} 
+
 }

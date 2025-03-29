@@ -4,9 +4,11 @@ import Home from "../pages/homepage/home";
 import Profile from "../pages/profile/profile";
 import Test from "../components/profilepage/profiletabs";
 import ProtectedRoute from "./AuthGuard";
-import { LocationProvider } from "../context/locationcontext";
+import { TimeProvider } from "../context/timecontext";
 import { ScheduleProvider } from "../context/schedule";
 import FormContextProvider from "../context/formcontext";
+import { HIProvider } from "../context/hicontext";
+import { LocationProvider } from "../context/locationcontext";
 
 const MainRoutes = () => {
   useEffect(() => {
@@ -14,9 +16,11 @@ const MainRoutes = () => {
   }, []);
 
   return (
+    <ScheduleProvider>
 
-    <LocationProvider>
-      <ScheduleProvider>
+    <TimeProvider>
+      <LocationProvider>
+      <HIProvider>
         <FormContextProvider>
           <Routes>
             <Route element={<ProtectedRoute />}>
@@ -30,8 +34,11 @@ const MainRoutes = () => {
           </Routes>
 
         </FormContextProvider>
-      </ScheduleProvider>
-    </LocationProvider>
+        </HIProvider>
+        </LocationProvider>
+    </TimeProvider>
+    </ScheduleProvider>
+
   );
 };
 

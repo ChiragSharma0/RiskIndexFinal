@@ -8,7 +8,7 @@
 .main {
     display: flex;
     flex-direction: row;
-    gap: 30px;
+    height: calc(100vh - 100px);
 }
 
 /* PROFILE */
@@ -21,7 +21,7 @@
 .profileBox {
     flex-direction: row-reverse;
     display: flex;
-    height: 80px;
+    height: 90px;
     max-width: 500px;
     background: linear-gradient(to right, #ff1acd, rgb(239, 150, 122));
     border-radius: 10px;
@@ -52,7 +52,7 @@
 .profiletabs {
     padding: 10px;
     max-height: 100%;
-    width: 70%;
+    width: 100%;
     overflow-y: hidden;
 }
 footer{

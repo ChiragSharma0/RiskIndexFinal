@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocationContext } from "../../context/locationcontext"; // Import Location Context
+import { useTimeContext } from "../../context/timecontext"; // Import Location Context
 
 // Dynamically import all images from the public/images folder
 const importAllImages = (r) => {
@@ -11,10 +11,10 @@ const importAllImages = (r) => {
   return images;
 };
 
-const images = importAllImages(require.context("/public/IMAGES/MAPIMAGES", false, /\.(png|jpe?g|gif)$/));
+const images = importAllImages(require.context("/public/IMAGES/IMAGES", false, /\.(png|jpe?g|gif)$/));
 
 const ImageSlider = () => {
-  const { date, time } = useLocationContext(); // Get date & time from LocationContext
+  const { date, time } = useTimeContext(); // Get date & time from LocationContext
   const [currentImage, setCurrentImage] = useState("");
 
   useEffect(() => {

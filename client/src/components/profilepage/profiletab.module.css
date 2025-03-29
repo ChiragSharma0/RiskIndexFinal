@@ -1,28 +1,46 @@
+.dashboard{
+    overflow: auto;
+}
+
 .Tabpage{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     height: 100%;
     width: 100%;
     overflow: hidden;
+    justify-content: space-between;
 }
 .Tabs{
     display: flex;
-    height: 40px;
-    width: 100%;
+    flex-direction: column;
+    height: max-content;
+    width: 15%;
+    min-width: 140px;
 
-    border-bottom: 2px solid black;
-
+border-radius: 20px;
+background-color: white;
+padding: 20px;
 
     input{
         display: none;
     }
 }
+
+
 .Tab {
     height: 40px;
     width: 100px;
     text-align: center;
     position: relative; /* Needed for absolute positioning of ::after */
     cursor: pointer;
+background-color: whitesmoke;
+    border-radius: 20px;
+
+    :hover{
+        background-color: rgba(190, 188, 188, 0.847);
+        border-radius: 20px;
+
+    }
 }
 
 
@@ -37,21 +55,13 @@
 }
 
 /* Animated underline effect */
-.name::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 0;
-    height: 5px;
-    background-color: blue;
-    transition: width 0.2s ease-in-out, left 0.2s ease-in-out;
-}
+
 
 /* When radio is checked, expand the underline from the center */
 .Tab input:checked + .name::after {
     width: 100%;
     left: 0;
+    background-color: whitesmoke;
 }
 
 
@@ -61,7 +71,11 @@
 
 
 .TabContent{
-    height: calc(100% - 40px);
+    display: flex;
+    flex: 0.9;
+    justify-content: center;
+    height: 100%;
+    border: 2px solid black;
 }
 
 

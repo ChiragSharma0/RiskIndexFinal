@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useLocationContext } from "../../context/locationcontext";
+import { useHIContext } from "../../context/hicontext";
 
 function HIfinalVal() {
-  const { HIfinal } = useLocationContext();
+  const { HIfinal } = useHIContext();
   const [displayvalue, setValue] = useState("0.00");
 
   useEffect(() => {
     setValue(HIfinal.toFixed(2));
     console.log("Updated HIfinal in component:", displayvalue);
   }, [HIfinal]); // ✅ Ensure re-render when HIfinal updates
+
 useEffect(()=>{
   console.log("RENDERED HI COMPONENT");
 },[HIfinal])
