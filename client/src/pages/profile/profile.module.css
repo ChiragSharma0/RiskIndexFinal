@@ -192,7 +192,21 @@ footer{
   .profile{
     width: auto;
   }
-  .profiletabs{
-    width: auto;
-  }
+  
+      }
+
+
+
+      @media screen and (max-width: 500px) {
+
+.dashboard{
+  padding: 0px 5px;
+}
+.profiletabs {
+  padding: 0px;
+  max-height: 100%;
+  width: 100%;
+  overflow-y: hidden;
+}
+
       }

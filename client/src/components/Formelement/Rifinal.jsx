@@ -36,7 +36,7 @@ function RIfinalVal() {
   
   
   const interpretLevel = (value) => {
-    if (value <= 0.33) return "green";
+    if (value <= 0.33) return "rgb(174, 225, 91)";
     if (value <= 0.66) return "yellow";
     if (value <= 1.0) return "red";
     return "";
@@ -48,7 +48,7 @@ function RIfinalVal() {
         <div className="highlight1" style={{border:"none", margin:"0px"}}>
           {RIfinal}
         </div>
-        <div  style={{ height: "100%", width: "40%" ,backgroundColor:interpretLevel(Number(RIfinal))}}></div>
+        <div  style={{ height: "100%", width: "40%" ,backgroundColor:interpretLevel(Number(RIfinal)) ,border: "2px solid" ,marginLeft:"2%"   }}></div>
       </div>
     </div>
   );

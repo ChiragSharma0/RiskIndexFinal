@@ -23,6 +23,12 @@ router.post("/getutci", async (req, res) => {
 
     let { homeLocation, workLocation, travelLocation, date, homeHrs, workHrs, time } = req.body;
 
+    // Check if homeLocation and workLocation are empty or missing
+    const isEmpty = (obj) => !obj || Object.keys(obj).length === 0;
+
+    if (isEmpty(homeLocation)) homeLocation = travelLocation;
+    if (isEmpty(workLocation)) workLocation = travelLocation;
+
     // 🛑 Validate Request Data
     if (!homeLocation || !workLocation || !travelLocation || date === undefined || time === undefined) {
       return res.status(400).json({ error: "Missing required fields" });
@@ -74,7 +80,6 @@ router.post("/getutci", async (req, res) => {
         return [];
       }
 
-      console.log("✅ Found UTCI Data:", data.UTCI);
 
       return keys.map((key) => {
         let [_, day, hour] = key.split("_"); // Extract day and hour from key

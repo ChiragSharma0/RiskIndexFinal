@@ -45,7 +45,7 @@
   "hourly_risk_index": "Hourly Risk Index",
   "confirm_language_change": "Changing language will refresh the page. Continue?",
   "cancel": "Cancel",
-  "confirm": "Yes, Change",
+  "confirm": "Confirm",
   "error_loading_data": "⚠ ERROR LOADING DATA",
   "fill_form_data": "FILL FORM DATA",
   "latitude": "Lat",
@@ -268,5 +268,13 @@
   "dangerTitle": "Danger Zone",
   "dangerDescription": "Permanent account actions like deactivating account, deleting data, etc."
 } 
+,
 
+"profileTabs": {
+  "profile": "Profile",
+  "viForm": "VI Form",
+  "eiForm": "EI Form",
+  "schedule": "Schedule",
+  "settings": "Settings"
+}
 }

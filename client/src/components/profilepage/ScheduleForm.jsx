@@ -3,6 +3,7 @@ import LocationModal from "../Formelement/MapComponent"; // assumed map modal
 import { useSchedule } from "../../context/schedule";
 import axios from 'axios';
 const timeSlots = Array.from({ length: 24 }, (_, i) => i);
+const url = process.env.REACT_APP_UPDATE_Schedule
 
 const formatTimeSlot = (index) => {
   const hour = Math.floor(index);
@@ -71,7 +72,7 @@ if (userid){
     console.log("Updated Schedule:", updatedSchedule); // Debug log
   
     try {
-      const response = await axios.post("http://localhost:5500/api/update/schedule", { userid, schedule:updatedSchedule });
+      const response = await axios.post(url, { userid, schedule:updatedSchedule });
       console.log("Server Response:", response.data); // Debug log
   
       if (response.status === 200) { 

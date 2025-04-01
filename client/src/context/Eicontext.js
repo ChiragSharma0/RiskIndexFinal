@@ -456,7 +456,7 @@ export const EIFormProvider = ({ children }) => {
         InfrastructureFacilityResidence
       };
       currentrisk = homerisk;
-    } else if (task === "traveling") {
+    } else if (task === "transit") {
       Infrastructure = {
         Transit
       };

@@ -133,6 +133,8 @@ const EIForm = () => {
         {/* Lifestyle - Alcohol */}
         <fieldset>
           <legend>{t("eiform.form.alcohol.legend")}</legend>
+
+          {/* Question 1: Have you consumed alcohol in the last 5 years? */}
           <label>{t("eiform.form.alcohol.consumed")}</label>
           <select name="alcohol" value={formData.alcohol} onChange={handleChange}>
             <option value="" disabled>{t("eiform.form.select")}</option>
@@ -142,13 +144,200 @@ const EIForm = () => {
 
           {formData.alcohol === "yes" && (
             <>
+              {/* Question 2: Do you drink more than 24g/day? */}
               <label>{t("eiform.form.alcohol.daily")}</label>
+              <div id="knowcontent">i
+                <div id="table-container">
+                  <h2>Alcohol Content by Type</h2>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Type of Alcohol</th>
+                        <th>Ethyl Alcohol Content at 20°C (per cent by volume)</th>
+                        <th>Max Value</th>
+                        <th>Gram of Alcohol/ml</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Brandy or Grape Brandy</td>
+                        <td>36 to 50</td>
+                        <td>50</td>
+                        <td>0.394635</td>
+                      </tr>
+                      <tr>
+                        <td>Blended Brandy</td>
+                        <td>36 to 50</td>
+                        <td>50</td>
+                        <td>0.394635</td>
+                      </tr>
+                      <tr>
+                        <td>Country Liquor or Plain Country Liquor</td>
+                        <td>19 to 43</td>
+                        <td>43</td>
+                        <td>0.3393861</td>
+                      </tr>
+                      <tr>
+                        <td>Blended Country Liquors</td>
+                        <td>19 to 43</td>
+                        <td>43</td>
+                        <td>0.3393861</td>
+                      </tr>
+                      <tr>
+                        <td>Fenny - Cashew</td>
+                        <td>19 to 43</td>
+                        <td>43</td>
+                        <td>0.3393861</td>
+                      </tr>
+                      <tr>
+                        <td>Fenny - Coconut</td>
+                        <td>19 to 43</td>
+                        <td>43</td>
+                        <td>0.3393861</td>
+                      </tr>
+                      <tr>
+                        <td>Gin</td>
+                        <td>36 to 50</td>
+                        <td>50</td>
+                        <td>0.394635</td>
+                      </tr>
+                      <tr>
+                        <td>Liqueur or Cordial or Apertif</td>
+                        <td>15 to 50</td>
+                        <td>50</td>
+                        <td>0.394635</td>
+                      </tr>
+                      <tr>
+                        <td>Rum</td>
+                        <td>36 to 50</td>
+                        <td>50</td>
+                        <td>0.394635</td>
+                      </tr>
+                      <tr>
+                        <td>White Rum</td>
+                        <td>36 to 50</td>
+                        <td>50</td>
+                        <td>0.394635</td>
+                      </tr>
+                      <tr>
+                        <td>Vodka</td>
+                        <td>36 to 50</td>
+                        <td>50</td>
+                        <td>0.394635</td>
+                      </tr>
+                      <tr>
+                        <td>Whisky</td>
+                        <td>36 to 50</td>
+                        <td>50</td>
+                        <td>0.394635</td>
+                      </tr>
+                      <tr>
+                        <td>Malt or Grain Whisky or Single Malt</td>
+                        <td>36 to 50</td>
+                        <td>50</td>
+                        <td>0.394635</td>
+                      </tr>
+                      <tr>
+                        <td>Blended Whisky</td>
+                        <td>36 to 50</td>
+                        <td>50</td>
+                        <td>0.394635</td>
+                      </tr>
+                      <tr>
+                        <td>Pot Distilled Spirits</td>
+                        <td>36 to 50</td>
+                        <td>50</td>
+                        <td>0.394635</td>
+                      </tr>
+                      <tr>
+                        <td>Table Wine - White</td>
+                        <td>7.0 to 15.5</td>
+                        <td>15.5</td>
+                        <td>0.12233685</td>
+                      </tr>
+                      <tr>
+                        <td>Table Wine - Red</td>
+                        <td>7.0 to 15.5</td>
+                        <td>15.5</td>
+                        <td>0.12233685</td>
+                      </tr>
+                      <tr>
+                        <td>Wine with Carbon Dioxide</td>
+                        <td>7.0 to 15.5</td>
+                        <td>15.5</td>
+                        <td>0.12233685</td>
+                      </tr>
+                      <tr>
+                        <td>Fortified Wine</td>
+                        <td>15.0 to 24.0</td>
+                        <td>24</td>
+                        <td>0.1894248</td>
+                      </tr>
+                      <tr>
+                        <td>Fruit Wine (other than Grape Wine)</td>
+                        <td>7.0 to 15.5</td>
+                        <td>15.5</td>
+                        <td>0.12233685</td>
+                      </tr>
+                      <tr>
+                        <td>Cider</td>
+                        <td>0.5 to 9.0</td>
+                        <td>9</td>
+                        <td>0.0710343</td>
+                      </tr>
+                      <tr>
+                        <td>Perry</td>
+                        <td>0.5 to 9.0</td>
+                        <td>9</td>
+                        <td>0.0710343</td>
+                      </tr>
+                      <tr>
+                        <td>Wine from Other Agricultural and Plant Sources</td>
+                        <td>1.5 to 8.0</td>
+                        <td>8</td>
+                        <td>0.0631416</td>
+                      </tr>
+                      <tr>
+                        <td>Beer - Regular</td>
+                        <td>0.5 up to 5.0</td>
+                        <td>5</td>
+                        <td>0.0394635</td>
+                      </tr>
+                      <tr>
+                        <td>Beer - Strong</td>
+                        <td>5.0 up to 8.0</td>
+                        <td>8</td>
+                        <td>0.0631416</td>
+                      </tr>
+                      <tr>
+                        <td>Draught Beer - Regular</td>
+                        <td>0.5 up to 5.0</td>
+                        <td>5</td>
+                        <td>0.0394635</td>
+                      </tr>
+                      <tr>
+                        <td>Draught Beer - Strong</td>
+                        <td>5.0 up to 8.0</td>
+                        <td>8</td>
+                        <td>0.0631416</td>
+                      </tr>
+                      <tr>
+                        <td>Craft Beer - Regular</td>
+                        <td>Up to 5.0</td>
+                        <td>5</td>
+                        <td>0.0394635</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
               <select name="daily_consumption" value={formData.daily_consumption} onChange={handleChange}>
                 <option value="" disabled>{t("eiform.form.select")}</option>
                 <option value="no">{t("eiform.no")}</option>
                 <option value="yes">{t("eiform.yes")}</option>
               </select>
 
+              {/* Question 3: Frequency in the last quarter */}
               {formData.daily_consumption === "no" && (
                 <>
                   <label>{t("eiform.form.alcohol.frequency")}</label>
@@ -159,9 +348,12 @@ const EIForm = () => {
                   </select>
                 </>
               )}
+
+
             </>
           )}
         </fieldset>
+
 
         {/* Lifestyle - Tobacco */}
         <fieldset>

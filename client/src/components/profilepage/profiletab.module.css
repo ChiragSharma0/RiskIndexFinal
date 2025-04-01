@@ -1,8 +1,8 @@
-.dashboard{
+.dashboard {
     overflow: auto;
 }
 
-.Tabpage{
+.Tabpage {
     display: flex;
     flex-direction: row;
     height: 100%;
@@ -10,36 +10,60 @@
     overflow: hidden;
     justify-content: space-between;
 }
-.Tabs{
+
+.Tabs {
     display: flex;
     flex-direction: column;
-    height: max-content;
+    height: 100%;
     width: 15%;
     min-width: 140px;
+    justify-content: space-between;
 
-border-radius: 20px;
-background-color: white;
-padding: 20px;
+    border-radius: 20px;
+    padding-bottom: 20px;
 
-    input{
+    input {
         display: none;
     }
 }
 
+.Tabsgroup {
+    display: flex;
+    flex-direction: column;
+
+    border-radius: 20px;
+    background-color: white;
+    padding: 20px;
+
+    input {
+        display: none;
+    }
+}
+
+.settingsgroup {
+    display: flex;
+    flex-direction: column;
+
+    border-radius: 20px;
+    background-color: white;
+    padding: 2px 20px;
+
+    input {
+        display: none;
+    }
+}
 
 .Tab {
     height: 40px;
     width: 100px;
     text-align: center;
-    position: relative; /* Needed for absolute positioning of ::after */
+    position: relative;
+    /* Needed for absolute positioning of ::after */
     cursor: pointer;
-background-color: whitesmoke;
-    border-radius: 20px;
+    border-radius: 0px;
 
-    :hover{
-        background-color: rgba(190, 188, 188, 0.847);
-        border-radius: 20px;
-
+    :hover {
+        font-weight: 500;
     }
 }
 
@@ -50,18 +74,19 @@ background-color: whitesmoke;
     height: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: left;
     position: relative;
+    font-size: 20px;
 }
 
 /* Animated underline effect */
 
 
 /* When radio is checked, expand the underline from the center */
-.Tab input:checked + .name::after {
+.Tab input:checked+.name {
     width: 100%;
     left: 0;
-    background-color: whitesmoke;
+    font-weight: 900;
 }
 
 
@@ -70,12 +95,14 @@ background-color: whitesmoke;
 
 
 
-.TabContent{
+.TabContent {
     display: flex;
     flex: 0.9;
     justify-content: center;
+    border-left: 2px solid black;
     height: 100%;
-    border: 2px solid black;
+    padding: 20px;
+    overflow: auto;
 }
 
 
@@ -107,3 +134,82 @@ background-color: whitesmoke;
 
 
 
+
+
+
+
+
+
+
+@media screen and (max-width: 500px) {
+
+    main {
+        overflow-x: hidden;
+        justify-content: start!important;
+    }
+
+    .Tabpage {
+        flex-direction: column;
+    }
+
+
+    .Tabs {
+        position: relative;
+        width: min-content;
+        display: flex;
+        flex-direction: row;
+
+        justify-content: center;
+
+        border-radius: 0px;
+        padding-bottom: 0px;
+
+
+        input {
+            display: none;
+        }
+    }
+
+
+
+    .Tabsgroup {
+        display: flex;
+        flex-direction: row;
+        width: max-content;
+        border-radius: 0px;
+        background-color: white;
+        padding: 5px;
+
+        input {
+            display: none;
+        }
+    }
+
+    .settingsgroup {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+
+        border-radius: 0px;
+        background-color: white;
+        padding: 2px;
+
+        input {
+            display: none;
+        }
+    }
+
+    .Tabsbar {
+        overflow-x: auto;
+        height: 50px;
+        width: 100%;
+
+    }
+
+    .Tab{
+        border-right: 1px solid black;
+    }
+.name{
+    justify-content: center;
+}
+}
