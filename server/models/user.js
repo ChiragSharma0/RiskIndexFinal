@@ -57,15 +57,15 @@ const ScheduleSchema = new mongoose.Schema({
   home: {
     hrs: [{ type: Number }], // Set of home hours
     location: {
-      lat: { type: Number, required: true },
-      lng: { type: Number, required: true }
+      lat: { type: Number, },
+      lng: { type: Number,  }
     }, // [longitude, latitude]
   },
   work: {
     hrs: [{ type: Number }], // Set of work hours
     location: {
-      lat: { type: Number, required: true },
-      lng: { type: Number, required: true }
+      lat: { type: Number,  },
+      lng: { type: Number,  }
     }, // [longitude, latitude]
   },
   useCustom: { type: Boolean, default: false }, // Keep useCustom flag

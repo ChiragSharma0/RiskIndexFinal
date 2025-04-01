@@ -12,7 +12,6 @@ function DateLoc() {
   const [istimeEditing, settimeEditing] = useState(false);
   const [tempDate, setTempDate] = useState(date.date);
   const [tempTime, setTempTime] = useState(time.hrs);
-  const [modalOpen, setModalOpen] = useState(false); // ✅ Added modal state
 
   const handleDateChange = (e) => setTempDate(e.target.value);
   const handleTimeChange = (e) => setTempTime(e.target.value);
@@ -65,7 +64,7 @@ function DateLoc() {
                 value={tempDate}
                 onChange={handleDateChange}
                 className={styles.dateInput}
-                style={{ fontSize: 'clamp(10px, 2vw, 30px)' }}
+                style={{ fontSize: 'clamp(10px, 1.8vw, 30px)' }}
               />
             )}
             /{date.month}/{date.year} |
@@ -97,9 +96,7 @@ function DateLoc() {
             {t('longitude')}: {useLocation?.lng ? Number(useLocation.lng).toFixed(3) : t('unavailable')}
           </h3>
           <h4 id="localityName">{locationSource || t('unknown')}</h4>
-          <button className={styles.button} style={{ position: 'absolute' }} onClick={() => setModalOpen(true)}>
-            {t('edit')}
-          </button>
+          
         </div>
       </div>
     </div>

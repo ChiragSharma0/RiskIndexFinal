@@ -12,11 +12,12 @@ import USERprofile from "../../components/profilepage/USERprofile";
 
 
 export default function Profile() {
- 
 
- 
+
+
 
   return (
+  <>
     <div className={`dashboard ${styles.dashboard}`}>
       <Header />
       <main className={`main ${styles.main}`}>
@@ -25,9 +26,11 @@ export default function Profile() {
           <ProfileTabs />
         </div>
       </main>
-      <Footer />
 
-     
+
     </div>
+    <Footer />
+  </>
+
   );
 }

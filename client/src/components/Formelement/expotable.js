@@ -33,7 +33,7 @@ function ExpoTable() {
         { title: t("infrastructure_residence"), level: interpretLevel(EIresult.InfrastructureResidence) },
         { title: t("infrastructure_facility_residence"), level: interpretLevel(EIresult.InfrastructureFacilityResidence) },
         { title: t("transit"), level: interpretLevel(EIresult.Transit) },
-
+        { title: t("transit"), level: interpretLevel(EIresult.Transit) },
         { title: t("lifestyle"), level: "none" },
         { title: t("alcohol"), level: interpretLevel(EIresult.Alcohol) },
         { title: t("tobacco"), level: interpretLevel(EIresult.Tobacco) },

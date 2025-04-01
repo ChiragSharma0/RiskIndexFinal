@@ -112,32 +112,32 @@ const VIFORM = () => {
             <option value="lb">{t("viform.lb")}</option>
           </select>
 
-           {/* Height Field */}
-      <label>
-        {formData.heightUnit === "ft"
-          ? t("viform.heightFeet")
-          : t("viform.height")}
-        <input
-          type="number"
-          name="height"
-          value={formData.height}
-          onChange={handleChange}
-        />
-      </label>
+          {/* Height Field */}
+          <label>
+            {formData.heightUnit === "ft"
+              ? t("viform.heightFeet")
+              : t("viform.height")}
+            <input
+              type="number"
+              name="height"
+              value={formData.height}
+              onChange={handleChange}
+            />
+          </label>
 
-      {/* Height in Inches - Only if heightUnit is ft */}
-      {formData.heightUnit === "ft" && (
-        <label>
-          {t("viform.heightInInches")}
-          <input
-            type="number"
-            name="heightininch"
-            value={formData.heightininch}
-            onChange={handleChange}
-          />
-        </label>
-      )}
-      
+          {/* Height in Inches - Only if heightUnit is ft */}
+          {formData.heightUnit === "ft" && (
+            <label>
+              {t("viform.heightInInches")}
+              <input
+                type="number"
+                name="heightininch"
+                value={formData.heightininch}
+                onChange={handleChange}
+              />
+            </label>
+          )}
+
           <select name="heightUnit" value={formData.heightUnit} onChange={handleChange}>
             <option value="m">{t("viform.meters")}</option>
             <option value="cm">{t("viform.centimeters")}</option>
@@ -196,44 +196,52 @@ const VIFORM = () => {
 
         <fieldset>
           <legend>{t("viform.genderLegend")}</legend>
-          <label>{t("viform.gender")}
-            <select name="gender" value={formData.gender} onChange={handleChange}>
-              <option value="">{t("viform.select")}</option>
-              <option value="male">{t("viform.male")}</option>
-              <option value="female">{t("viform.female")}</option>
-              <option value="Other">{t("viform.other")}</option>
-            </select>
-          </label>
-          {formData.gender === "female" && (
-            <label>{t("viform.pregnant")}
-              <select name="pregnant" value={formData.pregnant} onChange={handleChange}>
+          <div>
+            <label>{t("viform.gender")}
+              <select name="gender" value={formData.gender} onChange={handleChange}>
                 <option value="">{t("viform.select")}</option>
-                <option value="Yes">{t("viform.yes")}</option>
-                <option value="No">{t("viform.no")}</option>
+                <option value="male">{t("viform.male")}</option>
+                <option value="female">{t("viform.female")}</option>
+                <option value="Other">{t("viform.other")}</option>
               </select>
-            </label>
+            </label></div>
+          {formData.gender === "female" && (
+            <div>
+
+              <label>{t("viform.pregnant")}
+                <select name="pregnant" value={formData.pregnant} onChange={handleChange}>
+                  <option value="">{t("viform.select")}</option>
+                  <option value="Yes">{t("viform.yes")}</option>
+                  <option value="No">{t("viform.no")}</option>
+                </select>
+              </label>
+            </div>
           )}
         </fieldset>
 
         <fieldset>
           <legend>{t("viform.healthLegend")}</legend>
-          <label htmlFor="chronic_issues">{t("viform.chronicIssues")}
-            <select id="chronic_issues" name="chronicIssues" value={formData.chronicIssues} required onChange={handleChange}>
-              <option value="" disabled>{t("viform.selectChronicStatus")}</option>
-              <option value="yes">{t("viform.yes")}</option>
-              <option value="no">{t("viform.no")}</option>
-            </select>
-          </label>
+          <div>
 
-          {(formData.chronicIssues === "no") &&
-            <label>{t("viform.acuteHospitalization")}
-              <select id="hospitalization" name="hospitalization" value={formData.hospitalization} onChange={handleChange}>
+            <label htmlFor="chronic_issues">{t("viform.chronicIssues")}
+              <select id="chronic_issues" name="chronicIssues" value={formData.chronicIssues} required onChange={handleChange}>
                 <option value="" disabled>{t("viform.selectChronicStatus")}</option>
-                <option value="low">{t("viform.hospMore2Years")}</option>
-                <option value="medium">{t("viform.hosp1to2Years")}</option>
-                <option value="high">{t("viform.hosp1Year")}</option>
+                <option value="yes">{t("viform.yes")}</option>
+                <option value="no">{t("viform.no")}</option>
               </select>
             </label>
+          </div>
+          {(formData.chronicIssues === "no") &&
+            <div>
+              <label>{t("viform.acuteHospitalization")}
+                <select id="hospitalization" name="hospitalization" value={formData.hospitalization} onChange={handleChange}>
+                  <option value="" disabled>{t("viform.selectChronicStatus")}</option>
+                  <option value="low">{t("viform.hospMore2Years")}</option>
+                  <option value="medium">{t("viform.hosp1to2Years")}</option>
+                  <option value="high">{t("viform.hosp1Year")}</option>
+                </select>
+              </label>
+            </div>
           }
         </fieldset>
 
@@ -251,22 +259,27 @@ const VIFORM = () => {
 
         <fieldset>
           <legend>{t("viform.disabilityLegend")}</legend>
-          <label>{t("viform.disability")}
-            <select name="disability" value={formData.disability} onChange={handleChange}>
-              <option value="">{t("viform.select")}</option>
-              <option value="no">{t("viform.no")}</option>
-              <option value="yes">{t("viform.yes")}</option>
-            </select>
-          </label>
+          <div>
 
-          {formData.disability === "yes" && (
-            <label>{t("viform.benchmarkDisability")}
-              <select name="benchmarkDisability" value={formData.benchmarkDisability} onChange={handleChange}>
+            <label>{t("viform.disability")}
+              <select name="disability" value={formData.disability} onChange={handleChange}>
                 <option value="">{t("viform.select")}</option>
-                <option value="Above">{t("viform.aboveStandard")}</option>
-                <option value="Below">{t("viform.belowStandard")}</option>
+                <option value="no">{t("viform.no")}</option>
+                <option value="yes">{t("viform.yes")}</option>
               </select>
             </label>
+          </div>
+          {formData.disability === "yes" && (
+            <div>
+
+              <label>{t("viform.benchmarkDisability")}
+                <select name="benchmarkDisability" value={formData.benchmarkDisability} onChange={handleChange}>
+                  <option value="">{t("viform.select")}</option>
+                  <option value="Above">{t("viform.aboveStandard")}</option>
+                  <option value="Below">{t("viform.belowStandard")}</option>
+                </select>
+              </label>
+            </div>
           )}
         </fieldset>
 

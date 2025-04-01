@@ -27,6 +27,17 @@
     flex: 1 1;
     margin: 0px 5px 5px 5px;
     min-width: max-content;
+
+
+
+
+
+    input{
+      border: 1px solid black;
+      width: clamp(50px,3vw,70px); 
+      padding: 5px;
+      margin: 5px;
+    }
   }
   
   
@@ -44,10 +55,7 @@
   }
   
 
-input{
-  border: 1px solid black;
-  width: clamp(20px,3vw,55px);
-}
+
 .button{
     position: absolute; 
     top: 5px;
@@ -80,9 +88,11 @@ input{
 /* Ensure Firefox doesn't leave space */
 .dateInput,
 .timeInput {
-  padding: 0;  /* Removes extra padding */
-  text-align: center; /* Keeps text centered */
-  background: transparent; /* Optional: Match background */
+  padding: 0!important;
+  text-align: center!important;
+  background: transparent!important;
+  width: clamp(50px,3vw,70px)!important;
+
 }
 
 @media screen and (min-width: 750px) and (max-width: 1000px){

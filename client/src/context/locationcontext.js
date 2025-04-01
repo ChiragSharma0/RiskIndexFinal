@@ -93,23 +93,39 @@ export const LocationProvider = ({ children }) => {
   useEffect(() => {
     console.log("⏳ [useEffect] Checking location update...");
 
+    // Helper function to check if location is valid
+    const isValidLocation = (loc) => loc && Object.keys(loc).length > 0;
+
     if (time?.hrs !== undefined && Array.isArray(home?.hrs) && Array.isArray(work?.hrs)) {
       console.log(`⏰ Current time: ${time.hrs}`);
       const currentHour = Number(time?.hrs);
-console.log("🛠 Converted time.hrs to Number:", currentHour);
+      console.log("🛠 Converted time.hrs to Number:", currentHour);
 
       console.log("🏠 Home schedule:", home);
       console.log("🏢 Work schedule:", work);
       console.log("🔍 Checking home hours match:", home.hrs.includes(currentHour));
       console.log("🔍 Checking work hours match:", work.hrs.includes(currentHour));
+      console.log("location check", home.hrs.includes(currentHour), isValidLocation(home.location), home.location)
+      console.log("location check", work.hrs.includes(currentHour), isValidLocation(work.location), work.location)
+
 
       if (home.hrs.includes(currentHour)) {
         console.log("✅ Setting location to HOME:", home.location);
-        setUseLocation(home.location || currentLocation);
+        if (isValidLocation(home.location)) {
+          setUseLocation(home.location);
+        } else {
+          setUseLocation(currentLocation);
+
+        }
         setLocationSource("Residence");
       } else if (work.hrs.includes(currentHour)) {
         console.log("✅ Setting location to WORK:", work.location);
-        setUseLocation(work.location || currentLocation);
+        if (isValidLocation(work.location)) {
+          setUseLocation(work.location);
+        } else {
+          setUseLocation(currentLocation);
+
+        }
         setLocationSource("Workplace");
       } else {
         console.log("✅ Setting location to CURRENT LOCATION:", currentLocation);
@@ -122,7 +138,9 @@ console.log("🛠 Converted time.hrs to Number:", currentHour);
     } else {
       console.warn("⚠️ `home.hrs` or `work.hrs` is undefined or not an array!");
     }
+
   }, [time?.hrs, schedule, currentLocation]);
+
 
   return (
     <LocationContext.Provider value={{ currentLocation, useLocation, hasPermission, locationSource }}>
