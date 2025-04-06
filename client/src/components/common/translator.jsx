@@ -17,9 +17,7 @@ const LanguageSelector = () => {
   const confirmChange = () => {
     i18n.changeLanguage(selectedLang);
     setShowModal(false);
-    setTimeout(() => {
-      window.location.reload(); // Optional if full refresh is needed
-    }, 100);
+
   };
 
   const cancelChange = () => {

@@ -9,7 +9,7 @@ const url = process.env.REACT_APP_FETCH_LOCATION;
 export const HIContext = createContext();
 
 export const HIProvider = ({ children }) => {
-  const { time, date } = useTimeContext();
+  const { utctime, date } = useTimeContext();
   const { schedule } = useSchedule();
   const { currentLocation } = useLocationContext();
 
@@ -17,7 +17,7 @@ export const HIProvider = ({ children }) => {
   const [utciArray, setUtciArray] = useState([]);
 
   const normalizeUTCI = (T) => {
-    if (T === null || T === undefined) return 0.0; 
+    if (T === null || T === undefined) return 0.0;
     const categories = [
       { min: 9, max: 26, min_cat: 0.0, max_cat: 0.25 },
       { min: 26, max: 32, min_cat: 0.25, max_cat: 0.5 },
@@ -36,20 +36,31 @@ export const HIProvider = ({ children }) => {
       console.warn("⚠️ Missing required schedule or location data", { schedule, currentLocation });
       return;
     }
-    const TIme = Number(time.hrs);  // Ensure it's a number
+    const ISTOffset = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30
 
+    // Convert time to UTC
+   
+
+
+    // Ensure UTC date does not go below 10
+   
+    // Ensure UTC time does not go below 12 when date is 12
+    
     const requestBody = {
       homeLocation: schedule.home.location,
       workLocation: schedule.work.location,
       travelLocation: currentLocation,
-      date: date.date,
-      time:TIme,
+      date: utctime.date,  // Adjusted to UTC with constraints
+      time: utctime.hrs,   // Adjusted to UTC with constraints
       homeHrs: schedule.home.hrs || [],
       workHrs: schedule.work.hrs || [],
     };
 
+    console.log("📡 Final UTCI request with:", requestBody);
 
-console.log("📡 Sending UTCI request with:", requestBody);
+
+
+    console.log("📡 Sending UTCI request with:", requestBody);
 
 
     console.log("📡 Fetching UTCI data from:", url, requestBody);
@@ -63,11 +74,11 @@ console.log("📡 Sending UTCI request with:", requestBody);
       }
 
       const normalizedArray = utciData.map((utci) => normalizeUTCI(utci.value)).filter((val) => val !== null);
-      
+
       if (normalizedArray.length > 0) {
         setHifinal(normalizedArray[0]);
       }
-      
+
       setUtciArray(normalizedArray);
       console.log("📊 Normalized UTCI values:", normalizedArray);
     } catch (error) {
@@ -77,7 +88,8 @@ console.log("📡 Sending UTCI request with:", requestBody);
 
   useEffect(() => {
     updateHIFinal();
-  }, [schedule, currentLocation, time]);
+  }, [schedule, currentLocation, utctime.hrs, utctime.date]); // Depend on specific values, not whole object
+  
 
   return <HIContext.Provider value={{ HIfinal, utciArray, updateHIFinal }}>{children}</HIContext.Provider>;
 };

@@ -2,71 +2,84 @@
 
 /* Using clamp() for responsive font size */
 .datetime h3 {
-    font-size: clamp(10px, 2vw, 30px); /* Minimum size: 20px, preferred size: 5vw, maximum size: 40px */
-  }
-  
-  .lonlat {
-    font-size: clamp(8px, 2vw, 15px); /* Minimum size: 14px, preferred size: 3vw, maximum size: 19px */
-  }
-  
-  .infobox {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-  }
-  
-  .datetime,
-  .location {
-    position: relative;
-    width: 50%;
-    background: #fff;
-    padding: 5px 17px;
-    border-radius: 20px;
+  font-size: clamp(10px, 2vw, 30px);
+  /* Minimum size: 20px, preferred size: 5vw, maximum size: 40px */
+}
+
+.lonlat {
+  font-size: clamp(8px, 2vw, 18px);
+  /* Minimum size: 14px, preferred size: 3vw, maximum size: 19px */
+}
+
+.infobox {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  flex: 1;
+}
+
+.datetime,
+.location {
+
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  position: relative;
+  width: 50%;
+  min-height: 90px;
+  background: #fff;
+  padding: 5px 17px;
+  border-radius: 20px;
+  border: 1px solid black;
+  box-shadow: 2px 4px 7px rgba(0, 0, 0, 0.5);
+  flex: 1 1;
+  margin: 0px 5px 5px 5px;
+  min-width: max-content;
+  max-height: 100px;
+
+
+
+
+
+
+  input {
     border: 1px solid black;
-    box-shadow: 2px 4px 7px rgba(0, 0, 0, 0.5);
-    flex: 1 1;
-    margin: 0px 5px 5px 5px;
-    min-width: max-content;
-
-
-
-
-
-    input{
-      border: 1px solid black;
-      width: clamp(50px,3vw,70px); 
-      padding: 5px;
-      margin: 5px;
-    }
+    width: clamp(50px, 3vw, 70px);
+    padding: 5px;
+    margin: 5px;
   }
-  
-  
-  
-  .date {
-    font-size: 70%;
-  }
-  
-  .zone {
-    font-size: 30%;
-  }
-  
-  .location h4 {
-    font-size: clamp(10px, 2vw, 25px); /* Minimum size: 20px, preferred size: 3vw, maximum size: 30px */
-  }
-  
+}
 
 
-.button{
-    position: absolute; 
-    top: 5px;
-    right: 10px;
-    border: 1px solid black;
-    border-radius: 2px;
-    width: fit-content;
-    padding: 2px;
-    background-color: whitesmoke;
-    color: black;
-  }
+
+.date {
+  font-size: 70%;
+}
+
+.zone {
+  font-size: 30%;
+}
+
+.location h4 {
+  font-size: clamp(10px, 2vw, 25px);
+  /* Minimum size: 20px, preferred size: 3vw, maximum size: 30px */
+}
+
+
+
+.button {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  border: 1px solid black;
+  border-radius: 2px;
+  width: fit-content;
+  padding: 2px;
+  background-color: whitesmoke;
+  color: black;
+}
 
 
 
@@ -88,16 +101,16 @@
 /* Ensure Firefox doesn't leave space */
 .dateInput,
 .timeInput {
-  padding: 0!important;
-  text-align: center!important;
-  background: transparent!important;
-  width: clamp(50px,3vw,70px)!important;
+  padding: 0 !important;
+  text-align: center !important;
+  background: transparent !important;
+  width: clamp(50px, 3vw, 70px) !important;
 
 }
 
-@media screen and (min-width: 750px) and (max-width: 1000px){
-  .infobox{
-    
+@media screen and (min-width: 750px) and (max-width: 1000px) {
+  .infobox {
+
     flex-direction: column;
     display: flex;
     justify-content: space-between;
@@ -110,17 +123,38 @@
   }
 }
 
-@media screen and (max-width: 500px){
-  .infobox{
-    
-    
-      flex-direction: column;
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-    }  
-    .datetime,
-    .location {
-      width: auto !important;
+@media screen and (max-width: 500px) {
+  .infobox {
+
+
+    flex-direction: column;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .datetime,
+  .location {
+    width: auto !important;
+
+
+  }
+
+  .datetime {
+    h3 {
+      font-size: 30px;
     }
+  }
+
+  .location {
+
+    h3 {
+      font-size: 20px;
+    }
+
+    h4 {
+      font-size: 30px;
+
+    }
+  }
 }

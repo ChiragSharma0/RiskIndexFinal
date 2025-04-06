@@ -7,7 +7,7 @@ const url = process.env.REACT_APP_UPDATE_Schedule
 
 const formatTimeSlot = (index) => {
   const hour = Math.floor(index);
-  const minute = "00" ;
+  const minute = "30" ;
   return `${hour}:${minute}`;
 };
 
@@ -19,6 +19,7 @@ const categoryColors = {
 
 export default function ScheduleForm() {
   const { schedule, setSchedule, scheduleType, setScheduleType } = useSchedule();
+  const[useCustom , setcustom] = useState(true);
   const [activeCategory, setActiveCategory] = useState("home");
   const [homeHrs, setHomeHrs] = useState(new Set(schedule.home.hrs));
   const [workHrs, setWorkHrs] = useState(new Set(schedule.work.hrs));
@@ -32,6 +33,17 @@ export default function ScheduleForm() {
     setHomeLoc(schedule.home.location || {});
     setWorkLoc(schedule.work.location || {});
   }, [schedule]);
+
+useEffect(()=>{
+  const Custom = scheduleType === "custom";
+if(Custom){
+  setcustom(true);
+}
+else{
+  setcustom(false);
+}
+
+},[scheduleType]);
 
   const handleHourClick = async (hour) => {
     const newHomeHrs = new Set(homeHrs);
@@ -91,61 +103,82 @@ if (userid){
   return (
     <div style={styles.container}>
       <h2 style={styles.title}>Set Your Daily Schedule</h2>
-
-      <div style={styles.categoryButtons}>
-        {Object.keys(categoryColors).map((category) => (
-          <button
-            key={category}
-            onClick={() => setActiveCategory(category)}
-            style={{
-              ...styles.catButton,
-              backgroundColor: categoryColors[category],
-              border: activeCategory === category ? "1px solid #333" : "none",
-              boxShadow: activeCategory === category ? "rgba(22, 22, 22, 0.62) 6px 3px 8px" : "none",
-            }}
-          >
-            {category.charAt(0).toUpperCase() + category.slice(1)}
-          </button>
-        ))}
-      </div>
-
-      <div style={styles.hourGrid}>
-        {timeSlots.map((hour) => (
-          <div
-            key={hour}
-            onClick={() => handleHourClick(hour)}
-            style={{
-              ...styles.hourBox,
-              backgroundColor: categoryColors[getCategory(hour)],
-            }}
-          >
-            {formatTimeSlot(hour)}
+  
+      {/* Blur wrapper */}
+      <div style={{ 
+        filter: useCustom ? "none" : "blur(4px)", 
+        pointerEvents: useCustom ? "auto" : "none",
+        transition: "filter 0.3s ease"
+      }}>
+        {/* Category selection */}
+        <div style={styles.categoryButtons}>
+          {Object.keys(categoryColors).map((category) => (
+            <button
+              key={category}
+              onClick={() => setActiveCategory(category)}
+              style={{
+                ...styles.catButton,
+                backgroundColor: categoryColors[category],
+                border: activeCategory === category ? "1px solid #333" : "none",
+                boxShadow: activeCategory === category ? "rgba(22, 22, 22, 0.62) 6px 3px 8px" : "none",
+              }}
+            >
+              {category.charAt(0).toUpperCase() + category.slice(1)}
+            </button>
+          ))}
+        </div>
+  
+        {/* Hours Grid */}
+        <div style={styles.hourGrid}>
+          {timeSlots.map((hour) => (
+            <div
+              key={hour}
+              onClick={() => handleHourClick(hour)}
+              style={{
+                ...styles.hourBox,
+                backgroundColor: categoryColors[getCategory(hour)],
+              }}
+            >
+              {formatTimeSlot(hour)}
+            </div>
+          ))}
+        </div>
+  
+        {/* Location section */}
+        <div style={styles.locationRow}>
+          <div style={styles.card}>
+            <h4>Home Location:</h4>
+            <p>Lat: {homeLoc?.lat?.toFixed(4)}</p>
+            <p>Lng: {homeLoc?.lng?.toFixed(4)}</p>
+            <button style={styles.editButton} onClick={() => setModalTarget("home")}>
+              Edit
+            </button>
           </div>
-        ))}
-      </div>
-
-      <div style={styles.locationRow}>
-        <div style={styles.card}>
-          <h4>Home Location:</h4>
-          <p>Lat: {homeLoc?.lat?.toFixed(4)}</p>
-          <p>Lng: {homeLoc?.lng?.toFixed(4)}</p>
-          <button style={styles.editButton} onClick={() => setModalTarget("home")}>
-            Edit
-          </button>
+  
+          <div style={styles.card}>
+            <h4>Work Location:</h4>
+            <p>Lat: {workLoc?.lat?.toFixed(4)}</p>
+            <p>Lng: {workLoc?.lng?.toFixed(4)}</p>
+            <button style={styles.editButton} onClick={() => setModalTarget("work")}>
+              Edit
+            </button>
+          </div>
         </div>
-
-        <div style={styles.card}>
-          <h4>Work Location:</h4>
-          <p>Lat: {workLoc?.lat?.toFixed(4)}</p>
-          <p>Lng: {workLoc?.lng?.toFixed(4)}</p>
-          <button style={styles.editButton} onClick={() => setModalTarget("work")}>
-            Edit
-          </button>
-        </div>
+  
+        <button style={styles.saveButton} onClick={handleSave}>Save Schedule</button>
       </div>
-
-      <button style={styles.saveButton} onClick={handleSave}>Save Schedule</button>
-
+  
+      {/* Block Modal when not using custom */}
+      {!useCustom && (
+        <div style={styles.overlay}>
+          <div style={styles.modalBox}>
+            <h3>Custom Schedule Disabled</h3>
+            <p>Please enable custom schedule from settings to edit your schedule.</p>
+          </div>
+        </div>
+      )}
+  
+      {/* Map Modal */}
       {modalTarget && (
         <LocationModal
           initial={modalTarget === "home" ? homeLoc : workLoc}
@@ -158,6 +191,7 @@ if (userid){
       )}
     </div>
   );
+  
 }
 
 
@@ -246,7 +280,30 @@ const styles = {
     cursor: "pointer",
     fontSize: "1rem",
     marginTop: "1rem"
+  },
+
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(0,0,0,0.4)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 10,
+  },
+  
+  modalBox: {
+    backgroundColor: "#fff",
+    padding: "2rem",
+    borderRadius: "10px",
+    boxShadow: "0 2px 10px rgba(0,0,0,0.3)",
+    maxWidth: "400px",
+    textAlign: "center",
   }
+  
 };
 
 
