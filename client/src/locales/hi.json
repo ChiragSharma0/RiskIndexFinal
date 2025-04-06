@@ -56,6 +56,16 @@
   "username": "उपयोगकर्ता नाम",
   "note": "टिप्पणी",
   "profile_picture_placeholder": "प्रोफ़ाइल चित्र URL",
+  
+    "residence": "निवास",
+    "unknown": "अज्ञात",
+    "ist": "आईएसटी",
+
+
+
+
+
+
   "common": {
     "select": "चयन करें...",
     "yes": "हाँ",

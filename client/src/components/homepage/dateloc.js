@@ -12,7 +12,6 @@ function DateLoc() {
   const [istimeEditing, settimeEditing] = useState(false);
   const [tempDate, setTempDate] = useState(date.date);
   const [tempTime, setTempTime] = useState(time.hrs);
-
   const handleDateChange = (e) => setTempDate(e.target.value);
   const handleTimeChange = (e) => setTempTime(e.target.value);
 
@@ -37,6 +36,7 @@ function DateLoc() {
   // ✅ Runs only when `locationSource` or `useLocation` changes
   useEffect(() => {
     console.log('DateLoc re-rendered:', { locationSource, useLocation });
+
   }, [locationSource, useLocation]);
 
   return (
@@ -82,7 +82,8 @@ function DateLoc() {
                 style={{ fontSize: 'clamp(10px, 2vw, 30px)' }}
               />
             )}
-            :{String(time.min).padStart(2, '0')}:{String(time.sec).padStart(2, '0')} UTC
+            :{String(time.min).padStart(2, '0')}:{String(time.sec).padStart(2, '0')} IST
+
           </h3>
         </div>
       </div>
@@ -95,8 +96,11 @@ function DateLoc() {
             <br />
             {t('longitude')}: {useLocation?.lng ? Number(useLocation.lng).toFixed(3) : t('unavailable')}
           </h3>
-          <h4 id="localityName">{locationSource || t('unknown')}</h4>
-          
+          <h4 id="localityName">
+  {locationSource
+    ? t(locationSource.toLowerCase()) // 🔹 Ensure correct translation key
+    : t("unknown")}
+</h4>          
         </div>
       </div>
     </div>

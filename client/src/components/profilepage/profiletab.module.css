@@ -96,6 +96,7 @@
 
 
 .TabContent {
+    position: relative;
     display: flex;
     flex: 0.9;
     justify-content: center;

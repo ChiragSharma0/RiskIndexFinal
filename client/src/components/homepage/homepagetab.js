@@ -10,6 +10,7 @@ import HIfinalVal from "../Formelement/HIfinal";
 import RIfinalVal from "../Formelement/Rifinal";
 import Header from "../common/Header";
 import { useTranslation } from "react-i18next";
+import Footer from "../common/Footer";
 
 export default function HomePageMobile() {
         const { t } = useTranslation();
@@ -20,7 +21,7 @@ export default function HomePageMobile() {
             <Header />
 
             <main>
-                <div style={{ display: "flex" }}>
+                <div className="mainbox" style={{ display: "flex" }}>
                     <div className="img-container">
                         <div id='imgbox'>
                             <Image />
@@ -66,9 +67,8 @@ export default function HomePageMobile() {
                 </div>
             </main>
 
-            <footer>
+            <Footer />
 
-            </footer>
         </div>
     );
 

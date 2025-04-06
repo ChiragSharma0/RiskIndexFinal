@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useTimeContext } from "../../context/timecontext"; // Import Location Context
+import { useTimeContext } from "../../context/timecontext"; // Import Time Context
 
 // Dynamically import all images from the public/images folder
 const importAllImages = (r) => {
@@ -14,15 +14,15 @@ const importAllImages = (r) => {
 const images = importAllImages(require.context("/public/IMAGES/IMAGES", false, /\.(png|jpe?g|gif)$/));
 
 const ImageSlider = () => {
-  const { date, time } = useTimeContext(); // Get date & time from LocationContext
+  const { date, utctime } = useTimeContext(); // Get date & time from TimeContext
   const [currentImage, setCurrentImage] = useState("");
 
   useEffect(() => {
     const updateImage = () => {
-      if (!date || !time) return; // Ensure date & time are available
+      if (!date || !utctime) return; // Ensure date & time are available
 
       const day = date.date; // Extract day from "DD/MM/YYYY"
-      const hour = time.hrs; // Extract hour from "HH:MM:SS"
+      const hour = utctime.hrs; // Extract hour from "HH:MM:SS"
 
       let imageName = `UTCI_${day}_${hour}.png`; // Expected filename format
       if (!images[imageName]) {
@@ -33,18 +33,11 @@ const ImageSlider = () => {
     };
 
     updateImage(); // Set image immediately on mount
-    const intervalId = setInterval(updateImage, 1000); // Update every second
 
-    return () => clearInterval(intervalId); // Cleanup on unmount
-  }, [date, time]); // Depend on date & time from context
+  }, [date, utctime]); // Depend on date & time from context
 
   return (
-    <img
-      id="URCIIMG"
-      src={currentImage}
-      alt="Weather-image"
-      style={{ objectFit: "contain", borderRadius: "10px" }}
-    />
+    <img id="URCIIMG" src={currentImage} alt="Weather-image" />
   );
 };
 

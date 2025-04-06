@@ -95,20 +95,20 @@ function ExpoTable() {
         </div>
       )}
 
-      <div style={{ display: "flex", padding: "0px 15px", justifyContent: "space-between",gap:"10px" }}>
-        <div style={{display:"flex",flex:"1",alignContent:"center",justifyContent:"right",flexWrap:"wrap"}}>
+      <div style={{ display: "flex", padding: "0px 10px", justifyContent: "space-between", gap: "10px" }}>
+      <div style={{display:"flex",alignContent:"center",justifyContent:"right",}}>
           <div className="underline1"></div>
-          <div className="">{t("high")}</div>
+          <div className="">{t("high")}({t("high")[0]})</div>
         </div>
-        <div style={{display:"flex",flex:"1"}}>
+        <div style={{display:"flex"}}>
 
           <div className="underline2"></div>
-          <div className="">{t("medium")}</div>
+          <div className="">{t("medium")}({t("medium")[0]})</div>
         </div>
-        <div style={{display:"flex",flex:"1"}}>
+        <div style={{display:"flex"}}>
 
           <div className="underline3"></div>
-          <div className="">{t("low")}</div>
+          <div className="">{t("low")}({t("low")[0]})</div>
         </div>
       </div>
     </div>

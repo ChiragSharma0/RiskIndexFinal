@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useVIFormContext } from "../../context/VIformcontext";
 import { useEIFormContext } from "../../context/Eicontext";
 import { useHIContext } from "../../context/hicontext";
+import { useTimeContext } from "../../context/timecontext"; // Import Time Context
 import { useTranslation } from "react-i18next";
 import { Chart } from "chart.js/auto";
 
@@ -9,6 +10,7 @@ const ChartComponent = () => {
   const { EIfinal } = useEIFormContext();
   const { utciArray = [] } = useHIContext();
   const { VIfinal } = useVIFormContext();
+  const { time } = useTimeContext(); // ⏰ Get current time
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
   const { t } = useTranslation();
@@ -32,7 +34,12 @@ const ChartComponent = () => {
     if (chartInstance.current) {
       updateChart();
     }
-  }, [EIfinal, VIfinal, utciArray]);
+  }, [EIfinal, VIfinal, utciArray, time.hrs]); // 🔄 Rerun when time changes
+
+  // 🔹 Generate Labels Starting from `time.hrs`
+  const generateLabels = (startHour) => {
+    return Array.from({ length: 24 }, (_, i) => `${(startHour + i) % 24}:30`);
+  };
 
   const initializeChart = () => {
     const ctx = chartRef.current.getContext("2d");
@@ -40,7 +47,7 @@ const ChartComponent = () => {
     chartInstance.current = new Chart(ctx, {
       type: "line",
       data: {
-        labels: Array.from({ length: 24 }, (_, i) => `${i}:00`),
+        labels: generateLabels(time.hrs), // ⏰ Start from `time.hrs`
         datasets: [
           {
             label: t("hourly_risk_index") || "Hourly Risk Index",
@@ -62,7 +69,7 @@ const ChartComponent = () => {
       },
     });
 
-    console.log("✅ Chart initialized");
+    console.log("✅ Chart initialized with labels:", generateLabels(time.hrs));
   };
 
   const updateChart = () => {
@@ -71,13 +78,16 @@ const ChartComponent = () => {
     const EI = parseFloat(EIfinal) || 1;
     const VI = parseFloat(VIfinal) || 1;
 
-    const calculatedData = utciArray.length === 24
-      ? utciArray.map(item => (typeof item === "number" ? item : item?.value ?? 0) * EI * VI)
-      : new Array(24).fill(5);
+    const calculatedData =
+      utciArray.length === 24
+        ? utciArray.map((item) => (typeof item === "number" ? item : item?.value ?? 0) * EI * VI)
+        : new Array(24).fill(5);
 
+    chartInstance.current.data.labels = generateLabels(time.hrs); // Update labels dynamically
     chartInstance.current.data.datasets[0].data = calculatedData;
     chartInstance.current.update();
-    
+
+    console.log("✅ Chart updated with labels:", generateLabels(time.hrs));
     console.log("✅ Chart updated with calculated data:", calculatedData);
   };
 
@@ -89,6 +99,3 @@ const ChartComponent = () => {
 };
 
 export default ChartComponent;
-
-
-

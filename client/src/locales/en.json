@@ -62,6 +62,14 @@
     "no": "No"
   },
 
+  
+    "residence": "Residence",
+    "unknown": "Unknown",
+    "ist": "IST",
+
+  
+  
+
 "header": {
   "title": "UTCI_HSRIF",
   "subtitle": "UTCI based Heat Stress Risk Index Forecast",
