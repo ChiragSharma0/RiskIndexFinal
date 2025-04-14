@@ -35,69 +35,104 @@ header p {
   /* Paragraph */
   
   
-  /* Menu Button */
-  .menuButton {
-    display: flex;
-    align-items: center;
-    font-weight: bold;
-    font-size: 20px;
-    cursor: pointer;
-  }
+/* Paragraph */
+.para1 {
+  font-size: 14px;
+}
+
+/* Menu Button */
+.menuButton {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+
+
+/* Sidebar */
+.sidebar {
+  /* First definition */
+  position: fixed;
+  top: 0;
+  right: -250px; /* Initially hidden */
+  width: 250px;
+  height: 100vh;
+  background: #222;
+  color: white;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
+  padding-top: 60px;
+  transition: right 0.3s ease-in-out;
+  z-index: 999;
+
+  /* Second definition (conflicting) */
+}
+
+/* Sidebar ul */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  text-align: center; /* From first definition */
+}
+
+/* Sidebar ul li */
+.sidebar ul li {
+  padding: 15px; /* First version */
+  cursor: pointer;
+  font-size: 18px;
+  border-bottom: 1px solid #444;
+
+  /* Second definition */
+  text-decoration: none;
+  padding: 10px 0; /* Conflicts with 15px above */
+}
+
+/* Sidebar ul li:hover */
+.sidebar ul li:hover {
+  background: #444;
+}
+
+/* Sidebar ul li a */
+.sidebar ul li a {
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+  font-size: 16px;
+}
+
+/* Open Sidebar */
+.open {
+  right: 0;
+}
+
+/* Close Sidebar */
+.close {
+  right: -250px;
+}
+
+/* Close Button (First version) */
+.closeButton {
+  position: absolute;
+  top: 10px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+
   
-  /* Sidebar */
-  .sidebar {
-    position: fixed;
-    top: 0;
-    right: -250px; /* Initially hidden */
-    width: 250px;
-    height: 100vh;
-    background: #222;
-    color: white;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
-    padding-top: 60px;
-    transition: right 0.3s ease-in-out;
-    z-index: 999;
-  }
-  
-  /* Open Sidebar */
-  .open {
-    right: 0;
-  }
-  
-  /* Close Sidebar */
-  .close {
-    right: -250px;
-  }
-  
-  /* Sidebar Items */
-  .sidebar ul {
-    list-style: none;
-    padding: 0;
-    text-align: center;
-  }
-  
-  .sidebar ul li {
-    padding: 15px;
-    cursor: pointer;
-    font-size: 18px;
-    border-bottom: 1px solid #444;
-  }
-  
-  .sidebar ul li:hover {
-    background: #444;
-  }
-  
-  /* Close Button */
-  .closeButton {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 20px;
-    cursor: pointer;
-  }
+}
+.closeButton:hover{
+  background-color: #444;
+}
+
+/* Close Button (Second version, class: close-btn) */
+
+
+
+
+
+
   @media screen and (max-width: 500px) {
     .para1{
 display: none;

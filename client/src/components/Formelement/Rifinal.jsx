@@ -44,7 +44,7 @@ function RIfinalVal() {
 
   return (
     <div style={{ display: "flex", justifyContent: "center", alignContent: "center" }}>
-      <div style={{ display: "flex" ,flex:"1",justifyContent:"center"}}>
+      <div style={{ display: "flex" ,flex:"1",justifyContent:"right"}}>
         <div className="highlight1" style={{border:"none", margin:"0px"}}>
           {RIfinal}
         </div>

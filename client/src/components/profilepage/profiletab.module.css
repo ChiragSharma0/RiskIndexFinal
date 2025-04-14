@@ -146,14 +146,16 @@
 
     main {
         overflow-x: hidden;
-        justify-content: start!important;
+        justify-content: start !important;
     }
 
     .Tabpage {
         flex-direction: column;
     }
 
-
+.TabContent{
+    border: 0px;
+}
     .Tabs {
         position: relative;
         width: min-content;
@@ -207,10 +209,64 @@
 
     }
 
-    .Tab{
+    .Tab {
         border-right: 1px solid black;
     }
-.name{
-    justify-content: center;
+
+    .name {
+        justify-content: center;
+    }
+
+
+
+
+
+
+    
 }
+
+@media screen and (min-width: 500px) and (max-width: 800px) {
+    .Tabpage {
+        flex-direction: column;
+    }
+.Tabsbar{
+    padding-bottom: 5px;
+    border-bottom: 5px solid black;
+
+}
+    .Tabs {
+        width: auto;
+        padding: 0px;
+        flex-direction: row;
+        justify-content: center;
+        border: 2px solid black;
+        border-radius: 0px;
+        flex: 1;
+    }
+
+    .Tabsgroup {
+        width: auto;         
+        padding: 0px;
+        flex-direction: row;
+        border-radius: 0px;
+        flex: 1;
+    }
+
+    .settingsgroup {
+        display: flex;
+        border-radius: 0px;
+        padding: 0px;
+        flex: 0.2;
+        .Tab{
+width: 100%;        }
+    }
+    .Tab{
+        border-left: 2px solid black;
+        border-right: 2px solid black;
+                margin:0px;
+                flex: 1;
+    }
+    .TabContent{
+        border: 0px;
+    }
 }

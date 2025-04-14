@@ -353,6 +353,7 @@ img {
   height: 115px;
   width: 100%;
   margin: 5px;
+  flex: 0.5;
 }
 
 /* Footer */
@@ -485,7 +486,12 @@ img {
     flex: 1 1;
     margin: 5px;
   }
-
+.index-card{
+  flex: 0.28;
+}
+.index-card-result{
+  flex:1;
+}
   .index-values {
     justify-content: space-between;
     width: 50%;
@@ -494,21 +500,22 @@ img {
     height: auto;
     padding-bottom: 45px;
   }
-  .indexvalues-indivisual{
-    flex: 1;
-
-  }
+  
   .indexvalues-indivisual,
   .indexvalue-final {
     width: auto;
     flex-direction: column;
+    flex: 1;
   }
+.indexvalues-indivisual{
+    flex: 3;
 
+  }
   .chart-container {
     display: block;
     box-sizing: border-box;
     height: 100px;
-    width: auto;
+    width: 100%;
     margin: 5px;
   }
 }
@@ -580,18 +587,20 @@ img {
     flex-direction: column;
     display: flex;
     height: auto;
+    flex: 1;
   }
 
   .indexvalues-indivisual,
   .indexvalue-final {
     width: auto;
+    flex:1;
   }
 
   .chart-container {
     display: block;
     box-sizing: border-box;
     height: 100px;
-    width: auto;
+    width: 100%;
     margin: 5px;
   }
 }
