@@ -1,59 +1,57 @@
 /* Profile.module.css */
 
 .dashboard {
-    height: 100vh;
-    width: 100vw;
+  height: 100vh;
+  width: 100vw;
 }
 
 .main {
-    display: flex;
-    flex-direction: row;
-    height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - 100px);
 }
 
 /* PROFILE */
 .profile {
-    width: 30%;
-    margin: 10px;
-    margin-left: 30px;
+  width: 30%;
+  min-width: 500px;
 }
 
 .profileBox {
-    flex-direction: row-reverse;
-    display: flex;
-    height: 90px;
-    max-width: 500px;
-    background: linear-gradient(to right, #ff1acd, rgb(239, 150, 122));
-    border-radius: 10px;
-    padding: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  flex-direction: row-reverse;
+  display: flex;
+  height: 90px;
+  max-width: 500px;
+  background: linear-gradient(to right, #ff1acd, rgb(239, 150, 122));
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .button {
-    display: flex;
+  display: flex;
 }
 
 .editButton {
-    height: 30px;
-    width: 60px;
-    background-color: #fff;
-    color: #000;
-    border: 0px solid #000;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
+  height: 30px;
+  width: 60px;
+  background-color: #fff;
+  color: #000;
+  border: 0px solid #000;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 .editButton:hover {
-    background-color: #000;
-    color: #fff;
+  background-color: #000;
+  color: #fff;
 }
 
 .profiletabs {
-    padding: 10px;
-    max-height: 100%;
-    width: 100%;
-    overflow-y: hidden;
+  max-height: 100%;
+  width: 100%;
+  overflow-y: hidden;
 }
 
 
@@ -103,75 +101,79 @@
 
 
 .modalOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-  }
-  
-  .modalContent {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-  }
-  
-  .input,
-  .textarea {
-    width: 100%;
-    margin: 0.5rem 0 1rem 0;
-    padding: 0.6rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-  }
-  
-  .textarea {
-    min-height: 100px;
-    resize: vertical;
-  }
-  
-  .buttonGroup {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-  
-  .saveButton {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    padding: 0.6rem 1rem;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-  
-  .cancelButton {
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    padding: 0.6rem 1rem;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modalContent {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.input,
+.textarea {
+  width: 100%;
+  margin: 0.5rem 0 1rem 0;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.saveButton {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.cancelButton {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
 /* Responsive */
 @media screen and (max-width: 600px) {
-    .main {
-        width: 100%;
-    }
+  .profile{
+    width: 80%;
+    min-width: unset;
+  }
+  .main {
+    width: 100%;
+  }
 
-    .profileBox {
-        width: 100%;
-        background: linear-gradient(to right, #ff1a7d, rgb(240, 127, 127));
-    }
+  .profileBox {
+    width: 100%;
+    background: linear-gradient(to right, #ff1a7d, rgb(240, 127, 127));
+  }
 }
 
 
@@ -179,31 +181,37 @@
 
 
 @media screen and (max-width: 800px) {
-  .dashboard{
+  .dashboard {
     padding: 0px 30px;
   }
-  .main{
-      display: flex;
-      flex-direction: column;
+
+  .main {
+    display: flex;
+    flex-direction: column;
+    padding-top: 30px;
+    justify-content: flex-start;
   }
+
   .profile{
-    width: auto;
+    width: 80%;
+    min-width: unset;
   }
-  
-      }
 
-
-
-      @media screen and (max-width: 500px) {
-
-.dashboard{
-  padding: 0px 5px;
-}
-.profiletabs {
-  padding: 0px;
-  max-height: 100%;
-  width: 100%;
-  overflow-y: hidden;
 }
 
-      }
+
+
+@media screen and (max-width: 500px) {
+
+  .dashboard {
+    padding: 0px 5px;
+  }
+
+  .profiletabs {
+    padding: 0px;
+    max-height: 100%;
+    width: 100%;
+    overflow-y: hidden;
+  }
+
+}
