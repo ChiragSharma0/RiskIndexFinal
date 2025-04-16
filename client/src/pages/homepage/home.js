@@ -16,7 +16,7 @@ function Home() {
 
     function getScreenType() {
         const width = window.innerWidth;
-        if (width > 1000) return 'desktop';
+        if (width > 1250) return 'desktop';
         if (width > 750) return 'tablet';
         return 'mobile';
     }

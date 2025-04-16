@@ -9,7 +9,7 @@ export const TimeProvider = ({ children }) => {
   // Local time states (IST)
   const [date, setDate] = useState({
     date: 10,
-    month: 7,
+    month: 6,
     year: 2024,
   });
 
