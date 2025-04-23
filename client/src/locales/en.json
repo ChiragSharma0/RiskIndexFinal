@@ -146,9 +146,9 @@
       },
       "alcohol": {
         "legend": "Alcohol Consumption",
-        "consumed": "Do you consume alcohol?",
-        "daily": "Do you consume alcohol daily?",
-        "frequency": "Did you drink at least once in last 3 months?"
+        "consumed": "Have you consumed alcohol in last 5 years?",
+        "daily": "Usually do you drink more than 24g in a day? (Calculate using the following Table)",
+        "frequency": " In last quarter, has you had more than 1 time/month?"
       },
       "tobacco": {
         "legend": "Tobacco Usage",
@@ -163,9 +163,9 @@
       "caffeine": {
         "legend": "Caffeine Intake",
         "intake": "Your Caffeine Intake Level",
-        "low": "Low (0-1 cup)",
-        "medium": "Medium (2-3 cups)",
-        "high": "High (4+ cups)"
+        "low": "Low (<145 mg/day)",
+        "medium": "Medium ( 145-300 mg/day)",
+        "high": "High (>300 mg/day)"
       },
       "sleep": {
         "legend": "Sleep Duration",
