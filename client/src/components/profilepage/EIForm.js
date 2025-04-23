@@ -421,15 +421,17 @@ const EIForm = () => {
           <legend>{t("eiform.form.fluids.legend")}</legend>
           <label>{t("eiform.form.fluids.intake")}</label>
           <input type="number" name="fluidIntake" step="0.1" value={formData.fluidIntake} onChange={handleChange} />
-          <label>{t("eiform.form.fluids.activity")}</label>
-          <select name="activityStatus" value={formData.activityStatus} onChange={handleChange}>
-            <option value="" disabled>{t("eiform.form.select")}</option>
-            <option value="sedentary">{t("eiform.form.fluids.sedentary")}</option>
-            <option value="lightly_active">{t("eiform.form.fluids.light")}</option>
-            <option value="moderately_active">{t("eiform.form.fluids.moderate")}</option>
-            <option value="very_active">{t("eiform.form.fluids.very")}</option>
-            <option value="extra_active">{t("eiform.form.fluids.extra")}</option>
-          </select>
+          <div>
+            <label>{t("eiform.form.fluids.activity")}</label>
+            <select name="activityStatus" value={formData.activityStatus} onChange={handleChange}>
+              <option value="" disabled>{t("eiform.form.select")}</option>
+              <option value="sedentary">{t("eiform.form.fluids.sedentary")}</option>
+              <option value="lightly_active">{t("eiform.form.fluids.light")}</option>
+              <option value="moderately_active">{t("eiform.form.fluids.moderate")}</option>
+              <option value="very_active">{t("eiform.form.fluids.very")}</option>
+              <option value="extra_active">{t("eiform.form.fluids.extra")}</option>
+            </select>
+          </div>
         </fieldset>
 
         {/* Hospital Access */}
