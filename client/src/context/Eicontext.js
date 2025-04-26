@@ -4,7 +4,7 @@ import { useTimeContext } from './timecontext';
 import axios from "axios";
 import Loader from "../components/common/loader";
 import { useLocationContext } from "./locationcontext";
- const Fetchurl = process.env.REACT_APP_FETCH_EI_DATA;
+const Fetchurl = process.env.REACT_APP_FETCH_EI_DATA;
 
 const EIFormContext = createContext();
 
@@ -195,7 +195,7 @@ function calculateFluidCategory(VIformData, EIformData) {
 
   // Convert weight and height
   const weight = parseFloat(VIformData.weight);
-  console.log("HEIGHT VALUES",VIformData.height,VIformData.heightininch,VIformData.heightUnit);
+  console.log("HEIGHT VALUES", VIformData.height, VIformData.heightininch, VIformData.heightUnit);
 
   let heightInMeters;
   if (VIformData.heightUnit === "m") {
@@ -320,13 +320,18 @@ function calculateHealthAccessibility(formData) {
   return riskLevel;
 }
 function calculateExposureIndex(infrastructure, lifestyle, fluidIntake, airQuality, healthAccessibility) {
-  return (
-    0.282 * infrastructure +
-    0.184 * lifestyle +
-    0.282 * fluidIntake +
-    0.126 * airQuality +
-    0.125 * healthAccessibility
-  );
+  console.log(infrastructure, lifestyle, fluidIntake, airQuality, healthAccessibility, "ei data logged")
+  if (infrastructure && lifestyle && fluidIntake && airQuality && healthAccessibility) {
+
+
+    return (
+      0.282 * infrastructure +
+      0.184 * lifestyle +
+      0.282 * fluidIntake +
+      0.126 * airQuality +
+      0.125 * healthAccessibility
+    );
+  } else {return 0.00;}
 }
 
 function calculateLifestyle(alcohol, tobacco, caffeine, sleep) {
@@ -421,16 +426,16 @@ export const EIFormProvider = ({ children }) => {
 
   function CalculateResult() {
     if (!EIformData) return;
-  
+
     const InfrastructureWorkplace = calculateInfrastructureWorkplace(EIformData);
     const InfrastructureFacilityWorkplace = calculateInfrastructureFacilityWorkplace(EIformData);
     const workrisk = calculateinfra(InfrastructureWorkplace, InfrastructureFacilityWorkplace);
-  
+
     const InfrastructureResidence = calculateInfrastructureResidence(EIformData);
     const InfrastructureFacilityResidence = calculateInfrastructureFacilityResidence(EIformData);
     const homerisk = calculateinfra(InfrastructureResidence, InfrastructureFacilityResidence);
     const Transit = calculateTransit(EIformData);
-  
+
     const Alcohol = calculateAlcohol(VIformData, EIformData);
     const Tobacco = calculateTobacco(VIformData, EIformData);
     const Caffeine = calculateCaffeine(EIformData);
@@ -439,11 +444,11 @@ export const EIFormProvider = ({ children }) => {
     const Fluid = calculateFluidCategory(VIformData, EIformData);
     const AQI = calculateAQI(date.date);
     const HealthAccessibility = calculateHealthAccessibility(EIformData);
-  
+
     const task = locationSource?.toLowerCase();
     let currentrisk;
     let Infrastructure = {};
-  
+
     if (task === "workplace") {
       Infrastructure = {
         InfrastructureWorkplace,
@@ -462,17 +467,17 @@ export const EIFormProvider = ({ children }) => {
       };
       currentrisk = Transit;
     }
-  
+
     // ✅ Check if Infrastructure has at least one meaningful (non-null/undefined/empty) value
     const hasInfrastructureValue = Object.values(Infrastructure).some(
       (val) => val !== null && val !== undefined && val !== "" && !(Array.isArray(val) && val.length === 0)
     );
-  
+
     if (!hasInfrastructureValue) {
       console.warn("⚠️ Infrastructure has no valid values. EI result not set.");
       return;
     }
-  
+
     const components = {
       ...Infrastructure,
       Alcohol,
@@ -483,11 +488,11 @@ export const EIFormProvider = ({ children }) => {
       AQI,
       HealthAccessibility,
     };
-  
+
     console.log("🛠 Final Components before setting state:", components);
     setEIresult(components);
   }
-  
+
 
   useEffect(() => {
     console.log("✅ Updated EIresult:", EIresult);
@@ -525,7 +530,7 @@ export const EIFormProvider = ({ children }) => {
       Infrastructure = { Transit };
       currentrisk = Transit;
     }
-console.log("infrastructure", Infrastructure);
+    console.log("infrastructure", Infrastructure);
     const finalIndex = calculateExposureIndex(currentrisk, liferisk, Fluid, AQI, HealthAccessibility);
     setEIfinal(finalIndex);
     console.log("Final Exposure Index:", finalIndex);

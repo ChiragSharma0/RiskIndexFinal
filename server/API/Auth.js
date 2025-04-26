@@ -34,8 +34,11 @@ const registerUser = async (req, res) => {
     
     await newUser.save();
 
-    res.status(201).json({ message: 'User registered successfully!' });
-  } catch (error) {
+    res.status(201).json({ 
+      message: 'User registered successfully!', 
+      userid: newUser.UserID 
+    });
+      } catch (error) {
     console.error('Error registering user:', error);
 
     // Handle duplicate key error (MongoDB code 11000)

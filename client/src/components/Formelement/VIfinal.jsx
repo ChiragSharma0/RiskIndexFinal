@@ -10,11 +10,13 @@ function VIfinalVal() {
 
   // Update `displayvalue` when `VIfinal` changes
   useEffect(() => {
-    if (typeof VIfinal === "number") {
+    if (typeof VIfinal === "number" && !isNaN(VIfinal)) {
       setValue(VIfinal.toFixed(2));
+    } else {
+      setValue("0.00");
     }
-    console.log("VI rendered", VIfinal);
   }, [VIfinal]);
+  
 
   const interpretLevel = (value) => {
     if (value <= 0.33) return "highlight2"; 
