@@ -75,8 +75,8 @@ const ChartComponent = () => {
   const updateChart = () => {
     if (!chartInstance.current) return;
 
-    const EI = parseFloat(EIfinal) || 1;
-    const VI = parseFloat(VIfinal) || 1;
+    const EI = parseFloat(EIfinal) || 0;
+    const VI = parseFloat(VIfinal) || 0;
 
     const calculatedData =
       utciArray.length === 24
