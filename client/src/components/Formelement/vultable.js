@@ -51,7 +51,7 @@ function VulTable() {
   const alignRightTitles = [t("health_issues"), t("medication")];
 
   return (
-    <div className="index-box" style={{ padding: "20px", borderRadius: "10px", background: "#f0f0f0" }}>
+    <div className="index-box" style={{ padding:"10px", borderRadius: "10px", background: "#f0f0f0" }}>
       <h3 style={{ textAlign: "center" }}>{t("vulnerability_index")} (V.I.)</h3>
 
       {!viresult || Object.keys(viresult).length === 0 ? (
@@ -70,8 +70,8 @@ function VulTable() {
             {t("error_loading_data")}
           </p>
           <button
-  onClick={() => navigate("/profile")}
-  style={{
+            onClick={() => navigate("/profile")}
+            style={{
               padding: "12px 24px",
               fontSize: "16px",
               backgroundColor: "#007bff",
@@ -79,14 +79,14 @@ function VulTable() {
               border: "none",
               borderRadius: "6px",
               cursor: "pointer",
-            }} 
+            }}
           >
             {t("fill_form_data")}
           </button>
         </div>
       ) : (
         <>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <table style={{ width: "100%", }}>
             <thead>
               <tr>
                 <th>{t("vulnerability")}</th>
@@ -99,7 +99,6 @@ function VulTable() {
               {vulnerabilityData.map((row, index) => (
                 <tr key={index}>
                   <td style={{
-                    padding: "10px",
                     textAlign: alignRightTitles.includes(row.title) ? "right" : "left",
                   }}>
                     {row.title}
@@ -116,7 +115,6 @@ function VulTable() {
           <div style={{
             display: "flex",
             justifyContent: "space-between",
-            marginTop: "20px",
             gap: "10px",
             fontSize: "14px",
           }}>
