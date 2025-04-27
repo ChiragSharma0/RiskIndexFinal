@@ -54,7 +54,7 @@ function ExpoTable() {
   const alignRightTitles = [t("alcohol"), t("tobacco"), t("caffeine"), t("sleep")];
 
   return (
-    <div className="index-box" style={{ padding: "20px", borderRadius: "10px", background: "#f0f0f0" }}>
+    <div className="index-box" style={{ padding: "10px", borderRadius: "10px", background: "#f0f0f0" }}>
       <h3 style={{ textAlign: "center" }}>{t("exposure_index")} (E.I.)</h3>
 
       {!displaydata ? (
@@ -103,7 +103,6 @@ function ExpoTable() {
                 <tr key={index}>
                   <td
                     style={{
-                      padding: "10px",
                       textAlign: alignRightTitles.includes(row.title) ? "right" : "left",
                     }}
                   >
@@ -121,7 +120,6 @@ function ExpoTable() {
           <div style={{
             display: "flex",
             justifyContent: "space-between",
-            marginTop: "20px",
             gap: "10px",
             fontSize: "14px",
           }}>

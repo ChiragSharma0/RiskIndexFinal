@@ -90,8 +90,7 @@ img {
   display: flex;
   flex-direction: column;
   width: 60%;
-  height: 100%;
-  padding-bottom: 20px;
+  height: calc(100% - 25px);
 }
 
 .info-box {
@@ -176,7 +175,6 @@ img {
 .index-box table {
   width: 94%;
   border-collapse: collapse;
-  margin-left: 10px;
   font-size: 0.9rem;
   font-weight: 500;
 }
@@ -355,10 +353,10 @@ img {
 .chart-container {
   display: block;
   box-sizing: border-box;
-  height: 115px;
+  min-height: 100px;
   width: 100%;
-  margin: 5px;
-  flex: 0.4;
+  margin: 0px 5px;
+  flex: 1;
 }
 
 /* Footer */
