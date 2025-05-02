@@ -105,7 +105,9 @@ const EIForm = () => {
               <select name="structure" value={formData.structure} onChange={handleChange}>
                 <option value="" disabled>{t("eiform.form.select")}</option>
                 <option value="pukka_large">{t("eiform.form.home.pukka")}</option>
-                <option value="pukka_small">{t("eiform.form.home.kutcha")}</option>
+                <option value="pukka_small">{t("eiform.form.home.pukka_small")}</option>
+
+                <option value="kaccha_small">{t("eiform.form.home.kaccha_small")}</option>
               </select>
             </>
           )}
