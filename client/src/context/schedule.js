@@ -59,7 +59,6 @@ export const ScheduleProvider = ({ children }) => {
   
   
 
-  // Update `currentTask` whenever `time` or `schedule` changes
   
 
   

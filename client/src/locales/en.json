@@ -117,8 +117,8 @@
         "heatMachinery": "Are heavy machinery or heating units used?",
         "structureLabel": "Type of indoor workplace",
         "structure": {
-          "well": "Enclosed and air-controlled",
-          "temp": "Exposed to outside air"
+          "well": "Pakka Structure",
+          "temp": "Temporary / Kacha Structure"
         },
         "services": "Available Services"
       },
@@ -215,9 +215,9 @@
     "feetInches": "Feet & Inches",
     "economicLegend": "Economic Status",
     "income": "Income Level",
-    "incomeHigh": "Below Poverty Line",
-    "incomeMid": "Middle Income",
-    "incomeLow": "Above Poverty Line",
+    "incomeHigh": "<12,00,000",
+    "incomeMid": ">12,00,001<18,00,000",
+    "incomeLow": ">18,00,001",
     "select": "Select an option",
     "isolationLegend": "Social Isolation",
     "adultsHelp": "How many adults can help you in an emergency?",

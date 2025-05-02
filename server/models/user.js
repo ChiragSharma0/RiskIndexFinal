@@ -47,7 +47,8 @@ const EISchema = new mongoose.Schema({
   fluidIntake: { type: String, default: "" },
   activityStatus: { type: String, default: "" },
   air_quality: { type: String, default: "" },
-  hospital_access: { type: String, default: "" },
+  hospital_access_office: { type: String, default: "" },
+  hospital_access_home: { type: String, default: "" }
 });
 
 
