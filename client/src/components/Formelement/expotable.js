@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 function ExpoTable() {
   const { t } = useTranslation();
-  const { EIresult } = useEIFormContext();
+  const { EIresult ,hospitalAccess } = useEIFormContext();
   const [EIdata, setEIdata] = useState([]);
   const [displaydata, setDisplaydata] = useState(false);
 

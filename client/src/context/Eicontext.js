@@ -4,6 +4,7 @@ import { useTimeContext } from './timecontext';
 import axios from "axios";
 import Loader from "../components/common/loader";
 import { useLocationContext } from "./locationcontext";
+import { useSchedule } from "./schedule";
 const Fetchurl = process.env.REACT_APP_FETCH_EI_DATA;
 
 const EIFormContext = createContext();
@@ -303,16 +304,16 @@ function calculateAQI(date) {
   return 1.00; // High Risk
 }
 
-function calculateHealthAccessibility(formData) {
-  console.log("🔍 Hospital Access:", formData.hospital_access);
+function calculateHealthAccessibility(hospitalAccess) {
+  console.log("🔍 Hospital Access:", hospitalAccess);
 
   let riskLevel = 0; // Default to 0 (No Risk)
 
-  if (formData.hospital_access === "less_than_30") {
+  if (hospitalAccess === "less_than_30") {
     riskLevel = 0.33; // Low Risk
-  } else if (formData.hospital_access === "30-60") {
+  } else if (hospitalAccess === "30-60") {
     riskLevel = 0.66; // Medium Risk
-  } else if (formData.hospital_access === "more_than_60") {
+  } else if (hospitalAccess === "more_than_60") {
     riskLevel = 1.00; // High Risk
   }
 
@@ -331,10 +332,11 @@ function calculateExposureIndex(infrastructure, lifestyle, fluidIntake, airQuali
       0.126 * airQuality +
       0.125 * healthAccessibility
     );
-  } else {return 0.00;}
+  } else { return 0.00; }
 }
 
 function calculateLifestyle(alcohol, tobacco, caffeine, sleep) {
+
   return (
     0.341 * alcohol +
     0.218 * tobacco +
@@ -345,10 +347,10 @@ function calculateLifestyle(alcohol, tobacco, caffeine, sleep) {
 
 
 export const EIFormProvider = ({ children }) => {
-  const { date } = useTimeContext();
+  const { date, time } = useTimeContext();
   const { VIformData } = useVIFormContext();
   const { locationSource } = useLocationContext();
-
+  const { schedule } = useSchedule()
   const [EIformData, setEIFormData] = useState({
     workplace: "",
     heavy_machinery: "",
@@ -369,11 +371,13 @@ export const EIFormProvider = ({ children }) => {
     smokedTobacco: "",
     caffeine: "",
     sleep: "",
-    fluidIntake: 0o0,
+    fluidIntake: 0,
     activityStatus: "",
     air_quality: "",
-    hospital_access: "",
+    hospital_access_office: "",
+    hospital_access_home: "",
   });
+
 
   const [EIresult, setEIresult] = useState({});
   const [EIfinal, setEIfinal] = useState(0);
@@ -384,6 +388,72 @@ export const EIFormProvider = ({ children }) => {
     mayBeAppropriate: "May be appropriate",
     notRecommended: "Not recommended",
   });
+
+
+  
+  const [hospitalAccess, setHospitalAccess] = useState(""); // Local state
+ 
+  
+  useEffect(() => {
+    if (
+      !time ||
+      !schedule ||
+      !schedule.work ||
+      !schedule.home ||
+      !Array.isArray(schedule.work.hrs) ||
+      !Array.isArray(schedule.home.hrs) ||
+      EIformData == null
+    ) {
+      console.warn("⛔ Missing or invalid time, schedule, or EIformData");
+      return;
+    }
+  
+    const currentHour = time.hrs;
+  
+    const getHourDistance = (a, b) => {
+      const diff = Math.abs(a - b);
+      return Math.min(diff, 24 - diff); // wrap around
+    };
+  
+    const allHours = [
+      ...schedule.work.hrs.map((h) => ({ hour: h, type: "work" })),
+      ...schedule.home.hrs.map((h) => ({ hour: h, type: "home" })),
+    ];
+  
+    if (allHours.length === 0) {
+      console.warn("⚠️ No hours in schedule to compare");
+      return;
+    }
+  
+    const closest = allHours.reduce((closestSoFar, current) => {
+      const currDist = getHourDistance(current.hour, currentHour);
+      const bestDist = getHourDistance(closestSoFar.hour, currentHour);
+  
+      if (currDist < bestDist) return current;
+  
+      if (currDist === bestDist) {
+        // Prefer previous hour if both are equally close
+        const currentIsBefore = (current.hour - currentHour + 24) % 24 > 12;
+        return currentIsBefore ? current : closestSoFar;
+      }
+  console.log("closest",closestSoFar);
+      return closestSoFar;
+    });
+  
+    const selectedAccess =
+      closest.type === "work"
+        ? EIformData.hospital_access_office
+        : EIformData.hospital_access_home;
+  console.log("closest selected",selectedAccess,time.hrs,closest);
+    setHospitalAccess(selectedAccess || "");
+  }, [
+    time,
+    schedule?.work?.hrs,
+    schedule?.home?.hrs,
+    EIformData?.hospital_access_home,
+    EIformData?.hospital_access_office,
+  ]);
+  
 
   // Fetch EI Data on Mount
   useEffect(() => {
@@ -422,7 +492,7 @@ export const EIFormProvider = ({ children }) => {
   useEffect(() => {
     if (!EIformData.alcohol || !VIformData.age) return;
     CalculateResult();
-  }, [EIformData, VIformData, locationSource]);
+  }, [EIformData, VIformData, locationSource,hospitalAccess]);
 
   function CalculateResult() {
     if (!EIformData) return;
@@ -443,7 +513,11 @@ export const EIFormProvider = ({ children }) => {
     const liferisk = calculateLifestyle(Alcohol, Tobacco, Caffeine, Sleep);
     const Fluid = calculateFluidCategory(VIformData, EIformData);
     const AQI = calculateAQI(date.date);
-    const HealthAccessibility = calculateHealthAccessibility(EIformData);
+
+
+
+
+    const HealthAccessibility = calculateHealthAccessibility(hospitalAccess);
 
     const task = locationSource?.toLowerCase();
     let currentrisk;
@@ -513,7 +587,7 @@ export const EIFormProvider = ({ children }) => {
     const liferisk = calculateLifestyle(Alcohol, Tobacco, Caffeine, Sleep);
     const Fluid = calculateFluidCategory(VIformData, EIformData);
     const AQI = calculateAQI(date.date);
-    const HealthAccessibility = calculateHealthAccessibility(EIformData);
+    const HealthAccessibility = calculateHealthAccessibility(hospitalAccess);
 
     let currentrisk;
 
@@ -541,7 +615,7 @@ export const EIFormProvider = ({ children }) => {
   }, [EIfinal]);
 
   return (
-    <EIFormContext.Provider value={{ EIformData, setEIFormData, EIfinal, EIresult, sleepOptions }}>
+    <EIFormContext.Provider value={{ EIformData, setEIFormData, EIfinal, EIresult, sleepOptions ,hospitalAccess}}>
       {isLoading ? <Loader /> : children} {/* 🔹 Show Loader while loading */}
     </EIFormContext.Provider>
   );

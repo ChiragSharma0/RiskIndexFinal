@@ -33,16 +33,17 @@ const EIForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      updateDatabase();
+      await updateDatabase();
       setEIFormData(formData);
+      alert(t("form.submitAlert"));
     } catch (error) {
-      console.log("Error while submitting");
+      console.error("Error while submitting:", error);
     }
-    alert(t("form.submitAlert"));
   };
+
 
   return (
     <div className="form-container">
@@ -66,7 +67,7 @@ const EIForm = () => {
                 <option value="no">{t("eiform.no")}</option>
               </select>
 
-              {formData.heavy_machinery === "yes" && (
+              {formData.heavy_machinery === "no" && (
                 <>
                   <label>{t("eiform.form.work.structureLabel")}</label>
                   <select name="indoor_structure" value={formData.indoor_structure} onChange={handleChange}>
@@ -411,7 +412,7 @@ const EIForm = () => {
           <select name="sleep" value={formData.sleep} onChange={handleChange}>
             <option value="" disabled>{t("eiform.form.select")}</option>
             <option value="recommended">{sleepOptions?.recommended || t("form.sleep.default.recommended")}</option>
-            <option value="maybeAppropriate">{sleepOptions?.maybeAppropriate || t("form.sleep.default.maybe")}</option>
+            <option value="maybeAppropriate">{sleepOptions?.mayBeAppropriate || t("form.sleep.default.maybe")}</option>
             <option value="notRecommended">{sleepOptions?.notRecommended || t("form.sleep.default.notRecommended")}</option>
           </select>
         </fieldset>
@@ -437,14 +438,42 @@ const EIForm = () => {
         {/* Hospital Access */}
         <fieldset>
           <legend>{t("eiform.form.hospital.legend")}</legend>
-          <label>{t("eiform.form.hospital.access")}</label>
-          <select name="hospital_access" value={formData.hospital_access} onChange={handleChange}>
-            <option value="" disabled>{t("eiform.form.select")}</option>
-            <option value="less_than_30">{t("eiform.form.hospital.less30")}</option>
-            <option value="30-60">{t("eiform.form.hospital.30to60")}</option>
-            <option value="more_than_60">{t("eiform.form.hospital.more60")}</option>
-          </select>
+          <div>
+            <label>
+              {t("eiform.form.hospital.access")} from Office
+              <select
+                name="hospital_access_office"
+                value={formData.hospital_access_office}
+                onChange={handleChange}
+              >
+                <option value="" disabled>
+                  {t("eiform.form.select")}
+                </option>
+                <option value="less_than_30">{t("eiform.form.hospital.less30")}</option>
+                <option value="30-60">{t("eiform.form.hospital.30to60")}</option>
+                <option value="more_than_60">{t("eiform.form.hospital.more60")}</option>
+              </select>
+            </label>
+          </div>
+          <div>
+            <label>
+              {t("eiform.form.hospital.access")} from Home
+              <select
+                name="hospital_access_home"
+                value={formData.hospital_access_home}
+                onChange={handleChange}
+              >
+                <option value="" disabled>
+                  {t("eiform.form.select")}
+                </option>
+                <option value="less_than_30">{t("eiform.form.hospital.less30")}</option>
+                <option value="30-60">{t("eiform.form.hospital.30to60")}</option>
+                <option value="more_than_60">{t("eiform.form.hospital.more60")}</option>
+              </select>
+            </label>
+          </div>
         </fieldset>
+
 
         {/* Buttons */}
         <button type="submit">{t("eiform.form.submit")}</button>
