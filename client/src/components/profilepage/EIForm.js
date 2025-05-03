@@ -361,15 +361,18 @@ const EIForm = () => {
         {/* Lifestyle - Tobacco */}
         <fieldset>
           <legend>{t("eiform.form.tobacco.legend")}</legend>
+
+          {/* Q1 */}
           <label>{t("eiform.form.tobacco.ever")}</label>
           <select name="tobaccoConsumed" value={formData.tobaccoConsumed} onChange={handleChange}>
             <option value="" disabled>{t("eiform.form.select")}</option>
-            <option value="no">{t("eiform.no")}</option>
-            <option value="yes">{t("eiform.yes")}</option>
+            <option value="no">{t("eiform.form.no")}</option>
+            <option value="yes">{t("eiform.form.yes")}</option>
           </select>
 
           {formData.tobaccoConsumed === "yes" && (
             <>
+              {/* Q2 */}
               <label>{t("eiform.form.tobacco.type")}</label>
               <select name="tobaccoType" value={formData.tobaccoType} onChange={handleChange}>
                 <option value="" disabled>{t("eiform.form.select")}</option>
@@ -378,22 +381,49 @@ const EIForm = () => {
                 <option value="both">{t("eiform.form.tobacco.both")}</option>
               </select>
 
+              {/* Q3 */}
               <label>{t("eiform.form.tobacco.amount")}</label>
               <select name="tobaccoAmount" value={formData.tobaccoAmount} onChange={handleChange}>
                 <option value="" disabled>{t("eiform.form.select")}</option>
-                <option value="no">{t("eiform.no")}</option>
-                <option value="yes">{t("eiform.yes")}</option>
+                <option value="no">{t("eiform.form.no")}</option>
+                <option value="yes">{t("eiform.form.yes")}</option>
               </select>
 
+              {/* Q4 */}
               <label>{t("eiform.form.tobacco.recent")}</label>
               <select name="recentTobacco" value={formData.recentTobacco} onChange={handleChange}>
                 <option value="" disabled>{t("eiform.form.select")}</option>
-                <option value="no">{t("eiform.no")}</option>
-                <option value="yes">{t("eiform.yes")}</option>
+                <option value="no">{t("eiform.form.no")}</option>
+                <option value="yes">{t("eiform.form.yes")}</option>
               </select>
+
+              {/* Q4a */}
+              {(formData.tobaccoType === "smokeless" || formData.tobaccoType === "both") && (
+                <>
+                  <label>{t("eiform.form.tobacco.smokelessRecent")}</label>
+                  <select name="smokelessTobacco" value={formData.smokelessTobacco} onChange={handleChange}>
+                    <option value="" disabled>{t("eiform.form.select")}</option>
+                    <option value="no">{t("eiform.form.no")}</option>
+                    <option value="yes">{t("eiform.form.yes")}</option>
+                  </select>
+                </>
+              )}
+
+              {/* Q4b */}
+              {(formData.tobaccoType === "smoke" || formData.tobaccoType === "both") && (
+                <>
+                  <label>{t("eiform.form.tobacco.smokedRecent")}</label>
+                  <select name="smokedTobacco" value={formData.smokedTobacco} onChange={handleChange}>
+                    <option value="" disabled>{t("eiform.form.select")}</option>
+                    <option value="no">{t("eiform.form.no")}</option>
+                    <option value="yes">{t("eiform.form.yes")}</option>
+                  </select>
+                </>
+              )}
             </>
           )}
         </fieldset>
+
 
         {/* Caffeine */}
         <fieldset>

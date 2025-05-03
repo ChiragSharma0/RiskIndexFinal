@@ -61,26 +61,19 @@
     "yes": "Yes",
     "no": "No"
   },
-
-  
-    "residence": "Residence",
-    "unknown": "Unknown",
-    "ist": "IST",
-
-  
-  
-
-"header": {
-  "title": "UTCI_HSRIF",
-  "subtitle": "UTCI based Heat Stress Risk Index Forecast",
-  "menu": "MENU",
-  "home": "Home",
-  "profile": "Profile"
-},
-"footer": {
+  "residence": "Residence",
+  "unknown": "Unknown",
+  "ist": "IST",
+  "header": {
+    "title": "UTCI_HSRIF",
+    "subtitle": "UTCI based Heat Stress Risk Index Forecast",
+    "menu": "MENU",
+    "home": "Home",
+    "profile": "Profile"
+  },
+  "footer": {
     "text": "My React App. All rights reserved."
   },
-
   "form": {
     "submit": "Submit",
     "cancel": "Cancel",
@@ -131,7 +124,7 @@
         "pukka": "Pukka/Concrete House (>30sqmt or >7.5sqmt/person)",
         "pukka_small": "Pukka/Concrete House (<30sqmt and <7.5sqmt/person)",
         "services": "Available Services",
-        "kaccha_small":"Kutcha/Dilapidated Structure"
+        "kaccha_small": "Kutcha/Dilapidated Structure"
       },
       "service": {
         "none": "No service",
@@ -151,15 +144,19 @@
         "daily": "Usually do you drink more than 24g in a day? (Calculate using the following Table)",
         "frequency": " In last quarter, has you had more than 1 time/month?"
       },
+      "yes": "Yes",
+      "no": "No",
       "tobacco": {
-        "legend": "Tobacco Usage",
-        "ever": "Have you ever used tobacco?",
-        "type": "Type of Tobacco Used",
-        "smoke": "Smoking",
-        "smokeless": "Smokeless (chewing, etc)",
+        "legend": "Tobacco Consumption Assessment",
+        "ever": "Have you ever consumed tobacco?",
+        "type": "Which type of tobacco have you consumed?",
+        "smoke": "Smoked",
+        "smokeless": "Smokeless",
         "both": "Both",
-        "amount": "Was it more than 5 times in your life?",
-        "recent": "Used tobacco in last 3 months?"
+        "amount": "Have you consumed more than 70g (or 100 cigarettes) of tobacco?",
+        "recent": "Have you consumed tobacco in the last 6 months?",
+        "smokelessRecent": "Have you consumed smokeless tobacco in the last 1 year?",
+        "smokedRecent": "Have you consumed smoked tobacco in the last 5 years?"
       },
       "caffeine": {
         "legend": "Caffeine Intake",
@@ -263,27 +260,23 @@
     "submit": "Save",
     "cancel": "Cancel"
   },
-
-
   "settings": {
-  "languageTitle": "Language",
-  "languageDescription": "Choose your preferred language.",
-  "scheduleTitle": "Schedule",
-  "scheduleDescription": "Customize your usual daily time periods.",
-  "privacyTitle": "Privacy",
-  "privacyDescription": "Settings for data privacy preferences and permissions.",
-  "statusTitle": "Activity Status",
-  "statusDescription": "Show or hide your active/online status to other users.",
-  "dangerTitle": "Danger Zone",
-  "dangerDescription": "Permanent account actions like deactivating account, deleting data, etc."
-} 
-,
-
-"profileTabs": {
-  "profile": "Profile",
-  "viForm": "VI Form",
-  "eiForm": "EI Form",
-  "schedule": "Schedule",
-  "settings": "Settings"
-}
+    "languageTitle": "Language",
+    "languageDescription": "Choose your preferred language.",
+    "scheduleTitle": "Schedule",
+    "scheduleDescription": "Customize your usual daily time periods.",
+    "privacyTitle": "Privacy",
+    "privacyDescription": "Settings for data privacy preferences and permissions.",
+    "statusTitle": "Activity Status",
+    "statusDescription": "Show or hide your active/online status to other users.",
+    "dangerTitle": "Danger Zone",
+    "dangerDescription": "Permanent account actions like deactivating account, deleting data, etc."
+  },
+  "profileTabs": {
+    "profile": "Profile",
+    "viForm": "VI Form",
+    "eiForm": "EI Form",
+    "schedule": "Schedule",
+    "settings": "Settings"
+  }
 }

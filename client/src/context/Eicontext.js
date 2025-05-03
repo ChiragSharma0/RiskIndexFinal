@@ -49,7 +49,7 @@ function calculateInfrastructureResidence(data) {
     } else if (data.structure === "pukka_small") {
       return 0.66; // Kutcha/Dilapidated or Small Pukka House (Medium)
     } else if (data.structure === "kaccha_small") {
-      return 1.0;
+      return 0.66;
     }
   } else if (data.residence === "homeless") {
     return 1.0; // Homeless (High)
