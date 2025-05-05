@@ -121,8 +121,8 @@
         "home": "Permanent Home",
         "homeless": "Homeless",
         "category": "Type of House",
-        "pukka": "Pukka/Concrete House (>30sqmt or >7.5sqmt/person)",
-        "pukka_small": "Pukka/Concrete House (<30sqmt and <7.5sqmt/person)",
+        "pukka": "Pukka/Concrete House (>30sqmt and >7.5sqmt/person)",
+        "pukka_small": "Pukka/Concrete House (<30sqmt or <7.5sqmt/person)",
         "services": "Available Services",
         "kaccha_small": "Kutcha/Dilapidated Structure"
       },
