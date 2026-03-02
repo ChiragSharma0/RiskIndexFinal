@@ -13,10 +13,27 @@ connectDB();
 const FRONTEND_URL = process.env.FRONTEND_URL || 'https://yourdomain.com';
 
 // Middleware
-app.use(cors({ 
-    origin: FRONTEND_URL,  // ✅ Allow only your frontend domain
-    credentials: true      // ✅ Allow cookies to be sent
-})); 
+const allowedOrigins = [
+  "https://hsrif.com",
+  "https://www.hsrif.com"
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true); // Postman, mobile apps
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
+    methods: "GET,POST,PUT,DELETE,PATCH",
+    credentials: true,
+  })
+);
+
  
 app.use(express.json()); // Parse JSON requests
 app.use(cookieParser()); // Enable cookie parsing
